@@ -3,9 +3,14 @@ import { TableTypes } from '../components/table/table-wrapper';
 import { languages } from './languages';
 
 export function populateColumns<T extends TableTypes>(
-  data: string[],
+  data: string[] | null,
   language = 'spanish'
-): ColumnDef<T, string>[] {
+): ColumnDef<T, string>[] | null {
+
+  if (!data) {
+    return null;
+  }
+
   const columns: ColumnDef<T, string>[] = [];
 
   data.map((column) => {

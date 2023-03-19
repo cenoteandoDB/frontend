@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useApi } from '../../hooks/useApi';
 import {
   CenoteIssue,
   CenoteModel,
@@ -25,7 +26,7 @@ interface CenoteTableColumns {
 type TableColumns = CenoteTableColumns | VariableModel | object;
 
 interface TableProps {
-  tableData: TableTypes[];
+  tableData?: TableTypes[];
 }
 
 //TODO Think in a way to handle the wrapper and the fetchs
@@ -36,13 +37,12 @@ interface TableProps {
 // In order to detect the table type we must need to extract the url from
 // react router. E.g. "cenoteando.org/table/cenote", we extract "cenote" and
 // we extract from a dictionary the route to fetch
-export const CenoteandoTableWrapper: React.FC<TableProps> = ({ tableData }) => {
-  if (!tableData) {
-    return null;
-  }
+export const CenoteandoTableWrapper: React.FC<TableProps> = () => {
+  const { data, loading, error, fetch } = useApi('api/cenotes', 'get', {}, { size: 150 });
+  const [tableData, setTableData] = useState<TableTypes[] | null>(null);
 
-  const columnHeaders: TableColumns[] = tableData.map((dat) => {
-    if (dat instanceof CenoteModel) {
+  const columnHeaders: TableColumns[] | undefined = tableData?.map((dat) => {
+    if (dat instanceof CenoteModel && dat) {
       const { geojson, gadm, social, alternativeNames, ...remaining } = dat;
 
       return {
@@ -57,17 +57,32 @@ export const CenoteandoTableWrapper: React.FC<TableProps> = ({ tableData }) => {
         touristic: remaining.touristic,
       } as CenoteTableColumns;
     }
-    if (dat instanceof VariableModel) {
+    if (dat instanceof VariableModel && dat) {
       return dat;
     }
 
     return {};
   });
 
-  const tableKeys = Object.keys(columnHeaders?.[0]);
+  const tableKeys = columnHeaders ? Object.keys(columnHeaders?.[0]) : null;
   const columns = populateColumns<TableTypes>(tableKeys);
 
-  console.log(columnHeaders, columns);
+  useEffect(() => {
+    if (data !== null) {
+      const cenotesMap = data.content.map(
+        (cenote: CenoteModel) => new CenoteModel(cenote)
+      );
+      setTableData(cenotesMap);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    fetch();
+  }, []);
+
+  if (!columns) {
+    return null;
+  }
 
   return <CenoteandoTable data={columnHeaders} columns={columns} />;
 };

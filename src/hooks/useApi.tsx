@@ -8,8 +8,8 @@ export const useApi = (
   url: string,
   method: string,
   payload: object,
-  params?: any,
-  headers?: RawAxiosRequestHeaders
+  params: any = {},
+  headers: RawAxiosRequestHeaders = {}
 ) => {
   const [data, setData] = React.useState<any>(null);
   const [error, setError] = React.useState('');
@@ -34,6 +34,8 @@ export const useApi = (
         params,
         headers,
       });
+      console.log('Calling api: ', response);
+      
       setData(response.data);
     } catch (error: any) {
       setError(error.message);

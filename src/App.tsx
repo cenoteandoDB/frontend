@@ -19,7 +19,7 @@ function App() {
         requestInterceptors={[requestInterceptor]}
       >
         <Heading>Cenoteando Frontend</Heading>
-        <CenoteandoTableWrapper tableData={tableData} />
+        <CenoteandoTableWrapper />
       </ApiInstanceProvider>
     </div>
   );
