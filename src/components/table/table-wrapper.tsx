@@ -28,6 +28,14 @@ interface TableProps {
   tableData: TableTypes[];
 }
 
+//TODO Think in a way to handle the wrapper and the fetchs
+// should the parent component send the data or should this component
+// make the fetch?
+
+//TODO implement fetch call from here based on the table type
+// In order to detect the table type we must need to extract the url from
+// react router. E.g. "cenoteando.org/table/cenote", we extract "cenote" and
+// we extract from a dictionary the route to fetch
 export const CenoteandoTableWrapper: React.FC<TableProps> = ({ tableData }) => {
   if (!tableData) {
     return null;
