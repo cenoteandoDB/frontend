@@ -1,12 +1,22 @@
-import { ChakraProvider } from '@chakra-ui/react';
 import React from 'react';
+
+import { ChakraProvider } from '@chakra-ui/react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
+import { RouterProvider } from 'react-router-dom';
+import router from './services/routes';
+import { ApiInstanceProvider } from './hooks/api-instance-provider';
+import { httpClient } from './services/http-client';
+import { requestInterceptor } from './services/http-interceptors';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <ChakraProvider>
-      <App />
+      <ApiInstanceProvider
+        config={httpClient}
+        requestInterceptors={[requestInterceptor]}
+      >
+        <RouterProvider router={router} />
+      </ApiInstanceProvider>
     </ChakraProvider>
-  </React.StrictMode>,
+  </React.StrictMode>
 );

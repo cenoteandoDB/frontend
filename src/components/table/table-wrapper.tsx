@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useLoaderData } from 'react-router-dom';
 import { useApi } from '../../hooks/useApi';
 import {
   CenoteIssue,
@@ -26,8 +27,13 @@ interface CenoteTableColumns {
 type TableColumns = CenoteTableColumns | VariableModel | object;
 
 interface TableProps {
-  tableData?: TableTypes[];
+  route: string;
 }
+
+const classMap = {
+  cenotes: (data: CenoteModel) => new CenoteModel(data),
+  variables: (data: VariableModel) => new VariableModel(data),
+};
 
 //TODO Think in a way to handle the wrapper and the fetchs
 // should the parent component send the data or should this component
@@ -37,8 +43,14 @@ interface TableProps {
 // In order to detect the table type we must need to extract the url from
 // react router. E.g. "cenoteando.org/table/cenote", we extract "cenote" and
 // we extract from a dictionary the route to fetch
-export const CenoteandoTableWrapper: React.FC<TableProps> = () => {
-  const { data, loading, error, fetch } = useApi('api/cenotes', 'get', {}, { size: 150 });
+export const CenoteandoTableWrapper: React.FC<TableProps> = ({ route }) => {
+  const { data, loading, error, fetch } = useApi(
+    `api/${route}`,
+    'get',
+    {},
+    { size: 150 }
+  );
+  //const { data, loading, error } = useLoaderData();
   const [tableData, setTableData] = useState<TableTypes[] | null>(null);
 
   const columnHeaders: TableColumns[] | undefined = tableData?.map((dat) => {
@@ -58,7 +70,16 @@ export const CenoteandoTableWrapper: React.FC<TableProps> = () => {
       } as CenoteTableColumns;
     }
     if (dat instanceof VariableModel && dat) {
-      return dat;
+      return {
+        id: dat.id,
+        name: dat.name,
+        description: dat.description,
+        theme: dat.theme,
+        timeSeries: dat.timeseries,
+        multiple: dat.multiple,
+        unit: dat.units,
+        methodology: dat.methodology,
+      };
     }
 
     return {};
@@ -69,10 +90,11 @@ export const CenoteandoTableWrapper: React.FC<TableProps> = () => {
 
   useEffect(() => {
     if (data !== null) {
-      const cenotesMap = data.content.map(
-        (cenote: CenoteModel) => new CenoteModel(cenote)
+      const classType = classMap[route];
+      const classFromApi = data.content.map((cenote: typeof classType) =>
+        classType(cenote)
       );
-      setTableData(cenotesMap);
+      setTableData(classFromApi);
     }
   }, [data]);
 

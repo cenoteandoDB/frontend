@@ -34,8 +34,6 @@ export const useApi = (
         params,
         headers,
       });
-      console.log('Calling api: ', response);
-      
       setData(response.data);
     } catch (error: any) {
       setError(error.message);
