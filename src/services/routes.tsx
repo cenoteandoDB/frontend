@@ -2,6 +2,7 @@
 import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import App from '../App';
+import { Dashboard } from '../components/dashboard';
 import { NavbarWrapper } from '../components/navbar';
 import { CenoteandoTableWrapper } from '../components/table';
 
@@ -15,15 +16,22 @@ const router = createBrowserRouter([
         element: <App />
       },
       {
-        path: '/admin/cenotes',
-        element: <CenoteandoTableWrapper route='cenotes' />
+        path: '/admin',
+        element: <Dashboard />,
+        children: [
+          {
+            path: '/admin/cenotes',
+            element: <CenoteandoTableWrapper route='cenotes' />
+          },
+          {
+            path: 'variables',
+            element: <CenoteandoTableWrapper route='variables' />
+          }
+        ]
       },
-      {
-        path: '/admin/variables',
-        element: <CenoteandoTableWrapper route='variables' />
-      }
+      
     ]
-  },
+  }
 ]);
 
 export default router;

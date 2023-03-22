@@ -33,7 +33,7 @@ export const CenoteandoTableWrapper: React.FC<TableProps> = ({ route }) => {
     { size: 150 }
   );
   //const { data, loading, error } = useLoaderData();
-  const [tableData, setTableData] = useState<TableTypes[] | null>(null);
+  const [tableData, setTableData] = useState<TableTypes[] | null>(null); 
 
   const columnHeaders: TableColumns[] | undefined = tableData?.map((dat) => {
     if (dat instanceof CenoteModel && dat) {
@@ -77,10 +77,12 @@ export const CenoteandoTableWrapper: React.FC<TableProps> = ({ route }) => {
         classType(cenote)
       );
       setTableData(classFromApi);
-    } else {
-      fetch();
     }
   }, [data]);
+
+  useEffect(() => {
+    fetch();
+  }, [route]);
 
   if (!columns) {
     return null;

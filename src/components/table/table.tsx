@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import {
   Box,
@@ -17,7 +17,7 @@ import {
   Th,
   Thead,
   Tr,
-  VStack
+  VStack,
 } from '@chakra-ui/react';
 
 import { ChevronDownIcon, ChevronUpIcon, SearchIcon } from '@chakra-ui/icons';
@@ -34,7 +34,7 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  useReactTable
+  useReactTable,
 } from '@tanstack/react-table';
 import { Filter } from '../filter';
 import { TableTypes } from './types';
@@ -43,8 +43,6 @@ interface TableProps {
   columns: ColumnDef<TableTypes, string>[];
   data: any;
 }
-
-
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   // Rank the item
@@ -61,7 +59,8 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
 
 export const CenoteandoTable: React.FC<TableProps> = (props) => {
   const { data, columns } = props;
-  const [tableData] = React.useState(data);
+
+  const [tableData, setTableData] = React.useState(data);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
@@ -88,6 +87,10 @@ export const CenoteandoTable: React.FC<TableProps> = (props) => {
       fuzzy: fuzzyFilter,
     },
   });
+
+  useEffect(() => {
+    setTableData(data);
+  }, [data]);
 
   return (
     <Center>

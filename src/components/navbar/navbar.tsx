@@ -44,8 +44,8 @@ export const NavBar = () => {
         </Flex>
       </Link>
       <Flex gap='2' alignItems='center'>
-        <Link to='admin/cenotes'>Admin</Link>
-        <Link to='admin/variables'>Variables</Link>
+        <Link to='admin'>Admin</Link>
+        <Link to='map'>Map</Link>
       </Flex>
     </Flex>
   );
