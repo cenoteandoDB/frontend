@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useLoaderData } from 'react-router-dom';
 import { useApi } from '../../hooks/useApi';
 import {
-  CenoteIssue,
-  CenoteModel,
-  CenoteType,
+  CenoteModel
 } from '../../models/CenotesTypes';
 import { VariableModel } from '../../models/VariablesTypes';
 import { populateColumns } from '../../utils/populate-columns';
 import { CenoteandoTable } from './table';
-import { TableTypes, TableColumns, CenoteTableColumns } from './types';
+import { CenoteTableColumns, TableColumns, TableTypes } from './types';
 
 interface TableProps {
   route: string;

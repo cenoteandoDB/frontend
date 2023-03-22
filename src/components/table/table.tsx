@@ -17,7 +17,7 @@ import {
   Th,
   Thead,
   Tr,
-  VStack,
+  VStack
 } from '@chakra-ui/react';
 
 import { ChevronDownIcon, ChevronUpIcon, SearchIcon } from '@chakra-ui/icons';
@@ -34,10 +34,8 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  useReactTable,
+  useReactTable
 } from '@tanstack/react-table';
-import { CenoteModel } from '../../models/CenotesTypes';
-import { populateColumns } from '../../utils/populate-columns';
 import { Filter } from '../filter';
 import { TableTypes } from './types';
 
