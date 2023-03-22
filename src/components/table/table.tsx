@@ -39,7 +39,7 @@ import {
 import { CenoteModel } from '../../models/CenotesTypes';
 import { populateColumns } from '../../utils/populate-columns';
 import { Filter } from '../filter';
-import { TableTypes } from './table-wrapper';
+import { TableTypes } from './types';
 
 interface TableProps {
   columns: ColumnDef<TableTypes, string>[];
@@ -93,7 +93,7 @@ export const CenoteandoTable: React.FC<TableProps> = (props) => {
 
   return (
     <Center>
-      <VStack spacing={4} width='85%'>
+      <VStack spacing={4} width='95%'>
         <Box width='100%'>
           <InputGroup width='25%'>
             <InputLeftElement pointerEvents='none'>
@@ -142,12 +142,12 @@ export const CenoteandoTable: React.FC<TableProps> = (props) => {
                 ))}
               </Thead>
               <Tbody>
-                {table.getRowModel().rows.map((row) => {
+                {table.getRowModel().rows.map((row, i) => {
                   return (
-                    <Tr key={row.id}>
-                      {row.getVisibleCells().map((cell) => {
+                    <Tr key={`tr-${row.id}-${i}`}>
+                      {row.getVisibleCells().map((cell, index) => {
                         return (
-                          <Td key={cell.id} isTruncated>
+                          <Td key={`td-${cell.id}-${index}`} isTruncated>
                             {flexRender(
                               cell.column.columnDef.cell,
                               cell.getContext()

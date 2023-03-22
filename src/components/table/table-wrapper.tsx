@@ -9,22 +9,7 @@ import {
 import { VariableModel } from '../../models/VariablesTypes';
 import { populateColumns } from '../../utils/populate-columns';
 import { CenoteandoTable } from './table';
-
-export type TableTypes = CenoteModel | VariableModel;
-
-interface CenoteTableColumns {
-  id: string;
-  name: string;
-  state: string;
-  municipality: string;
-  type: CenoteType;
-  issues: CenoteIssue[];
-  createdAt: string;
-  updatedAt: string;
-  touristic: boolean;
-}
-
-type TableColumns = CenoteTableColumns | VariableModel | object;
+import { TableTypes, TableColumns, CenoteTableColumns } from './types';
 
 interface TableProps {
   route: string;
@@ -89,18 +74,16 @@ export const CenoteandoTableWrapper: React.FC<TableProps> = ({ route }) => {
   const columns = populateColumns<TableTypes>(tableKeys);
 
   useEffect(() => {
-    if (data !== null) {
-      const classType = classMap[route];
-      const classFromApi = data.content.map((cenote: typeof classType) =>
+    if (data) {
+      const classType = classMap[route as keyof typeof classMap];
+      const classFromApi = data.content.map((cenote: CenoteModel & VariableModel) =>
         classType(cenote)
       );
       setTableData(classFromApi);
+    } else {
+      fetch();
     }
   }, [data]);
-
-  useEffect(() => {
-    fetch();
-  }, []);
 
   if (!columns) {
     return null;

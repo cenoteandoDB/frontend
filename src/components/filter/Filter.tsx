@@ -22,8 +22,8 @@ export function Filter({
     <>
       <InputGroup>
         <datalist id={column.id + 'list'}>
-          {sortedUniqueValues.map((value) => (
-            <option value={value} key={value} />
+          {sortedUniqueValues.map((value, index) => (
+            <option value={value} key={`filter-key-${value}-${index}`} />
           ))}
         </datalist>
         <Input
