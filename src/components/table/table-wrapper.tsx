@@ -3,6 +3,7 @@ import { useApi } from '../../hooks/useApi';
 import {
   CenoteModel
 } from '../../models/CenotesTypes';
+import ReferenceModel from '../../models/ReferencesTypes';
 import { VariableModel } from '../../models/VariablesTypes';
 import { populateColumns } from '../../utils/populate-columns';
 import { CenoteandoTable } from './table';
@@ -15,6 +16,7 @@ interface TableProps {
 const classMap = {
   cenotes: (data: CenoteModel) => new CenoteModel(data),
   variables: (data: VariableModel) => new VariableModel(data),
+  references: (data: ReferenceModel) => new ReferenceModel(data)
 };
 
 //TODO Think in a way to handle the wrapper and the fetchs
@@ -38,7 +40,6 @@ export const CenoteandoTableWrapper: React.FC<TableProps> = ({ route }) => {
   const columnHeaders: TableColumns[] | undefined = tableData?.map((dat) => {
     if (dat instanceof CenoteModel && dat) {
       const { geojson, gadm, social, alternativeNames, ...remaining } = dat;
-
       return {
         id: remaining.id,
         name: remaining.name,
@@ -63,6 +64,16 @@ export const CenoteandoTableWrapper: React.FC<TableProps> = ({ route }) => {
         methodology: dat.methodology,
       };
     }
+    
+    if (dat instanceof ReferenceModel && dat) {
+      return {
+        id: dat.id,
+        authors: dat.authors,
+        shortName: dat.shortName,
+        type: dat.type,
+        year: dat.year,
+      };
+    }
 
     return {};
   });
@@ -73,7 +84,7 @@ export const CenoteandoTableWrapper: React.FC<TableProps> = ({ route }) => {
   useEffect(() => {
     if (data) {
       const classType = classMap[route as keyof typeof classMap];
-      const classFromApi = data.content.map((cenote: CenoteModel & VariableModel) =>
+      const classFromApi = data.content.map((cenote: CenoteModel & VariableModel & ReferenceModel) =>
         classType(cenote)
       );
       setTableData(classFromApi);

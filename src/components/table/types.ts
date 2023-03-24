@@ -1,4 +1,5 @@
 import { CenoteType, CenoteIssue, CenoteModel } from '../../models/CenotesTypes';
+import ReferenceModel from '../../models/ReferencesTypes';
 import { VariableModel } from '../../models/VariablesTypes';
 
 export interface CenoteTableColumns {
@@ -15,4 +16,4 @@ export interface CenoteTableColumns {
 
 export type TableColumns = CenoteTableColumns | VariableModel | object;
 
-export type TableTypes = CenoteModel | VariableModel;
+export type TableTypes = CenoteModel | VariableModel | ReferenceModel;
