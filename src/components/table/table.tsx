@@ -94,7 +94,7 @@ export const CenoteandoTable: React.FC<TableProps> = (props) => {
 
   return (
     <Center>
-      <VStack spacing={4} width='95%'>
+      <VStack spacing={4} width='95%' mb='50px'>
         <Box width='100%'>
           <InputGroup width='25%'>
             <InputLeftElement pointerEvents='none'>
@@ -109,7 +109,7 @@ export const CenoteandoTable: React.FC<TableProps> = (props) => {
         </Box>
         <Card>
           <Box overflow={'scroll'}>
-            <Table variant={'simple'} size='md' overflow={'scroll'}>
+            <Table variant={'simple'} size='sm' overflow={'scroll'}>
               <Thead>
                 {table.getHeaderGroups().map((headerGroups) => (
                   <Tr key={headerGroups.id}>
