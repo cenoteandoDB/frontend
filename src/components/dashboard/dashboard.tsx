@@ -1,4 +1,4 @@
-import React, { FC, MouseEventHandler, useState } from 'react';
+import React from 'react';
 
 import { Center, Flex, Heading, Tag } from '@chakra-ui/react';
 import { Link, Outlet, useLocation } from 'react-router-dom';

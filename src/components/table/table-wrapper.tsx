@@ -32,7 +32,7 @@ export const CenoteandoTableWrapper: React.FC<TableProps> = ({ route }) => {
     `api/${route}`,
     'get',
     {},
-    { size: 150 }
+    { size: 1500 }
   );
   //const { data, loading, error } = useLoaderData();
   const [tableData, setTableData] = useState<TableTypes[] | null>(null); 

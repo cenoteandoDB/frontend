@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
+  Badge,
   Box,
   Button,
   Card,
@@ -88,6 +89,8 @@ export const CenoteandoTable: React.FC<TableProps> = (props) => {
     },
   });
 
+  const sortedDataLength = table.getPreSortedRowModel().rows.length;
+
   useEffect(() => {
     setTableData(data);
   }, [data]);
@@ -95,18 +98,27 @@ export const CenoteandoTable: React.FC<TableProps> = (props) => {
   return (
     <Center>
       <VStack spacing={4} width='95%' mb='50px'>
-        <Box width='100%'>
-          <InputGroup width='25%'>
-            <InputLeftElement pointerEvents='none'>
-              <SearchIcon color='gray.300' />
-            </InputLeftElement>
-            <Input
-              placeholder='Buscar en todas las columnas'
-              value={globalFilter ?? ''}
-              onChange={(value) => setGlobalFilter(value.target.value)}
-            />
-          </InputGroup>
-        </Box>
+        <Flex width='100%' gap={5}>
+          <Box>
+            <InputGroup>
+              <InputLeftElement pointerEvents='none'>
+                <SearchIcon color='gray.300' />
+              </InputLeftElement>
+              <Input
+                placeholder='Buscar en todas las columnas'
+                value={globalFilter ?? ''}
+                onChange={(value) => setGlobalFilter(value.target.value)}
+              />
+            </InputGroup>
+          </Box>
+          <Box alignSelf='center'>
+            {sortedDataLength > 0 && (
+              <Badge colorScheme='green'>
+                Total de datos {sortedDataLength}
+              </Badge>
+            )}
+          </Box>
+        </Flex>
         <Card>
           <Box overflow={'scroll'}>
             <Table variant={'simple'} size='sm' overflow={'scroll'}>
