@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Center, Flex, Heading, Tag } from '@chakra-ui/react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import { adminRoutes } from '../../services/routes';
+import { adminRoutes } from '../../routes/routes';
 
 interface DashboardProps {
   route: string;
@@ -31,7 +31,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ route }) => {
 
   return (
     <>
-      <Heading>Este es el dashboard</Heading>
+      <Center>
+        <Heading>Dashboard - Statistics?</Heading>
+      </Center>
       <Center>
         <Flex gap={2} mb='20px' width='95%'>
           <Tags />

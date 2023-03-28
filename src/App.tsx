@@ -1,10 +1,11 @@
+import { Center, Heading } from '@chakra-ui/react';
 import React from 'react';
 
 function App() {
   return (
-    <div className='App'>
-      <h1>Esta es la homepage</h1>
-    </div>
+    <Center>
+      <Heading>Homepage</Heading>
+    </Center>
   );
 }
 

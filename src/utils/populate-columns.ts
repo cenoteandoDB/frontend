@@ -1,5 +1,5 @@
 import { ColumnDef } from '@tanstack/table-core';
-import { TableTypes } from '../components/table/table-wrapper';
+import { TableTypes } from '../components/table/types';
 import { languages } from './languages';
 
 export function populateColumns<T extends TableTypes>(
