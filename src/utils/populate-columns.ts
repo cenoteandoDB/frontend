@@ -26,6 +26,7 @@ export function populateColumns<T extends TableTypes>(
         }
         return columnAcc;
       },
+      enableColumnFilter: column !== 'edit'
     });
   });
 

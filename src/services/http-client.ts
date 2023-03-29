@@ -1,5 +1,5 @@
 export const httpClient = {
-  baseURL: 'https://cenoteando.org/',
+  baseURL: 'http://localhost:8080/',
   timeout: 10000,
   headers: {
     post: {
