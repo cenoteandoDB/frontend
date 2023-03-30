@@ -6,7 +6,8 @@ import {
 import ReferenceModel from '../../models/ReferencesTypes';
 import { VariableModel } from '../../models/VariablesTypes';
 import { populateColumns } from '../../utils/populate-columns';
-import { EditContent } from './editable-buttons';
+import { EditContent } from '../edit-buttons';
+
 import { CenoteandoTable } from './table';
 import { CenoteTableColumns, TableColumns, TableTypes } from './types';
 
@@ -51,7 +52,7 @@ export const CenoteandoTableWrapper: React.FC<TableProps> = ({ route }) => {
         createdAt: remaining.createdAt,
         updatedAt: remaining.updatedAt,
         touristic: remaining.touristic,
-        edit: <EditContent id={remaining.id} route='cenotes' inputs={remaining}/>
+        edit: <EditContent id={remaining.id} route='cenotes' inputs={dat}/>
       } as CenoteTableColumns;
     }
     if (dat instanceof VariableModel && dat) {
