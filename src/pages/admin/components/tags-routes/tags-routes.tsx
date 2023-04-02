@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Tag } from '@chakra-ui/react';
 import { Link, useLocation } from 'react-router-dom';
 import { adminRoutes } from '../../../routes';
+import { AdminTablesContext } from '../../context/admin-context';
 
-interface TagsRoutesProps {
-  route: string;
-}
 
-export const TagsRoutes: React.FC<TagsRoutesProps> = (props) => {
-  const { route } = props;
+
+export const TagsRoutes = () => {
+  const { route } = useContext(AdminTablesContext);
+
 
   const location = useLocation();
   const tagStyle = (tagName: string) =>

@@ -1,0 +1,1 @@
+export { EditModalWrapper } from './edit-modal-wrapper';

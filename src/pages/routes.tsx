@@ -2,8 +2,8 @@
 import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import { NavbarWrapper } from '../components/navbar';
-import { CenoteandoTableWrapper } from '../components/table';
 import { Admin } from './admin';
+import { CenoteandoTableWrapper } from './admin/components/table';
 import { Home } from './home';
 
 const ADMIN_KEY = '/admin';

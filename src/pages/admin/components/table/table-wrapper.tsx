@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { useApi } from '../../hooks/useApi';
-import {
-  CenoteModel
-} from '../../models/CenotesTypes';
-import ReferenceModel from '../../models/ReferencesTypes';
-import { VariableModel } from '../../models/VariablesTypes';
-import { populateColumns } from '../../utilities/populate-columns';
+
 import { EditContent } from '../edit-buttons';
+import { useApi } from '../../../../hooks/useApi';
+import { CenoteModel } from '../../../../models/CenotesTypes';
+import ReferenceModel from '../../../../models/ReferencesTypes';
+import { VariableModel } from '../../../../models/VariablesTypes';
+import { populateColumns } from '../../../../utilities/populate-columns';
+
 
 import { CenoteandoTable } from './table';
 import { CenoteTableColumns, TableColumns, TableTypes } from './types';
+import { AdminTablesContext } from '../../context/admin-context';
 
 interface TableProps {
   route: string;
@@ -39,6 +40,7 @@ export const CenoteandoTableWrapper: React.FC<TableProps> = ({ route }) => {
   //const { data, loading, error } = useLoaderData();
   const [tableData, setTableData] = useState<TableTypes[] | null>(null); 
 
+  //TODO refactor this
   const columnHeaders: TableColumns[] | undefined = tableData?.map((dat) => {
     if (dat instanceof CenoteModel && dat) {
       const { geojson, gadm, social, alternativeNames, ...remaining } = dat;
@@ -52,7 +54,7 @@ export const CenoteandoTableWrapper: React.FC<TableProps> = ({ route }) => {
         createdAt: remaining.createdAt,
         updatedAt: remaining.updatedAt,
         touristic: remaining.touristic,
-        edit: <EditContent id={remaining.id} route='cenotes' inputs={dat}/>
+        edit: <EditContent inputs={dat}/>
       } as CenoteTableColumns;
     }
     if (dat instanceof VariableModel && dat) {
@@ -102,5 +104,12 @@ export const CenoteandoTableWrapper: React.FC<TableProps> = ({ route }) => {
     return null;
   }
 
-  return <CenoteandoTable data={columnHeaders} columns={columns} />;
+  return (
+    <AdminTablesContext.Provider value={{
+      route: route,
+    }}>
+      <CenoteandoTable data={columnHeaders} columns={columns} />;
+    </AdminTablesContext.Provider>
+  );
+
 };

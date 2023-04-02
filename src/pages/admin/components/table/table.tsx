@@ -37,8 +37,8 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { Filter } from '../filter';
 import { TableTypes } from './types';
+import { Filter } from '../../../../components/filter';
 
 interface TableProps {
   columns: ColumnDef<TableTypes, string>[];

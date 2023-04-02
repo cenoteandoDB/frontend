@@ -1,6 +1,6 @@
-import { CenoteType, CenoteIssue, CenoteModel } from '../../models/CenotesTypes';
-import ReferenceModel from '../../models/ReferencesTypes';
-import { VariableModel } from '../../models/VariablesTypes';
+import { CenoteType, CenoteIssue, CenoteModel } from '../../../../models/CenotesTypes';
+import ReferenceModel from '../../../../models/ReferencesTypes';
+import { VariableModel } from '../../../../models/VariablesTypes';
 
 export interface CenoteTableColumns {
   id: string;

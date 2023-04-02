@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import {
   Modal,
   ModalOverlay,
@@ -11,7 +11,6 @@ import {
   Input,
   ModalFooter,
   Button,
-  Switch,
   Flex,
   Select,
   InputLeftAddon,
@@ -21,22 +20,22 @@ import {
   Checkbox,
   HStack,
 } from '@chakra-ui/react';
-import { CenoteModel } from '../../models/CenotesTypes';
+import { CenoteIssue, CenoteModel } from '../../../../models/CenotesTypes';
+import { AdminTablesContext } from '../../context/admin-context';
+
 
 export interface CenotesEditModalProps {
   isOpen: boolean;
   inputs: CenoteModel;
-  route: string;
   onClose: () => void;
 }
 
 // TODO finish template and implement other forms
 export const CenotesEditModal: FC<CenotesEditModalProps> = (props) => {
-  const { isOpen, inputs, onClose, route } = props;
+  const { route } = useContext(AdminTablesContext);
+  const { isOpen, inputs, onClose } = props;
   const [modalState, setModalState] = useState<CenoteModel>(inputs);
   const [issues, setIssues] = useState('');
-
-  console.log(modalState);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const targetName = event.target.name;
@@ -68,8 +67,6 @@ export const CenotesEditModal: FC<CenotesEditModalProps> = (props) => {
         ...modalState,
         geojson,
       } as CenoteModel;
-      console.log(newCenotesObj);
-
       setModalState(new CenoteModel(newCenotesObj));
       return;
     }
@@ -87,7 +84,7 @@ export const CenotesEditModal: FC<CenotesEditModalProps> = (props) => {
     const targetValue = event.target.value;
 
     if (targetName === 'issues') {
-      if (modalState.issues.includes(targetValue)) {
+      if (modalState.issues.includes(targetValue as CenoteIssue)) {
         return;
       }
       const issues = [targetValue,...modalState.issues];
