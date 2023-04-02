@@ -1,4 +1,4 @@
-import React, { FC, useContext, useState } from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import {
   Modal,
   ModalOverlay,
@@ -19,14 +19,13 @@ import {
   VStack,
   Checkbox,
   HStack,
-  InputRightElement,
-  IconButton,
   FormHelperText,
 } from '@chakra-ui/react';
 import { CenoteIssue, CenoteModel } from '../../../../models/CenotesTypes';
 import { AdminTablesContext } from '../../context/admin-context';
 import { CheckIcon, CloseIcon } from '@chakra-ui/icons';
 import { InputRightIcon } from '../input';
+import { useApi } from '../../../../hooks/useApi';
 
 export interface CenotesEditModalProps {
   isOpen: boolean;
@@ -36,7 +35,7 @@ export interface CenotesEditModalProps {
 
 // TODO finish template and implement other forms
 export const CenotesEditModal: FC<CenotesEditModalProps> = (props) => {
-  const { route } = useContext(AdminTablesContext);
+  const { tableData, setTableData } = useContext(AdminTablesContext);
   const { isOpen, inputs, onClose } = props;
   const [modalState, setModalState] = useState<CenoteModel>(inputs);
   const [alternativeNames, setAlternativeNames] = useState('');
@@ -44,6 +43,12 @@ export const CenotesEditModal: FC<CenotesEditModalProps> = (props) => {
   const [helperText, setHelperText] = useState({
     alternativeNames: '',
   });
+  const { data, status, loading, fetch } = useApi(
+    `api/cenotes/${modalState.id}`,
+    'put',
+    {},
+    {}
+  );
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const targetName = event.target.name;
@@ -78,24 +83,9 @@ export const CenotesEditModal: FC<CenotesEditModalProps> = (props) => {
       setModalState(new CenoteModel(newCenotesObj));
       return;
     }
-    if (targetName === 'new-alternative-name') {
-      const elementIndex = modalState.alternativeNames.indexOf(targetValue);
-      console.log(elementIndex, targetValue);
-
-      if (elementIndex === -1) return;
-
-      const newAlternativeNamesArr = modalState.alternativeNames;
-      newAlternativeNamesArr[elementIndex] = targetValue;
-      const newCenoteObj = {
-        ...modalState,
-        alternativeNames: newAlternativeNamesArr,
-      } as CenoteModel;
-      setModalState(newCenoteObj);
-    }
     const newCenoteObj = {
       ...modalState,
       [targetName]: targetValue,
-      touristic: event.target.checked,
     } as CenoteModel;
 
     setModalState(new CenoteModel(newCenoteObj));
@@ -181,7 +171,22 @@ export const CenotesEditModal: FC<CenotesEditModalProps> = (props) => {
     });
   };
 
-  console.log(modalState);
+  const handleOnSaveCenote = () => {
+    fetch(modalState);
+  };
+
+  //Effect to keep client data in sync with server data
+  useEffect(() => {
+    if (data && status === 200) {
+      onClose();
+      const newArr = (tableData as CenoteModel[])
+        .filter((data) => data.id !== modalState.id)
+        .map((cenote) => new CenoteModel(cenote));
+      setTableData([modalState, ...newArr]);
+    }
+  }, [data]);
+
+  console.log(modalState, tableData);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -220,7 +225,14 @@ export const CenotesEditModal: FC<CenotesEditModalProps> = (props) => {
               <Checkbox
                 name='touristic'
                 isChecked={modalState.touristic}
-                onChange={(event) => handleChange(event)}
+                onChange={(event) =>
+                  setModalState(
+                    new CenoteModel({
+                      ...modalState,
+                      touristic: event.target.checked,
+                    } as CenoteModel)
+                  )
+                }
               />
             </Flex>
           </FormControl>
@@ -321,7 +333,12 @@ export const CenotesEditModal: FC<CenotesEditModalProps> = (props) => {
         </ModalBody>
 
         <ModalFooter>
-          <Button colorScheme='blue' mr={3}>
+          <Button
+            colorScheme='blue'
+            mr={3}
+            isLoading={loading}
+            onClick={handleOnSaveCenote}
+          >
             Save
           </Button>
           <Button onClick={onClose}>Cancel</Button>

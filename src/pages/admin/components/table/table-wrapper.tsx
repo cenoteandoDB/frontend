@@ -7,10 +7,10 @@ import ReferenceModel from '../../../../models/ReferencesTypes';
 import { VariableModel } from '../../../../models/VariablesTypes';
 import { populateColumns } from '../../../../utilities/populate-columns';
 
-
 import { CenoteandoTable } from './table';
 import { CenoteTableColumns, TableColumns, TableTypes } from './types';
 import { AdminTablesContext } from '../../context/admin-context';
+import { Center, Spinner } from '@chakra-ui/react';
 
 interface TableProps {
   route: string;
@@ -19,7 +19,7 @@ interface TableProps {
 const classMap = {
   cenotes: (data: CenoteModel) => new CenoteModel(data),
   variables: (data: VariableModel) => new VariableModel(data),
-  references: (data: ReferenceModel) => new ReferenceModel(data)
+  references: (data: ReferenceModel) => new ReferenceModel(data),
 };
 
 //TODO Think in a way to handle the wrapper and the fetchs
@@ -35,10 +35,10 @@ export const CenoteandoTableWrapper: React.FC<TableProps> = ({ route }) => {
     `api/${route}`,
     'get',
     {},
-    { size: 1500 }
+    { size: 3000 }
   );
   //const { data, loading, error } = useLoaderData();
-  const [tableData, setTableData] = useState<TableTypes[] | null>(null); 
+  const [tableData, setTableData] = useState<TableTypes[] | null>(null);
 
   //TODO refactor this
   const columnHeaders: TableColumns[] | undefined = tableData?.map((dat) => {
@@ -54,7 +54,7 @@ export const CenoteandoTableWrapper: React.FC<TableProps> = ({ route }) => {
         createdAt: remaining.createdAt,
         updatedAt: remaining.updatedAt,
         touristic: remaining.touristic,
-        edit: <EditContent inputs={dat}/>
+        edit: <EditContent inputs={dat} />,
       } as CenoteTableColumns;
     }
     if (dat instanceof VariableModel && dat) {
@@ -69,7 +69,7 @@ export const CenoteandoTableWrapper: React.FC<TableProps> = ({ route }) => {
         methodology: dat.methodology,
       };
     }
-    
+
     if (dat instanceof ReferenceModel && dat) {
       return {
         id: dat.id,
@@ -89,8 +89,9 @@ export const CenoteandoTableWrapper: React.FC<TableProps> = ({ route }) => {
   useEffect(() => {
     if (data) {
       const classType = classMap[route as keyof typeof classMap];
-      const classFromApi = data.content.map((cenote: CenoteModel & VariableModel & ReferenceModel) =>
-        classType(cenote)
+      const classFromApi = data.content.map(
+        (cenote: CenoteModel & VariableModel & ReferenceModel) =>
+          classType(cenote)
       );
       setTableData(classFromApi);
     }
@@ -100,16 +101,27 @@ export const CenoteandoTableWrapper: React.FC<TableProps> = ({ route }) => {
     fetch();
   }, [route]);
 
+  if (!data && loading) {
+    return (
+      <Center>
+        <Spinner size='xl' />
+      </Center>
+    );
+  }
+
   if (!columns) {
     return null;
   }
 
   return (
-    <AdminTablesContext.Provider value={{
-      route: route,
-    }}>
+    <AdminTablesContext.Provider
+      value={{
+        route: route,
+        tableData,
+        setTableData
+      }}
+    >
       <CenoteandoTable data={columnHeaders} columns={columns} />;
     </AdminTablesContext.Provider>
   );
-
 };
