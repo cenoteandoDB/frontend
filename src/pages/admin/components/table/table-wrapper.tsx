@@ -33,7 +33,6 @@ export const CenoteandoTableWrapper: React.FC<TableProps> = ({ route }) => {
   const { data, loading, error, fetch } = useApi(
     `api/${route}`,
     'get',
-    {},
     { size: 3000 }
   );
   const [tableData, setTableData] = useState<TableTypes[] | null>(null);
@@ -121,7 +120,7 @@ export const CenoteandoTableWrapper: React.FC<TableProps> = ({ route }) => {
       value={{
         route: route,
         tableData,
-        setTableData
+        setTableData,
       }}
     >
       <CenoteandoTable data={columnHeaders} columns={columns} />;

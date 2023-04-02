@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
+import { DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons';
 import { Flex, IconButton, useDisclosure } from '@chakra-ui/react';
 import { EditModalWrapper } from '../edit-modals/edit-modal-wrapper';
 import { TableTypes } from '../table/types';
@@ -20,7 +20,7 @@ export const EditContent: React.FC<EditContentProps> = (props) => {
           <EditIcon />
         </IconButton>
         <IconButton aria-label='' size='sm' variant='ghost'>
-          <DeleteIcon />
+          <ViewIcon />
         </IconButton>
       </Flex>
       {isOpen && (

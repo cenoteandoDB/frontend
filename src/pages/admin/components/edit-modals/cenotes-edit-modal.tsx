@@ -23,9 +23,10 @@ import {
 } from '@chakra-ui/react';
 import { CenoteIssue, CenoteModel } from '../../../../models/CenotesTypes';
 import { AdminTablesContext } from '../../context/admin-context';
-import { CheckIcon, CloseIcon } from '@chakra-ui/icons';
+import { CheckIcon, CloseIcon, DeleteIcon } from '@chakra-ui/icons';
 import { InputRightIcon } from '../input';
 import { useApi } from '../../../../hooks/useApi';
+import { DeleteButton } from '../delete-button';
 
 export interface CenotesEditModalProps {
   isOpen: boolean;
@@ -333,15 +334,23 @@ export const CenotesEditModal: FC<CenotesEditModalProps> = (props) => {
         </ModalBody>
 
         <ModalFooter>
-          <Button
-            colorScheme='blue'
-            mr={3}
-            isLoading={loading}
-            onClick={handleOnSaveCenote}
-          >
-            Save
-          </Button>
-          <Button onClick={onClose}>Cancel</Button>
+          <Flex alignContent='flex-start' width='100%'>
+            <DeleteButton
+              modalState={modalState}
+              onCloseModal={onClose}
+            />
+          </Flex>
+          <Flex>
+            <Button
+              colorScheme='blue'
+              mr={3}
+              isLoading={loading}
+              onClick={handleOnSaveCenote}
+            >
+              Guardar
+            </Button>
+            <Button onClick={onClose}>Cancelar</Button>
+          </Flex>
         </ModalFooter>
       </ModalContent>
     </Modal>
