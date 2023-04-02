@@ -1,8 +1,16 @@
 import React from 'react';
+
 import { createContext } from 'react';
-import { TableColumns, TableTypes } from '../components/table/types';
-export const AdminTablesContext = createContext({
+import { TableTypes } from '../components/table/types';
+
+interface IAdminTablesContext {
+  route: string;
+  tableData: TableTypes[] | null;
+  setTableData: React.Dispatch<React.SetStateAction<TableTypes[] | null>>
+}
+
+export const AdminTablesContext = createContext<IAdminTablesContext>({
   route: '',
   tableData: [] as TableTypes[] | null,
-  setTableData: (tableData: TableTypes[]) => (null),
+  setTableData: () => undefined,
 });

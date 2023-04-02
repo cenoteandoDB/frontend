@@ -11,7 +11,6 @@ import { CenoteandoTable } from './table';
 import { CenoteTableColumns, TableColumns, TableTypes } from './types';
 import { AdminTablesContext } from '../../context/admin-context';
 import { Center, Spinner } from '@chakra-ui/react';
-
 interface TableProps {
   route: string;
 }
@@ -37,10 +36,9 @@ export const CenoteandoTableWrapper: React.FC<TableProps> = ({ route }) => {
     {},
     { size: 3000 }
   );
-  //const { data, loading, error } = useLoaderData();
   const [tableData, setTableData] = useState<TableTypes[] | null>(null);
 
-  //TODO refactor this
+  //TODO refactor this into adapters
   const columnHeaders: TableColumns[] | undefined = tableData?.map((dat) => {
     if (dat instanceof CenoteModel && dat) {
       const { geojson, gadm, social, alternativeNames, ...remaining } = dat;
@@ -100,6 +98,11 @@ export const CenoteandoTableWrapper: React.FC<TableProps> = ({ route }) => {
   useEffect(() => {
     fetch();
   }, [route]);
+
+  //TODO implement error handling
+  if (error) {
+    return null;
+  }
 
   if (!data && loading) {
     return (
