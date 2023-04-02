@@ -1,5 +1,6 @@
-import axios, { RawAxiosRequestHeaders } from 'axios';
 import React from 'react';
+
+import axios, { AxiosError, RawAxiosRequestHeaders } from 'axios';
 import { ApiContext } from './api-instance-provider';
 
 
@@ -7,13 +8,12 @@ import { ApiContext } from './api-instance-provider';
 export const useApi = (
   url: string,
   method: string,
-  payload: object,
-  params: any = {},
+  params: unknown = {},
   headers: RawAxiosRequestHeaders = {}
 ) => {
-  const [data, setData] = React.useState<any>(null);
+  const [data, setData] = React.useState<unknown>(null);
   const [status, setStatus] = React.useState(0);
-  const [error, setError] = React.useState('');
+  const [error, setError] = React.useState<AxiosError | null>(null);
   const [loading, setLoading] = React.useState(false);
   const contextInstance = React.useContext(ApiContext);
   const instance = React.useMemo(() => {
@@ -37,18 +37,12 @@ export const useApi = (
       });
       setStatus(response.status);
       setData(response.data);
-    } catch (error: any) {
-      setError(error.message);
+    } catch (error: unknown) {
+      setError(error as AxiosError);
     } finally {
       setLoading(false);
     }
   };
-
-  // React.useEffect(() => {
-  //   if (method === 'get') {
-  //     fetch();
-  //   }
-  // }, []);
 
   return { cancel, data, status, error, loading, fetch };
 };
