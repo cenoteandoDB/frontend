@@ -1,17 +1,21 @@
 // ./client/src/router.js
 import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
-import App from '../App';
-import { Dashboard } from '../components/dashboard';
 import { NavbarWrapper } from '../components/navbar';
 import { CenoteandoTableWrapper } from '../components/table';
+import { Admin } from './admin';
+import { Home } from './home';
 
 const ADMIN_KEY = '/admin';
 export const adminRoutes = ['cenotes', 'variables', 'references'];
 
+// Builds children of admin page dynamically
+// Because admin route will have tables with different data it's easier to build this routes
+// with this functions instead of copy-paste the routes below.
 const routeBuilder = (
   parentRoute: string,
   routesObj: string[],
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Component: React.FC<any>
 ): Array<{ path: string; element: JSX.Element }> => {
   const routes: Array<{ path: string; element: JSX.Element }> = [];
@@ -30,11 +34,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <App />,
+        element: <Home />,
       },
       {
         path: ADMIN_KEY,
-        element: <Dashboard route={ADMIN_KEY} />,
+        element: <Admin route={ADMIN_KEY} />,
         children: routeBuilder(ADMIN_KEY, adminRoutes, CenoteandoTableWrapper),
       },
     ],

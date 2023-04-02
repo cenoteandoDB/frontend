@@ -5,7 +5,7 @@ import {
 } from '../../models/CenotesTypes';
 import ReferenceModel from '../../models/ReferencesTypes';
 import { VariableModel } from '../../models/VariablesTypes';
-import { populateColumns } from '../../utils/populate-columns';
+import { populateColumns } from '../../utilities/populate-columns';
 import { EditContent } from '../edit-buttons';
 
 import { CenoteandoTable } from './table';

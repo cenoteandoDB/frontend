@@ -3,7 +3,7 @@ import React from 'react';
 import { ChakraProvider } from '@chakra-ui/react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
-import router from './routes/routes';
+import router from './pages/routes';
 import { ApiInstanceProvider } from './hooks/api-instance-provider';
 import { httpClient } from './services/http-client';
 import { requestInterceptor } from './services/http-interceptors';
