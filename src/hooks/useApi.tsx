@@ -12,6 +12,7 @@ export const useApi = (
   headers: RawAxiosRequestHeaders = {}
 ) => {
   const [data, setData] = React.useState<any>(null);
+  const [status, setStatus] = React.useState(0);
   const [error, setError] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const contextInstance = React.useContext(ApiContext);
@@ -34,6 +35,7 @@ export const useApi = (
         params,
         headers,
       });
+      setStatus(response.status);
       setData(response.data);
     } catch (error: any) {
       setError(error.message);
@@ -48,5 +50,5 @@ export const useApi = (
   //   }
   // }, []);
 
-  return { cancel, data, error, loading, fetch };
+  return { cancel, data, status, error, loading, fetch };
 };
