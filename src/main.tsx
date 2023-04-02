@@ -6,7 +6,7 @@ import { RouterProvider } from 'react-router-dom';
 import router from './pages/routes';
 import { ApiInstanceProvider } from './hooks/api-instance-provider';
 import { httpClient } from './services/http-client';
-import { requestInterceptor } from './services/http-interceptors';
+import { requestInterceptor } from './interceptors/http-interceptors';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
