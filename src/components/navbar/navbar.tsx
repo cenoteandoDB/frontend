@@ -4,12 +4,7 @@ import logo from '../../../public/logo.png';
 
 import {
   Flex,
-  Spacer,
-  ButtonGroup,
-  Button,
-  Box,
   Image,
-  Text,
   Heading,
 } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
@@ -22,7 +17,6 @@ export const NavBar = () => {
       gap='2'
       justifyContent='space-around'
       bg='Highlight'
-      mb='20px'
     >
       <Link to='/'>
         <Flex
