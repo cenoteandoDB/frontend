@@ -5,6 +5,15 @@ type CenoteSocialProperties = {
   rating?: number;
 };
 
+export interface geoJsonI {
+  id: number | string;
+  type: 'Feature';
+  geometry: {
+    type: 'Point';
+    coordinates: [number, number];
+  };
+}
+
 export enum CenoteType {
   NO_TYPE = 'NO_TYPE',
   CENOTE = 'CENOTE',
@@ -60,6 +69,14 @@ export class CenoteModel {
 
   getLongitude(): number | null {
     return this.geojson?.geometry.coordinates[0] || null;
+  }
+
+  getGeoJson(): geoJsonI {
+    const geoJson = {
+      id: this.id,
+      ...this.geojson,
+    };
+    return geoJson;
   }
 
   setCoordinates(latitude: number, longitude: number): void {
