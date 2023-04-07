@@ -15,11 +15,11 @@ export interface geoJsonI {
 }
 
 export enum CenoteType {
-  NO_TYPE = 'NO_TYPE',
+  NO_TYPE = 'Sin tipo',
   CENOTE = 'CENOTE',
-  DRY_CAVE = 'DRY_CAVE',
-  WATER_WELL = 'WATER_WELL',
-  WATERY = 'WATERY',
+  DRY_CAVE = 'Cueva seca',
+  WATER_WELL = 'Pozo',
+  WATERY = 'Acuoso',
 }
 
 export enum CenoteIssue {
@@ -50,7 +50,7 @@ export class CenoteModel {
   constructor(jsonObj?: CenoteModel) {
     if (jsonObj) {
       this.id = jsonObj.id;
-      this.type = jsonObj.type;
+      this.type = CenoteType[jsonObj.type as keyof typeof CenoteType];
       this.name = jsonObj.name;
       this.touristic = jsonObj.touristic;
       this.issues = jsonObj.issues;
