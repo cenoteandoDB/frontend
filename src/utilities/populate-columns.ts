@@ -1,10 +1,8 @@
 import { ColumnDef } from '@tanstack/table-core';
-import { TableTypes } from '../components/table/types';
-import { languages } from './languages';
+import { TableTypes } from '../pages/admin/components/table/types';
 
 export function populateColumns<T extends TableTypes>(
-  data: string[] | null,
-  language = 'spanish'
+  data: string[] | null
 ): ColumnDef<T, string>[] | null {
 
   if (!data) {
@@ -15,12 +13,11 @@ export function populateColumns<T extends TableTypes>(
 
   data.map((column) => {
     columns.push({
-      accessorKey: languages[language][column],
+      accessorKey: column,
       id: column,
-      width: 100,
       cell: (info) => info.getValue(),
-      accessorFn: (acc: T) => {
-        const columnAcc = acc[column as keyof T];
+      accessorFn: (acc: T)=> {
+        const columnAcc = acc[column as keyof T] as string;
         if (typeof columnAcc === 'boolean') {
           return columnAcc ? 'Sí' : 'No';
         }
