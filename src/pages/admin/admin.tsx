@@ -37,6 +37,7 @@ export const Admin: React.FC<AdminProps> = (props) => {
     <AdminTablesContext.Provider
       value={{
         route: route,
+        setTableData: () => undefined
       }}
     >
       <Center>

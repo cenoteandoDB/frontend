@@ -4,7 +4,7 @@ import { TableTypes } from '../components/table/types';
 interface IAdminTablesContext {
   route: string;
   tableData?: TableTypes[] | null;
-  setTableData?: React.Dispatch<React.SetStateAction<TableTypes[] | null>>
+  setTableData: React.Dispatch<React.SetStateAction<TableTypes[] | null>>
 }
 
 export const AdminTablesContext = createContext<IAdminTablesContext>({
