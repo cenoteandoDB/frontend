@@ -6,10 +6,9 @@ import maplibreGl, {
   LngLatLike,
   Map as MapLibre,
 } from 'maplibre-gl';
-import { CenoteModel, CenoteType } from '../../../../models/CenotesTypes';
+import { CenoteModel } from '../../../../models/CenotesTypes';
 import { clusterLayers, symbolLayer, unclusterLayer } from '../utilities';
 import './map.css';
-import { Flex } from '@chakra-ui/react';
 import { Popup } from '../popup';
 
 interface MapComponentI {
