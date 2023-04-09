@@ -1,7 +1,7 @@
 import React from 'react';
 import { CenoteModel } from '../../../../models/CenotesTypes';
 import { MapLayerSelector } from '../map-layer-selector';
-import { layers, mapLayers } from '../utilities';
+import { layers } from '../utilities';
 import { MapComponent } from './map-component';
 
 interface MapComponentWrapperI {
@@ -10,18 +10,18 @@ interface MapComponentWrapperI {
 
 export const MapComponentWrapper: React.FC<MapComponentWrapperI> = (props) => {
   const { data } = props;
-  const [, setCenotesLayers] = React.useState('');
+  const [cenoteLayers, setCenotesLayers] = React.useState('');
 
   const onSelectedOptionCallback = (
     e: React.ChangeEvent<HTMLSelectElement>
   ) => {
     setCenotesLayers(e.target.value);
-    //map.current?.setStyle(mapLayers(e.target.value));
   };
 
   return (
     <>
-      <MapComponent cenotes={data} />
+      <MapLayerSelector options={layers} selector={onSelectedOptionCallback} />
+      <MapComponent cenotes={data} mapLayer={cenoteLayers} />
     </>
   );
 };

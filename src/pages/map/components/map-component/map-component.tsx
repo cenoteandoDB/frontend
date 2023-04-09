@@ -7,19 +7,17 @@ import maplibreGl, {
   Map as MapLibre,
 } from 'maplibre-gl';
 import { CenoteModel } from '../../../../models/CenotesTypes';
-import { clusterLayers, symbolLayer, unclusterLayer } from '../utilities';
+import { clusterLayers, mapLayers, symbolLayer, unclusterLayer } from '../utilities';
 import './map.css';
 import { Popup } from '../popup';
 
 interface MapComponentI {
-  lng?: number;
-  lat?: number;
-  zoom?: number;
   cenotes: CenoteModel[] | null;
+  mapLayer: string;
 }
 
 export const MapComponent: React.FC<MapComponentI> = (props) => {
-  const { cenotes } = props;
+  const { cenotes, mapLayer} = props;
 
   const mapContainer = React.useRef(null);
   const map = React.useRef<MapLibre | null>(null);
@@ -159,6 +157,10 @@ export const MapComponent: React.FC<MapComponentI> = (props) => {
     const nav = new maplibreGl.NavigationControl({});
     map.current.addControl(nav, 'top-left');
   }, [API_KEY, cenotes, geoJson, popup]);
+
+  React.useEffect(() => {
+    map.current?.setStyle(mapLayers(mapLayer));
+  }, [mapLayer]);
 
   return (
     <div className='map-wrap'>
