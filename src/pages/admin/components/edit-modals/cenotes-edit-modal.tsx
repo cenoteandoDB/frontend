@@ -23,7 +23,7 @@ import {
 } from '@chakra-ui/react';
 import { CenoteIssue, CenoteModel } from '../../../../models/CenotesTypes';
 import { AdminTablesContext } from '../../context/admin-context';
-import { CheckIcon, CloseIcon, DeleteIcon } from '@chakra-ui/icons';
+import { CheckIcon, CloseIcon } from '@chakra-ui/icons';
 import { InputRightIcon } from '../input';
 import { useApi } from '../../../../hooks/useApi';
 import { DeleteButton } from '../delete-button';
