@@ -139,7 +139,6 @@ export const CenotesEditModal: FC<CenotesEditModalProps> = (props) => {
   ) => {
     const alternativeNamesArr = modalState.alternativeNames;
     const target = event.target as HTMLButtonElement;
-    console.log(target.name);
 
     const newAlternativeArr = alternativeNamesArr.filter(
       (name) => name !== target.name
@@ -186,8 +185,6 @@ export const CenotesEditModal: FC<CenotesEditModalProps> = (props) => {
       setTableData([modalState, ...newArr]);
     }
   }, [data]);
-
-  console.log(modalState, tableData);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
