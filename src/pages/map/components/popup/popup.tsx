@@ -15,6 +15,9 @@ export const Popup: React.FC<PopupI> = (props) => {
   }
 
   const cenoteData = data[0];
+
+  //TODO add link to cenote card
+  //TODO Ask to want else to add to this popup card
   return (
     <Flex direction='column' gap={2}>
       <Heading as='h2' fontSize='16px'>
