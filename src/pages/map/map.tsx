@@ -1,4 +1,5 @@
 import React from 'react';
+import { dataAdapter } from '../../adapters/api-data/api-data-adapter';
 import { LoadingSpinner } from '../../components/loading-spinner';
 import { useApi } from '../../hooks/useApi';
 import { CenoteModel } from '../../models/CenotesTypes';
@@ -12,10 +13,7 @@ export const Map = () => {
 
   React.useEffect(() => {
     if (data) {
-      const cenotesMap = data.content.map(
-        (cenote: CenoteModel) => new CenoteModel(cenote)
-      );
-      setCenotes(cenotesMap);
+      setCenotes(dataAdapter('cenotes', data));
     }
   }, [data]);
 

@@ -11,15 +11,11 @@ import { CenoteandoTable } from './table';
 import { CenoteTableColumns, TableColumns, TableTypes } from './types';
 import { AdminTablesContext } from '../../context/admin-context';
 import { LoadingSpinner } from '../../../../components/loading-spinner';
+import { dataAdapter } from '../../../../adapters/api-data/api-data-adapter';
 interface TableProps {
   route: string;
 }
 
-const classMap = {
-  cenotes: (data: CenoteModel) => new CenoteModel(data),
-  variables: (data: VariableModel) => new VariableModel(data),
-  references: (data: ReferenceModel) => new ReferenceModel(data),
-};
 
 //TODO Think in a way to handle the wrapper and the fetchs
 // should the parent component send the data or should this component
@@ -85,12 +81,7 @@ export const CenoteandoTableWrapper: React.FC<TableProps> = ({ route }) => {
 
   useEffect(() => {
     if (data) {
-      const classType = classMap[route as keyof typeof classMap];
-      const classFromApi = data.content.map(
-        (cenote: CenoteModel & VariableModel & ReferenceModel) =>
-          classType(cenote)
-      );
-      setTableData(classFromApi);
+      setTableData(dataAdapter(route, data));
     }
   }, [data]);
 
