@@ -5,7 +5,7 @@ import { Flex, IconButton, useDisclosure } from '@chakra-ui/react';
 import { EditModalWrapper } from '../edit-modals/edit-modal-wrapper';
 import { TableTypes } from '../table/types';
 
-interface EditContentProps {
+export interface EditContentProps {
   inputs: TableTypes;
 }
 

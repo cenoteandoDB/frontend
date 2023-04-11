@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
-import { EditContent } from '../edit-buttons';
 import { useApi } from '../../../../hooks/useApi';
-import { CenoteModel } from '../../../../models/CenotesTypes';
-import ReferenceModel from '../../../../models/ReferencesTypes';
-import { VariableModel } from '../../../../models/VariablesTypes';
-import { populateColumns } from '../../../../utilities/populate-columns';
 
 import { CenoteandoTable } from './table';
-import { CenoteTableColumns, TableColumns, TableTypes } from './types';
+import { TableTypes } from './types';
 import { AdminTablesContext } from '../../context/admin-context';
 import { LoadingSpinner } from '../../../../components/loading-spinner';
 import { dataAdapter } from '../../../../adapters/api-data/api-data-adapter';
+import { columnFactory } from '../../../../adapters/table-column-adapter/column-factory';
 interface TableProps {
   route: string;
 }
@@ -33,51 +29,8 @@ export const CenoteandoTableWrapper: React.FC<TableProps> = ({ route }) => {
   );
   const [tableData, setTableData] = useState<TableTypes[] | null>(null);
 
-  //TODO refactor this into adapters
-  const columnHeaders: TableColumns[] | undefined = tableData?.map((dat) => {
-    if (dat instanceof CenoteModel && dat) {
-      const { geojson, gadm, social, alternativeNames, ...remaining } = dat;
-      return {
-        id: remaining.id,
-        name: remaining.name,
-        state: gadm?.name_1,
-        municipality: gadm?.name_2,
-        type: remaining.type,
-        issues: remaining.issues,
-        createdAt: remaining.createdAt,
-        updatedAt: remaining.updatedAt,
-        touristic: remaining.touristic,
-        edit: <EditContent inputs={dat} />,
-      } as CenoteTableColumns;
-    }
-    if (dat instanceof VariableModel && dat) {
-      return {
-        id: dat.id,
-        name: dat.name,
-        description: dat.description,
-        theme: dat.theme,
-        timeSeries: dat.timeseries,
-        multiple: dat.multiple,
-        unit: dat.units,
-        methodology: dat.methodology,
-      };
-    }
-
-    if (dat instanceof ReferenceModel && dat) {
-      return {
-        id: dat.id,
-        authors: dat.authors,
-        shortName: dat.shortName,
-        type: dat.type,
-        year: dat.year,
-      };
-    }
-
-    return {};
-  });
-
-  const tableKeys = columnHeaders ? Object.keys(columnHeaders?.[0]) : null;
-  const columns = populateColumns<TableTypes>(tableKeys);
+  //TODO implement destructuration
+  const columns = columnFactory(tableData)?.buildColumnHeaders()  || undefined;
 
   useEffect(() => {
     if (data) {
@@ -94,13 +47,13 @@ export const CenoteandoTableWrapper: React.FC<TableProps> = ({ route }) => {
     return null;
   }
 
-  if (!data && loading) {
+  if (loading) {
     return (
       <LoadingSpinner />
     );
   }
 
-  if (!columns) {
+  if (!columns?.[0] || !columns?.[1]) {
     return null;
   }
 
@@ -112,7 +65,7 @@ export const CenoteandoTableWrapper: React.FC<TableProps> = ({ route }) => {
         setTableData,
       }}
     >
-      <CenoteandoTable data={columnHeaders} columns={columns} />;
+      <CenoteandoTable data={columns[1]} columns={columns[0]} />;
     </AdminTablesContext.Provider>
   );
 };
