@@ -10,7 +10,7 @@ import { populateColumns } from '../../../../utilities/populate-columns';
 import { CenoteandoTable } from './table';
 import { CenoteTableColumns, TableColumns, TableTypes } from './types';
 import { AdminTablesContext } from '../../context/admin-context';
-import { Center, Spinner } from '@chakra-ui/react';
+import { LoadingSpinner } from '../../../../components/loading-spinner';
 interface TableProps {
   route: string;
 }
@@ -105,9 +105,7 @@ export const CenoteandoTableWrapper: React.FC<TableProps> = ({ route }) => {
 
   if (!data && loading) {
     return (
-      <Center>
-        <Spinner size='xl' />
-      </Center>
+      <LoadingSpinner />
     );
   }
 

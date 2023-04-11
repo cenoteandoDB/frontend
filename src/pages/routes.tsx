@@ -5,8 +5,10 @@ import { NavbarWrapper } from '../components/navbar';
 import { Admin } from './admin';
 import { CenoteandoTableWrapper } from './admin/components/table';
 import { Home } from './home';
+import { Map } from './map';
 
 const ADMIN_KEY = '/admin';
+const MAP_KEY = '/map';
 export const adminRoutes = ['cenotes', 'variables', 'references'];
 
 // Builds children of admin page dynamically
@@ -41,6 +43,10 @@ const router = createBrowserRouter([
         element: <Admin route={ADMIN_KEY} />,
         children: routeBuilder(ADMIN_KEY, adminRoutes, CenoteandoTableWrapper),
       },
+      {
+        path: MAP_KEY,
+        element: <Map />
+      }
     ],
   },
 ]);

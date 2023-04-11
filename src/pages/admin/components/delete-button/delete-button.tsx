@@ -1,4 +1,4 @@
-import React, { LegacyRef, RefObject, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 
 import { DeleteIcon } from '@chakra-ui/icons';
 import {

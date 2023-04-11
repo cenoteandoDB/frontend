@@ -2,7 +2,6 @@ import { InternalAxiosRequestConfig } from 'axios';
 
 export const requestInterceptor = (config: InternalAxiosRequestConfig) => {
   const authHeader = config?.headers?.['Authorization'];
-  console.log('interceptor ', authHeader);
   
   if (!authHeader) {
     const accessToken = window.sessionStorage.getItem('userSession');

@@ -23,7 +23,7 @@ import {
 } from '@chakra-ui/react';
 import { CenoteIssue, CenoteModel } from '../../../../models/CenotesTypes';
 import { AdminTablesContext } from '../../context/admin-context';
-import { CheckIcon, CloseIcon, DeleteIcon } from '@chakra-ui/icons';
+import { CheckIcon, CloseIcon } from '@chakra-ui/icons';
 import { InputRightIcon } from '../input';
 import { useApi } from '../../../../hooks/useApi';
 import { DeleteButton } from '../delete-button';
@@ -139,7 +139,6 @@ export const CenotesEditModal: FC<CenotesEditModalProps> = (props) => {
   ) => {
     const alternativeNamesArr = modalState.alternativeNames;
     const target = event.target as HTMLButtonElement;
-    console.log(target.name);
 
     const newAlternativeArr = alternativeNamesArr.filter(
       (name) => name !== target.name
@@ -186,8 +185,6 @@ export const CenotesEditModal: FC<CenotesEditModalProps> = (props) => {
       setTableData([modalState, ...newArr]);
     }
   }, [data]);
-
-  console.log(modalState, tableData);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
