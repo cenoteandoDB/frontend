@@ -22,15 +22,14 @@ interface TableProps {
 // react router. E.g. "cenoteando.org/table/cenote", we extract "cenote" and
 // we extract from a dictionary the route to fetch
 export const CenoteandoTableWrapper: React.FC<TableProps> = ({ route }) => {
+  const [tableData, setTableData] = useState<TableTypes[] | null>(null);
+  //TODO implement destructuration
+  const columns = columnFactory(tableData)?.buildColumnHeaders()  || undefined;
   const { data, loading, error, fetch } = useApi(
     `api/${route}`,
     'get',
     { size: 3000 }
   );
-  const [tableData, setTableData] = useState<TableTypes[] | null>(null);
-
-  //TODO implement destructuration
-  const columns = columnFactory(tableData)?.buildColumnHeaders()  || undefined;
 
   useEffect(() => {
     if (data) {

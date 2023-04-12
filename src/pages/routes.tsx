@@ -1,5 +1,5 @@
-// ./client/src/router.js
 import React from 'react';
+
 import { createBrowserRouter } from 'react-router-dom';
 import { NavbarWrapper } from '../components/navbar';
 import { Admin } from './admin';

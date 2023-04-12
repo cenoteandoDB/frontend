@@ -1,5 +1,6 @@
-import { Center, Flex, Heading } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
+
+import { Center, Flex, Heading } from '@chakra-ui/react';
 import { Outlet } from 'react-router-dom';
 import { useApi } from '../../hooks/useApi';
 import { AuthDto } from '../../models/AuthTypes';

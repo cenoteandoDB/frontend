@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useEffect } from 'react';
 
 import {
   Badge,
@@ -20,7 +21,6 @@ import {
   Tr,
   VStack,
 } from '@chakra-ui/react';
-
 import { ChevronDownIcon, ChevronUpIcon, SearchIcon } from '@chakra-ui/icons';
 import { rankItem } from '@tanstack/match-sorter-utils';
 import {
@@ -40,11 +40,6 @@ import {
 import { TableTypes } from './types';
 import { Filter } from '../../../../components/filter';
 
-interface TableProps {
-  columns: ColumnDef<TableTypes, string>[];
-  data: any;
-}
-
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   // Rank the item
   const itemRank = rankItem(row.getValue(columnId), value);
@@ -58,9 +53,13 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   return itemRank.passed;
 };
 
+interface TableProps {
+  columns: ColumnDef<TableTypes, string>[];
+  data: any;
+}
+
 export const CenoteandoTable: React.FC<TableProps> = (props) => {
   const { data, columns } = props;
-
   const [tableData, setTableData] = React.useState(data);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []

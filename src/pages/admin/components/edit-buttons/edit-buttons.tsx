@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons';
+import { EditIcon, ViewIcon } from '@chakra-ui/icons';
 import { Flex, IconButton, useDisclosure } from '@chakra-ui/react';
 import { EditModalWrapper } from '../edit-modals/edit-modal-wrapper';
 import { TableTypes } from '../table/types';
