@@ -39,6 +39,7 @@ import {
 } from '@tanstack/react-table';
 import { TableTypes } from './types';
 import { Filter } from '../../../../components/filter';
+import { AddButton } from '../add-button.tsx';
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   // Rank the item
@@ -116,6 +117,9 @@ export const CenoteandoTable: React.FC<TableProps> = (props) => {
                 Total de datos {sortedDataLength}
               </Badge>
             )}
+          </Box>
+          <Box alignSelf='center'>
+            <AddButton />
           </Box>
         </Flex>
         <Card>

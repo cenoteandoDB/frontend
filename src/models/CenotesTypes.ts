@@ -60,7 +60,33 @@ export class CenoteModel {
       this.social = jsonObj.social;
       this.createdAt = jsonObj.createdAt;
       this.updatedAt = jsonObj.updatedAt;
+    } else {
+      this.getDefaults();
     }
+  }
+
+  private getDefaults() {
+    this.id = '';
+    this.type = CenoteType.NO_TYPE;
+    this.name = '';
+    this.touristic = true;
+    this.issues = [];
+    this.alternativeNames = [];
+    this.geojson = {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [0, 0],
+      },
+      properties: {},
+    };
+    this.gadm = {};
+    this.social = {
+      totalComments: 0,
+      rating: 0,
+    };
+    this.createdAt = '';
+    this.updatedAt = '';
   }
 
   getLatitude(): number | null {

@@ -32,7 +32,7 @@ import { EditModalProps } from './edit-modal-wrapper';
 
 // TODO finish template and implement other forms
 export const CenotesEditModal: FC<EditModalProps> = (props) => {
-  const { isOpen, inputs, onClose } = props;
+  const { isOpen, inputs, method, onClose } = props;
   const { tableData, setTableData } = useContext(AdminTablesContext);
   const [modalState, setModalState] = useState<CenoteModel>(inputs as CenoteModel);
   const [alternativeNames, setAlternativeNames] = useState('');
@@ -41,8 +41,8 @@ export const CenotesEditModal: FC<EditModalProps> = (props) => {
     alternativeNames: '',
   });
   const { data, status, loading, fetch } = useApi(
-    `api/cenotes/${modalState.id}`,
-    'put',
+    `api/cenotes/${method == 'put' ? modalState.id: ''}`,
+    method,
     {},
     {}
   );
