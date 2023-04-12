@@ -28,18 +28,13 @@ import { CheckIcon, CloseIcon } from '@chakra-ui/icons';
 import { InputRightIcon } from '../input';
 import { useApi } from '../../../../hooks/useApi';
 import { DeleteButton } from '../delete-button';
-
-export interface CenotesEditModalProps {
-  isOpen: boolean;
-  inputs: CenoteModel;
-  onClose: () => void;
-}
+import { EditModalProps } from './edit-modal-wrapper';
 
 // TODO finish template and implement other forms
-export const CenotesEditModal: FC<CenotesEditModalProps> = (props) => {
-  const { tableData, setTableData } = useContext(AdminTablesContext);
+export const CenotesEditModal: FC<EditModalProps> = (props) => {
   const { isOpen, inputs, onClose } = props;
-  const [modalState, setModalState] = useState<CenoteModel>(inputs);
+  const { tableData, setTableData } = useContext(AdminTablesContext);
+  const [modalState, setModalState] = useState<CenoteModel>(inputs as CenoteModel);
   const [alternativeNames, setAlternativeNames] = useState('');
   const [issues, setIssues] = useState('');
   const [helperText, setHelperText] = useState({
