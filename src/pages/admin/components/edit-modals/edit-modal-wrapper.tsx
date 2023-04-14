@@ -33,6 +33,7 @@ export const EditModalWrapper: React.FC<EditModalProps> = (props) => {
   if (!inputs) {
     const clazz = classMap[route as keyof typeof classMap];
     const newInput = clazz();
+
     return (
       <EditModalComponent
         isOpen={isOpen}

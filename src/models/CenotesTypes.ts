@@ -50,7 +50,7 @@ export class CenoteModel {
   constructor(jsonObj?: CenoteModel) {
     if (jsonObj) {
       this.id = jsonObj.id;
-      this.type = CenoteType[jsonObj.type as keyof typeof CenoteType];
+      this.type = jsonObj.type;
       this.name = jsonObj.name;
       this.touristic = jsonObj.touristic;
       this.issues = jsonObj.issues;

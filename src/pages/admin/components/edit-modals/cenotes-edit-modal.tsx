@@ -33,15 +33,18 @@ import { EditModalProps } from './edit-modal-wrapper';
 // TODO finish template and implement other forms
 export const CenotesEditModal: FC<EditModalProps> = (props) => {
   const { isOpen, inputs, method, onClose } = props;
+
   const { tableData, setTableData } = useContext(AdminTablesContext);
-  const [modalState, setModalState] = useState<CenoteModel>(inputs as CenoteModel);
+  const [modalState, setModalState] = useState<CenoteModel>(
+    inputs as CenoteModel
+  );
   const [alternativeNames, setAlternativeNames] = useState('');
   const [issues, setIssues] = useState('');
   const [helperText, setHelperText] = useState({
     alternativeNames: '',
   });
   const { data, status, loading, fetch } = useApi(
-    `api/cenotes/${method == 'put' ? modalState.id: ''}`,
+    `api/cenotes/${method == 'put' ? modalState.id : ''}`,
     method,
     {},
     {}
@@ -107,7 +110,7 @@ export const CenotesEditModal: FC<EditModalProps> = (props) => {
     }
     const newCenoteObj = {
       ...modalState,
-      [event.target.name]: event.target.value,
+      [targetName]: targetValue,
     } as CenoteModel;
 
     setModalState(new CenoteModel(newCenoteObj));
@@ -328,10 +331,7 @@ export const CenotesEditModal: FC<EditModalProps> = (props) => {
 
         <ModalFooter>
           <Flex alignContent='flex-start' width='100%'>
-            <DeleteButton
-              modalState={modalState}
-              onCloseModal={onClose}
-            />
+            <DeleteButton modalState={modalState} onCloseModal={onClose} />
           </Flex>
           <Flex>
             <Button

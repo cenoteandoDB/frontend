@@ -1,5 +1,5 @@
 import React from 'react';
-import { CenoteModel } from '../../models/CenotesTypes';
+import { CenoteModel, CenoteType } from '../../models/CenotesTypes';
 import { EditContent } from '../../pages/admin/components/edit-buttons';
 import { CenoteTableColumns, TableColumns } from '../../pages/admin/components/table/types';
 import { ColumnCreator } from './table-column-creator';
@@ -26,7 +26,7 @@ class CenotesColumns implements TableColumnInterface {
         name: data.name,
         state: data.gadm?.name_1,
         municipality: data.gadm?.name_2,
-        type: data.type,
+        type: CenoteType[data.type as keyof typeof CenoteType],
         issues: data.issues,
         createdAt: data.createdAt,
         updatedAt: data.updatedAt,
