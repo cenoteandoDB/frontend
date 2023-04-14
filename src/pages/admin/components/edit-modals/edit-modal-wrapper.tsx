@@ -25,7 +25,7 @@ export interface EditModalProps {
 
 export const EditModalWrapper: React.FC<EditModalProps> = (props) => {
   const { route } = useContext(AdminTablesContext);
-  const { isOpen, inputs, onClose } = props;
+  const { isOpen, inputs, method, onClose } = props;
 
   const EditModalComponent: FC<EditModalProps> =
     editModalDictionary[route as keyof typeof editModalDictionary];
@@ -38,7 +38,7 @@ export const EditModalWrapper: React.FC<EditModalProps> = (props) => {
       <EditModalComponent
         isOpen={isOpen}
         inputs={newInput as typeof EditModalComponent.prototype}
-        method='post'
+        method={method}
         onClose={onClose}
       />
     );

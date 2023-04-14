@@ -44,7 +44,7 @@ export const CenotesEditModal: FC<EditModalProps> = (props) => {
     alternativeNames: '',
   });
   const { data, status, loading, fetch } = useApi(
-    `api/cenotes/${method == 'put' ? modalState.id : ''}`,
+    `api/cenotes${method === 'put' ? '/' + modalState.id : ''}`,
     method,
     {},
     {}

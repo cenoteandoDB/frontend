@@ -24,7 +24,7 @@ export const AddButton: React.FC<AddButtonProps> = (props) => {
         onClick={onOpen}
       />
       {isOpen && (
-        <EditModalWrapper isOpen={isOpen} onClose={onClose} />
+        <EditModalWrapper isOpen={isOpen} onClose={onClose} method='post' />
       )}
     </>
   );
