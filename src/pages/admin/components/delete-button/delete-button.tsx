@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useContext, useEffect } from 'react';
 
 import { DeleteIcon } from '@chakra-ui/icons';
@@ -26,7 +27,7 @@ export const DeleteButton: React.FC<DeleteButtonProps> = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = React.useRef<any>(null);
   const { status, loading, error, fetch } = useApi(
-    `api/${route}/${modalState.id}`,
+    `api/${route}/${modalState?.id}`,
     'delete'
   );
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckIcon } from '@chakra-ui/icons';
+
 import {
   InputGroup,
   Input,
@@ -17,6 +17,7 @@ interface InputRightIconProps {
 
 export const InputRightIcon: React.FC<InputRightIconProps> = (props) => {
   const { inputValue, inputName, onChangeCallback, onClickCallback, iconComponent } = props;
+
   return (
     <InputGroup>
       <Input

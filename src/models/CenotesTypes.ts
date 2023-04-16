@@ -50,7 +50,7 @@ export class CenoteModel {
   constructor(jsonObj?: CenoteModel) {
     if (jsonObj) {
       this.id = jsonObj.id;
-      this.type = CenoteType[jsonObj.type as keyof typeof CenoteType];
+      this.type = jsonObj.type;
       this.name = jsonObj.name;
       this.touristic = jsonObj.touristic;
       this.issues = jsonObj.issues;
@@ -60,7 +60,33 @@ export class CenoteModel {
       this.social = jsonObj.social;
       this.createdAt = jsonObj.createdAt;
       this.updatedAt = jsonObj.updatedAt;
+    } else {
+      this.getDefaults();
     }
+  }
+
+  private getDefaults() {
+    this.id = '';
+    this.type = CenoteType.NO_TYPE;
+    this.name = '';
+    this.touristic = true;
+    this.issues = [];
+    this.alternativeNames = [];
+    this.geojson = {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [0, 0],
+      },
+      properties: {},
+    };
+    this.gadm = {};
+    this.social = {
+      totalComments: 0,
+      rating: 0,
+    };
+    this.createdAt = '';
+    this.updatedAt = '';
   }
 
   getLatitude(): number | null {

@@ -1,4 +1,5 @@
 import React, { FC, useContext, useEffect, useState } from 'react';
+
 import {
   Modal,
   ModalOverlay,
@@ -27,26 +28,24 @@ import { CheckIcon, CloseIcon } from '@chakra-ui/icons';
 import { InputRightIcon } from '../input';
 import { useApi } from '../../../../hooks/useApi';
 import { DeleteButton } from '../delete-button';
-
-export interface CenotesEditModalProps {
-  isOpen: boolean;
-  inputs: CenoteModel;
-  onClose: () => void;
-}
+import { EditModalProps } from './edit-modal-wrapper';
 
 // TODO finish template and implement other forms
-export const CenotesEditModal: FC<CenotesEditModalProps> = (props) => {
+export const CenotesEditModal: FC<EditModalProps> = (props) => {
+  const { isOpen, inputs, method, onClose } = props;
+
   const { tableData, setTableData } = useContext(AdminTablesContext);
-  const { isOpen, inputs, onClose } = props;
-  const [modalState, setModalState] = useState<CenoteModel>(inputs);
+  const [modalState, setModalState] = useState<CenoteModel>(
+    inputs as CenoteModel
+  );
   const [alternativeNames, setAlternativeNames] = useState('');
   const [issues, setIssues] = useState('');
   const [helperText, setHelperText] = useState({
     alternativeNames: '',
   });
   const { data, status, loading, fetch } = useApi(
-    `api/cenotes/${modalState.id}`,
-    'put',
+    `api/cenotes${method === 'put' ? '/' + modalState.id : ''}`,
+    method,
     {},
     {}
   );
@@ -111,7 +110,7 @@ export const CenotesEditModal: FC<CenotesEditModalProps> = (props) => {
     }
     const newCenoteObj = {
       ...modalState,
-      [event.target.name]: event.target.value,
+      [targetName]: targetValue,
     } as CenoteModel;
 
     setModalState(new CenoteModel(newCenoteObj));
@@ -332,10 +331,7 @@ export const CenotesEditModal: FC<CenotesEditModalProps> = (props) => {
 
         <ModalFooter>
           <Flex alignContent='flex-start' width='100%'>
-            <DeleteButton
-              modalState={modalState}
-              onCloseModal={onClose}
-            />
+            <DeleteButton modalState={modalState} onCloseModal={onClose} />
           </Flex>
           <Flex>
             <Button
