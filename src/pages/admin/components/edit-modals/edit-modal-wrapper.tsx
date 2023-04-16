@@ -1,16 +1,17 @@
 import React, { FC, useContext } from 'react';
 import { classMap } from '../../../../adapters/api-data/api-data-adapter';
-import { CenoteModel } from '../../../../models/CenotesTypes';
 
 import { AdminTablesContext } from '../../context/admin-context';
 import { TableTypes } from '../table/types';
 
 import { CenotesEditModal } from './cenotes-edit-modal';
+import { ReferencesEditModal } from './references-edit-modal';
 import { VariablesEditModal } from './variables-edit-modal';
 
 const editModalDictionary = {
   cenotes: CenotesEditModal,
   variables: VariablesEditModal,
+  references: ReferencesEditModal
 };
 
 export interface EditModalProps {
@@ -22,6 +23,7 @@ export interface EditModalProps {
 
 //TODO check why the insert is not working
 //TODO change name to something more generic
+//TODO make the modals reutilizable and improve code
 
 export const EditModalWrapper: React.FC<EditModalProps> = (props) => {
   const { route } = useContext(AdminTablesContext);
