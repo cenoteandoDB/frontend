@@ -1,12 +1,28 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
+import { LoginContext } from '../../context/login';
 import { NavBar } from './navbar';
 
 export const NavbarWrapper = () => {
+  const { userData, setUserData } = useContext(LoginContext);
+  const navigate = useNavigate();
+
+  const userSession = window.sessionStorage.getItem('userSession');
+  const userDataParsed = JSON.parse(userSession ?? '{}');
+  useEffect(() => {
+    if (!userSession) {
+      navigate('/login');
+    }
+    if (userDataParsed && userDataParsed.isLoggedIn) {
+      setUserData(userDataParsed);
+      navigate('/admin');
+    }
+  }, []);
+
   return (
     <div>
-      <NavBar />
+      {userData?.isLoggedIn ? <NavBar /> : null}
       <Outlet />
     </div>
   );

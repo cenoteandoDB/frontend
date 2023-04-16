@@ -5,6 +5,7 @@ import { NavbarWrapper } from '../components/navbar';
 import { Admin } from './admin';
 import { CenoteandoTableWrapper } from './admin/components/table';
 import { Home } from './home';
+import { Login } from './login';
 import { Map } from './map';
 
 const ADMIN_KEY = '/admin';
@@ -32,11 +33,17 @@ const routeBuilder = (
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <NavbarWrapper />,
+    element:  <NavbarWrapper />,
     children: [
       {
         path: '/',
         element: <Home />,
+        children: [
+          {
+            path: '/login',
+            element: <Login />
+          }
+        ]
       },
       {
         path: ADMIN_KEY,

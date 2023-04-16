@@ -1,15 +1,17 @@
 import { InternalAxiosRequestConfig } from 'axios';
+import { AuthDto } from '../models/AuthTypes';
 
 export const requestInterceptor = (config: InternalAxiosRequestConfig) => {
   const authHeader = config?.headers?.['Authorization'];
   
   if (!authHeader) {
-    const accessToken = window.sessionStorage.getItem('userSession');
+    const userSession = window.sessionStorage.getItem('userSession');
+    const userData = JSON.parse(userSession ?? '{}');
     const tokenType = 'Bearer';
 
-    if (accessToken && tokenType) {
+    if (userData.accessToken && tokenType) {
       if (config.headers !== null && config.headers !== undefined) {
-        config.headers['Authorization'] = tokenType + ' ' + accessToken;
+        config.headers['Authorization'] = tokenType + ' ' + userData.accessToken;
       }
     }
   }

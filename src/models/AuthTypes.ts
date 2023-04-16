@@ -21,6 +21,7 @@ export class AuthDto {
   accessToken!: string;
   tokenType!: string;
   expiresIn!: number;
+  isLoggedIn = false;
 
   constructor(jsonObj?: AuthDto) {
     if (jsonObj) {
