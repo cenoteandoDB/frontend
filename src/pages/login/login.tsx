@@ -67,7 +67,7 @@ export const Login: React.FC = () => {
             la UNAM
           </Heading>
         </Stack>
-        <Card p='12px' gap={4} width='336px'>
+        <Card p='12px' gap={4} width='336px' variant='elevated'>
           <FormControl>
             <Input
               name='user'
