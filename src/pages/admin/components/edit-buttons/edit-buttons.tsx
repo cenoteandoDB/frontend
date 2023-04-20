@@ -28,7 +28,6 @@ export const EditContent: React.FC<EditContentProps> = (props) => {
           isOpen={isOpen}
           inputs={inputs}
           onClose={onClose}
-          method=''
         />
       )}
     </>
