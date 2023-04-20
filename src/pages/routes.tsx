@@ -37,13 +37,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <Home />,
-        children: [
-          {
-            path: '/login',
-            element: <Login />
-          }
-        ]
+        element: <Home />
       },
       {
         path: ADMIN_KEY,
@@ -56,6 +50,10 @@ const router = createBrowserRouter([
       }
     ],
   },
+  {
+    path: '/login',
+    element: <Login />
+  }
 ]);
 
 export default router;
