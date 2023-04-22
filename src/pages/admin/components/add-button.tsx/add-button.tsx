@@ -4,7 +4,7 @@ import { AddIcon } from '@chakra-ui/icons';
 import { IconButton, useDisclosure } from '@chakra-ui/react';
 
 import { TableTypes } from '../table/types';
-import { EditModalWrapper } from '../edit-modals';
+import { EditModalWrapper } from '../modals';
 
 interface AddButtonProps {
   inputs?: TableTypes;

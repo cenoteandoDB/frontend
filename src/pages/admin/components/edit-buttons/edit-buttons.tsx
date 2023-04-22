@@ -2,7 +2,7 @@ import React from 'react';
 
 import { EditIcon, ViewIcon } from '@chakra-ui/icons';
 import { Flex, IconButton, useDisclosure } from '@chakra-ui/react';
-import { EditModalWrapper } from '../edit-modals/edit-modal-wrapper';
+import { EditModalWrapper } from '../modals/edit-modal-wrapper';
 import { TableTypes } from '../table/types';
 
 export interface EditContentProps {
