@@ -4,13 +4,15 @@ import { classMap } from '../../../../adapters/api-data/api-data-adapter';
 import { AdminTablesContext } from '../../context/admin-context';
 import { TableTypes } from '../table/types';
 
-import { CenotesEditModal } from './cenotes-edit-modal';
-import { ReferenceModalProps, ReferencesEditModal } from './references-edit-modal';
-import { VariablesEditModal } from './variables-edit-modal';
+import { CenotesEditModal, CenotesFormProps } from './cenotes-edit-modal';
+import { ReferenceModalProps, ReferencesEditModal } from './references-form';
+import { VariableFormProps, VariablesEditModal } from './variables-edit-modal';
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Flex, Button } from '@chakra-ui/react';
 import { DeleteButton } from '../delete-button';
 import { useApi } from '../../../../hooks/useApi';
 import ReferenceModel from '../../../../models/ReferencesTypes';
+
+type FormTypes = FC<EditModalProps> | FC<ReferenceModalProps> | FC<CenotesFormProps> | FC<VariableFormProps>;
 
 
 const editModalDictionary = {
@@ -22,7 +24,7 @@ const editModalDictionary = {
 export interface EditModalProps {
   isOpen?: boolean;
   inputs?: TableTypes;
-  setInputs?: React.Dispatch<React.SetStateAction<TableTypes>>
+  setInputs: React.Dispatch<React.SetStateAction<TableTypes>>
   onClose?: () => void;
 }
 
@@ -48,7 +50,7 @@ export const EditModalWrapper: React.FC<EditModalProps> = (props) => {
     fetch(modalState);
   };
 
-  const EditModalComponent: FC<EditModalProps> | FC<ReferenceModalProps> =
+  const EditModalComponent: FormTypes =
     editModalDictionary[route as keyof typeof editModalDictionary];
 
   if (!isOpen || !onClose) {
