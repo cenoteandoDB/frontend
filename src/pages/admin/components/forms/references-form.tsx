@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { FormControl, FormLabel, Input, Textarea, Select } from '@chakra-ui/react';
 
 import ReferenceModel from '../../../../models/ReferencesTypes';
-import { EditModalProps } from './edit-modal-wrapper';
+import { EditModalProps } from '../modals/edit-modal-wrapper';
 
 enum TypeValues {
   JOURNAL,

@@ -4,27 +4,32 @@ import { classMap } from '../../../../adapters/api-data/api-data-adapter';
 import { AdminTablesContext } from '../../context/admin-context';
 import { TableTypes } from '../table/types';
 
-import { CenotesEditModal, CenotesFormProps } from './cenotes-edit-modal';
-import { ReferenceModalProps, ReferencesEditModal } from './references-form';
-import { VariableFormProps, VariablesEditModal } from './variables-edit-modal';
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Flex, Button } from '@chakra-ui/react';
-import { DeleteButton } from '../delete-button';
+import { CenotesEditModal, CenotesFormProps } from '../forms/cenotes-form';
+import {
+  ReferenceModalProps,
+  ReferencesEditModal,
+} from '../forms/references-form';
+import { VariableFormProps, VariablesEditModal } from '../forms/variables-form';
 import { useApi } from '../../../../hooks/useApi';
 import ReferenceModel from '../../../../models/ReferencesTypes';
+import { ModalWrapper } from './modal-wrapper';
 
-type FormTypes = FC<EditModalProps> | FC<ReferenceModalProps> | FC<CenotesFormProps> | FC<VariableFormProps>;
-
+type FormTypes =
+  | FC<EditModalProps>
+  | FC<ReferenceModalProps>
+  | FC<CenotesFormProps>
+  | FC<VariableFormProps>;
 
 const editModalDictionary = {
   cenotes: CenotesEditModal,
   variables: VariablesEditModal,
-  references: ReferencesEditModal
+  references: ReferencesEditModal,
 };
 
 export interface EditModalProps {
   isOpen?: boolean;
   inputs?: TableTypes;
-  setInputs: React.Dispatch<React.SetStateAction<TableTypes>>
+  setInputs: React.Dispatch<React.SetStateAction<TableTypes>>;
   onClose?: () => void;
 }
 
@@ -57,20 +62,6 @@ export const EditModalWrapper: React.FC<EditModalProps> = (props) => {
     return null;
   }
 
-  if (!inputs) {
-    const clazz = classMap[route as keyof typeof classMap];
-    const newInput = clazz();
-
-    return (
-      <EditModalComponent
-        isOpen={isOpen}
-        inputs={newInput as typeof EditModalComponent.prototype}
-        setInputs={setModalState}
-        onClose={onClose}
-      />
-    );
-  }
-
   useEffect(() => {
     if (data && status === 200) {
       onClose();
@@ -82,38 +73,19 @@ export const EditModalWrapper: React.FC<EditModalProps> = (props) => {
   }, [data]);
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>Edit Variable</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody pb={6}>
-          <EditModalComponent
-            isOpen={isOpen}
-            inputs={modalState as typeof EditModalComponent.prototype}
-            setInputs={setModalState}
-            onClose={onClose}
-          />
-        </ModalBody>
-
-        <ModalFooter>
-          <Flex alignContent='flex-start' width='100%'>
-            <DeleteButton modalState={inputs} onCloseModal={onClose} />
-          </Flex>
-          <Flex>
-            <Button
-              colorScheme='blue'
-              mr={3}
-              isLoading={loading}
-              onClick={handleOnSaveCenote}
-            >
-              Guardar
-            </Button>
-            <Button onClick={onClose}>Cancelar</Button>
-          </Flex>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
-    
+    <ModalWrapper
+      modalState={modalState}
+      loading={loading}
+      isOpen={isOpen}
+      onClose={onClose}
+      handleOnSaveCenote={handleOnSaveCenote}
+    >
+      <EditModalComponent
+        isOpen={isOpen}
+        inputs={modalState as typeof EditModalComponent.prototype}
+        setInputs={setModalState}
+        onClose={onClose}
+      />
+    </ModalWrapper>
   );
 };

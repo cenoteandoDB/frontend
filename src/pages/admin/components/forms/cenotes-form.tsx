@@ -17,7 +17,7 @@ import {
 import { CenoteIssue, CenoteModel } from '../../../../models/CenotesTypes';
 import { CheckIcon, CloseIcon } from '@chakra-ui/icons';
 import { InputRightIcon } from '../input';
-import { EditModalProps } from './edit-modal-wrapper';
+import { EditModalProps } from '../modals/edit-modal-wrapper';
 
 export type CenotesFormProps = Omit<EditModalProps, 'inputs'> & { inputs: CenoteModel }
 

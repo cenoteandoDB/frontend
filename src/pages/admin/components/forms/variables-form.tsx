@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { VariableModel } from '../../../../models/VariablesTypes';
 
-import { EditModalProps } from './edit-modal-wrapper';
+import { EditModalProps } from '../modals/edit-modal-wrapper';
 
 enum ThemeValues {
   ORGANIZATION = 'ORGANIZATION',
