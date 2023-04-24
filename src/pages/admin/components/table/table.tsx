@@ -123,66 +123,73 @@ export const CenoteandoTable: React.FC<TableProps> = (props) => {
             <AddButton />
           </Box>
         </Flex>
-        <Card>
-          <Box overflow={'scroll'}>
-            <TableContainer>
-              <Table variant={'simple'} size='sm' overflow={'scroll'}>
-                <Thead >
-                  {table.getHeaderGroups().map((headerGroups) => (
-                    <Tr key={headerGroups.id}>
-                      {headerGroups.headers.map((header) => (
-                        <Th key={header.id}>
-                          {header.isPlaceholder ? null : (
-                            <>
-                              <Flex
-                                gap={1}
-                                onClick={header.column.getToggleSortingHandler()}
+        <Flex width='100%'>
+          <Card>
+            <Box overflow={'scroll'}>
+              <TableContainer>
+                <Table variant={'simple'} size='sm' overflow={'scroll'}>
+                  <Thead>
+                    {table.getHeaderGroups().map((headerGroups) => (
+                      <Tr key={headerGroups.id}>
+                        {headerGroups.headers.map((header) => (
+                          <Th key={header.id}>
+                            {header.isPlaceholder ? null : (
+                              <>
+                                <Flex
+                                  gap={1}
+                                  onClick={header.column.getToggleSortingHandler()}
+                                >
+                                  {flexRender(
+                                    header.column.columnDef.header,
+                                    header.getContext()
+                                  )}
+                                  {{
+                                    asc: <ChevronUpIcon boxSize={4} />,
+                                    desc: <ChevronDownIcon boxSize={4} />,
+                                  }[header.column.getIsSorted() as string] ??
+                                    null}
+                                </Flex>
+                                {header.column.getCanFilter() ? (
+                                  <div>
+                                    <Filter
+                                      column={header.column}
+                                      table={table}
+                                    />
+                                  </div>
+                                ) : null}
+                              </>
+                            )}
+                          </Th>
+                        ))}
+                      </Tr>
+                    ))}
+                  </Thead>
+                  <Tbody>
+                    {table.getRowModel().rows.map((row, i) => {
+                      return (
+                        <Tr key={`tr-${row.id}-${i}`}>
+                          {row.getVisibleCells().map((cell, index) => {
+                            return (
+                              <Td
+                                key={`td-${cell.id}-${index}`}
+                                whiteSpace='break-spaces'
                               >
-                                {flexRender(
-                                  header.column.columnDef.header,
-                                  header.getContext()
-                                )}
-                                {{
-                                  asc: <ChevronUpIcon boxSize={4} />,
-                                  desc: <ChevronDownIcon boxSize={4} />,
-                                }[header.column.getIsSorted() as string] ?? null}
-                              </Flex>
-                              {header.column.getCanFilter() ? (
-                                <div>
-                                  <Filter column={header.column} table={table} />
-                                </div>
-                              ) : null}
-                            </>
-                          )}
-                        </Th>
-                      ))}
-                    </Tr>
-                  ))}
-                </Thead>
-                <Tbody>
-                  {table.getRowModel().rows.map((row, i) => {
-                    return (
-                      <Tr key={`tr-${row.id}-${i}`}>
-                        {row.getVisibleCells().map((cell, index) => {
-                          return (
-                            <Td key={`td-${cell.id}-${index}`} isTruncated>
-                              <Text noOfLines={3} maxW='500px'>
                                 {flexRender(
                                   cell.column.columnDef.cell,
                                   cell.getContext()
                                 )}
-                              </Text>
-                            </Td>
-                          );
-                        })}
-                      </Tr>
-                    );
-                  })}
-                </Tbody>
-              </Table>
-            </TableContainer>
-          </Box>
-        </Card>
+                              </Td>
+                            );
+                          })}
+                        </Tr>
+                      );
+                    })}
+                  </Tbody>
+                </Table>
+              </TableContainer>
+            </Box>
+          </Card>
+        </Flex>
         <Flex width='100%' justify='space-evenly'>
           <Flex width='33%' justify='flex-start' gap={4}>
             <Box>
