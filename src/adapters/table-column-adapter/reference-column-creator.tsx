@@ -27,6 +27,7 @@ class ReferenceColumns implements TableColumnInterface {
         id: data.id,
         authors: data.authors,
         shortName: data.shortName,
+        reference: data.reference,
         type: data.type,
         year: data.year,
         edit: <EditContent inputs={data} />
