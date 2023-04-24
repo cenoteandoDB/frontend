@@ -7,6 +7,7 @@ import router from './pages/routes';
 import { ApiInstanceProvider } from './hooks/api-instance-provider';
 import { httpClient } from './services/http-client';
 import { requestInterceptor } from './interceptors/http-interceptors';
+import { LoginContextProvider } from './context/login';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -15,7 +16,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         config={httpClient}
         requestInterceptors={[requestInterceptor]}
       >
-        <RouterProvider router={router} />
+        <LoginContextProvider>
+          <RouterProvider router={router} />
+        </LoginContextProvider>
       </ApiInstanceProvider>
     </ChakraProvider>
   </React.StrictMode>
