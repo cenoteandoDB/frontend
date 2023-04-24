@@ -1,7 +1,12 @@
 import { FC } from 'react';
-import { CenotesFormProps, CenotesForm } from '../forms/cenotes-form';
-import { ReferenceModalProps, ReferencesForm } from '../forms/references-form';
-import { VariableFormProps, VariablesForm } from '../forms/variables-form';
+import {
+  CenotesForm,
+  VariablesForm,
+  ReferencesForm,
+  CenotesFormProps,
+  ReferenceModalProps,
+  VariableFormProps,
+} from '../forms';
 import { ModalWrapperProps } from './edit-modal-wrapper';
 
 export type FormTypes =
