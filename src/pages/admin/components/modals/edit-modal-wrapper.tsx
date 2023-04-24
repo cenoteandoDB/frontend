@@ -8,8 +8,6 @@ import ReferenceModel from '../../../../models/ReferencesTypes';
 import { ModalWrapper } from './modal-wrapper';
 import { FormTypes, FormsDictionary } from './types';
 
-
-
 export interface ModalWrapperProps {
   isOpen?: boolean;
   inputs?: TableTypes;
@@ -39,11 +37,11 @@ export const EditModalWrapper: FC<ModalWrapperProps> = (props) => {
 
   useEffect(() => {
     if (data && status === 200) {
-      onClose();
       const newArr = (tableData as ReferenceModel[])
         .filter((data) => data.id !== modalState.id)
         .map((cenote) => new ReferenceModel(cenote));
       setTableData([modalState, ...newArr]);
+      onClose();
     }
   }, [data]);
 

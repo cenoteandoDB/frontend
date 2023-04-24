@@ -35,7 +35,10 @@ export const AddModalWrapper: FC<ModalWrapperProps> = (props) => {
       const newArr = (tableData as ReferenceModel[])
         .filter((data) => data.id !== modalState.id)
         .map((cenote) => new ReferenceModel(cenote));
-      setTableData([modalState, ...newArr]);
+      const newModalState = modalState;
+      newModalState.id = data.id;
+      setTableData([newModalState, ...newArr]);
+      onClose();
     }
   }, [data]);
 
