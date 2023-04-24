@@ -50,7 +50,6 @@ export const ModalWrapper: FC<ModalWrapperProps> = (props) => {
           </Flex>
           <Flex>
             <Button
-              colorScheme='blue'
               mr={3}
               isLoading={loading}
               onClick={handleOnSave}

@@ -19,6 +19,7 @@ export const TagsRoutes = () => {
     <>
       {adminRoutes.map((adminRoute, index) => (
         <Tag
+          colorScheme='highligthed'
           key={`${adminRoute}-${index}`}
           variant={tagStyle(`${route}/${adminRoute}`)}
         >
