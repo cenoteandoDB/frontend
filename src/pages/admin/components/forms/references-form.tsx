@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { FormControl, FormLabel, Input, Textarea, Select } from '@chakra-ui/react';
 
 import ReferenceModel from '../../../../models/ReferencesTypes';
-import { EditModalProps } from '../modals/edit-modal-wrapper';
+import { ModalWrapperProps } from '../modals/edit-modal-wrapper';
 
 enum TypeValues {
   JOURNAL,
@@ -14,12 +14,12 @@ enum TypeValues {
   WEBPAGE
 }
 
-export type ReferenceModalProps = Omit<EditModalProps, 'inputs'> & { inputs: ReferenceModel }
+export type ReferenceModalProps = Omit<ModalWrapperProps, 'inputs'> & { inputs: ReferenceModel }
 
-export const ReferencesEditModal: FC<ReferenceModalProps> = (props) => {
+export const ReferencesForm: FC<ReferenceModalProps> = (props) => {
   const { inputs, setInputs } = props;
 
-  if (!inputs || !setInputs) {
+  if (!setInputs) {
     return null;
   }
 

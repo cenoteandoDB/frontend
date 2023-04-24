@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { VariableModel } from '../../../../models/VariablesTypes';
 
-import { EditModalProps } from '../modals/edit-modal-wrapper';
+import { ModalWrapperProps } from '../modals/edit-modal-wrapper';
 
 enum ThemeValues {
   ORGANIZATION = 'ORGANIZATION',
@@ -27,10 +27,14 @@ enum ThemeValues {
   GEOREFERENCE = 'GEOREFERENCE',
 }
 
-export type VariableFormProps = Omit<EditModalProps, 'inputs'> & { inputs: VariableModel };
+export type VariableFormProps = Omit<ModalWrapperProps, 'inputs'> & { inputs: VariableModel };
 
-export const VariablesEditModal: FC<VariableFormProps> = (props) => {
+export const VariablesForm: FC<VariableFormProps> = (props) => {
   const { inputs, setInputs } = props;
+
+  if (!setInputs) {
+    return null;
+  }
   
   const handleInputChange = (
     event:

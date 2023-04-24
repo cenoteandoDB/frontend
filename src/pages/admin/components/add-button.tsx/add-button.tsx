@@ -4,16 +4,15 @@ import { AddIcon } from '@chakra-ui/icons';
 import { IconButton, useDisclosure } from '@chakra-ui/react';
 
 import { TableTypes } from '../table/types';
-import { EditModalWrapper } from '../modals';
+import { AddModalWrapper } from '../modals/add-modal-wrapper';
 
 interface AddButtonProps {
-  inputs?: TableTypes;
+  inputs: TableTypes;
 }
 
-export const AddButton: React.FC<AddButtonProps> = (props) => {
-  const { inputs } = props;
+export const AddButton: React.FC<AddButtonProps> = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-
+    
   return (
     <>
       <IconButton
@@ -24,7 +23,10 @@ export const AddButton: React.FC<AddButtonProps> = (props) => {
         onClick={onOpen}
       />
       {isOpen && (
-        <EditModalWrapper isOpen={isOpen} onClose={onClose} method='post' />
+        <AddModalWrapper 
+          isOpen={isOpen}
+          onClose={onClose}
+        />
       )}
     </>
   );

@@ -17,12 +17,12 @@ import {
 import { CenoteIssue, CenoteModel } from '../../../../models/CenotesTypes';
 import { CheckIcon, CloseIcon } from '@chakra-ui/icons';
 import { InputRightIcon } from '../input';
-import { EditModalProps } from '../modals/edit-modal-wrapper';
+import { ModalWrapperProps } from '../modals/edit-modal-wrapper';
 
-export type CenotesFormProps = Omit<EditModalProps, 'inputs'> & { inputs: CenoteModel }
+export type CenotesFormProps = Omit<ModalWrapperProps, 'inputs'> & { inputs: CenoteModel }
 
 // TODO finish template and implement other forms
-export const CenotesEditModal: FC<CenotesFormProps> = (props) => {
+export const CenotesForm: FC<CenotesFormProps> = (props) => {
   const { inputs, setInputs } = props;
   const [issues, setIssues] = useState('');
   const [alternativeNames, setAlternativeNames] = useState('');
@@ -30,7 +30,7 @@ export const CenotesEditModal: FC<CenotesFormProps> = (props) => {
     alternativeNames: '',
   });
 
-  if (!inputs || !setInputs) {
+  if (!setInputs) {
     return null;
   }
 
