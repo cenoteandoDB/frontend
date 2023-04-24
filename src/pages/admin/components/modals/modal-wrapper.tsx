@@ -38,7 +38,7 @@ export const ModalWrapper: FC<ModalWrapperProps> = (props) => {
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Edit {route}</ModalHeader>
+        <ModalHeader>{isAdd ? 'Agregar' : 'Editar'} {route}</ModalHeader>
         <ModalCloseButton />
         <ModalBody pb={6}>{children}</ModalBody>
 
