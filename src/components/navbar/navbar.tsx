@@ -1,15 +1,19 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import logo from '../../../public/logo.png';
 
-import {
-  Flex,
-  Image,
-  Heading,
-} from '@chakra-ui/react';
+import { Flex, Image, Heading } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
+import { LoginContext } from '../../context/login';
 
 export const NavBar = () => {
+  const { userData, setUserData } = useContext(LoginContext);
+
+  const handleLogout = () => {
+    window.sessionStorage.clear();
+    setUserData(null);
+  };
+
   return (
     <Flex
       minWidth='max-content'
@@ -40,6 +44,11 @@ export const NavBar = () => {
       <Flex gap='2' alignItems='center'>
         <Link to='admin'>Admin</Link>
         <Link to='map'>Map</Link>
+        {userData?.isLoggedIn ? (
+          <Link to='/login' onClick={handleLogout}>
+            Cerrar Sesión
+          </Link>
+        ) : null}
       </Flex>
     </Flex>
   );
