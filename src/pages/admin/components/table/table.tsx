@@ -103,9 +103,10 @@ export const CenoteandoTable: React.FC<TableProps> = (props) => {
           <Box>
             <InputGroup>
               <InputLeftElement pointerEvents='none'>
-                <SearchIcon color='gray.300' />
+                <SearchIcon bg='light.100' color='gray.300' />
               </InputLeftElement>
               <Input
+                bg='light.100'
                 placeholder='Buscar en todas las columnas'
                 value={globalFilter ?? ''}
                 onChange={(value) => setGlobalFilter(value.target.value)}
@@ -174,10 +175,12 @@ export const CenoteandoTable: React.FC<TableProps> = (props) => {
                                 key={`td-${cell.id}-${index}`}
                                 whiteSpace='break-spaces'
                               >
-                                {flexRender(
-                                  cell.column.columnDef.cell,
-                                  cell.getContext()
-                                )}
+                                <Text>
+                                  {flexRender(
+                                    cell.column.columnDef.cell,
+                                    cell.getContext()
+                                  )}
+                                </Text>
                               </Td>
                             );
                           })}
@@ -194,14 +197,19 @@ export const CenoteandoTable: React.FC<TableProps> = (props) => {
           <Flex width='33%' justify='flex-start' gap={4}>
             <Box>
               <Select
+                colorScheme='light'
+                color='light.text'
+                bg='light.500'
                 value={table.getState().pagination.pageSize}
                 onChange={(e) => {
                   table.setPageSize(Number(e.target.value));
                 }}
               >
                 {[10, 20, 30, 40, 50].map((pageSize) => (
-                  <option key={pageSize} value={pageSize}>
-                    Show {pageSize}
+                  <option  key={pageSize} value={pageSize}>
+                    <Text color='light.text'>
+                      Show {pageSize}
+                    </Text>
                   </option>
                 ))}
               </Select>
@@ -209,8 +217,8 @@ export const CenoteandoTable: React.FC<TableProps> = (props) => {
           </Flex>
           <Flex width='33%' gap={2} justify='center'>
             <Box alignSelf='flex-start'>
-              <Text fontSize='md'>Página</Text>
-              <Text as='b'>
+              <Text fontSize='md' color='light.principal'>Página</Text>
+              <Text as='b'  color='light.principal'>
                 {table.getState().pagination.pageIndex + 1} de{' '}
                 {table.getPageCount()}
               </Text>

@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 
 import logo from '../../../public/logo.png';
 
-import { Flex, Image, Heading } from '@chakra-ui/react';
+import { Flex, Image, Heading, Text } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { LoginContext } from '../../context/login';
 
@@ -20,7 +20,7 @@ export const NavBar = () => {
       alignItems='center'
       gap='2'
       justifyContent='space-around'
-      bg='Highlight'
+      bg='light.principal'
     >
       <Link to='/'>
         <Flex
@@ -36,17 +36,21 @@ export const NavBar = () => {
             alt='Cenoteando-logo'
             src={logo}
           />
-          <Heading size='sm' ml='12px'>
+          <Heading color='light.text' size='sm' ml='12px'>
             Cenoteando
           </Heading>
         </Flex>
       </Link>
       <Flex gap='2' alignItems='center'>
-        <Link to='admin'>Admin</Link>
-        <Link to='map'>Map</Link>
+        <Link to='admin'>
+          <Text color='light.text'>Admin</Text>
+        </Link>
+        <Link to='map'>
+          <Text color='light.text'>Map</Text>
+        </Link>
         {userData?.isLoggedIn ? (
           <Link to='/login' onClick={handleLogout}>
-            Cerrar Sesión
+            <Text color='light.text'>Cerrar Sesión</Text>
           </Link>
         ) : null}
       </Flex>

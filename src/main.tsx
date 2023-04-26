@@ -8,10 +8,11 @@ import { ApiInstanceProvider } from './hooks/api-instance-provider';
 import { httpClient } from './services/http-client';
 import { requestInterceptor } from './interceptors/http-interceptors';
 import { LoginContextProvider } from './context/login';
+import { theme } from './utils/theme-colors';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <ApiInstanceProvider
         config={httpClient}
         requestInterceptors={[requestInterceptor]}
