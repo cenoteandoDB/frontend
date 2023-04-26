@@ -26,8 +26,12 @@ class VariablesColumns implements TableColumnInterface {
         name: data.name,
         description: data.description,
         theme: data.theme,
+        accessLevel: data.accessLevel,
+        dataType: data.type,
+        origin: data.origin,
         timeSeries: data.timeseries,
         multiple: data.multiple,
+        enumValues: data.enumValues,
         unit: data.units,
         methodology: data.methodology,
         edit: <EditContent inputs={data} />

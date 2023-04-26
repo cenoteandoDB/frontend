@@ -50,6 +50,8 @@ export const VariablesForm: FC<VariableFormProps> = (props) => {
       [targetName]: targetValue,
     } as VariableModel;
 
+    newVariablesObj.enumValues = ['test'];
+
     setInputs(new VariableModel(newVariablesObj));
   };
 
@@ -105,6 +107,33 @@ export const VariablesForm: FC<VariableFormProps> = (props) => {
       </FormControl>
 
       <FormControl mb={4}>
+        <FormLabel>Nivel de accesso</FormLabel>
+        <Input
+          name='accessLevel'
+          value={inputs.accessLevel}
+          onChange={(event) => handleInputChange(event)}
+        />
+      </FormControl>
+
+      <FormControl mb={4}>
+        <FormLabel>Tipo de dato</FormLabel>
+        <Input
+          name='type'
+          value={inputs.type}
+          onChange={(event) => handleInputChange(event)}
+        />
+      </FormControl>
+
+      <FormControl mb={4}>
+        <FormLabel>Origen</FormLabel>
+        <Input
+          name='origin'
+          value={inputs.origin}
+          onChange={(event) => handleInputChange(event)}
+        />
+      </FormControl>
+
+      <FormControl mb={4}>
         <Flex justifyContent='space-evenly'>
           <Checkbox
             name='timeseries'
@@ -122,6 +151,16 @@ export const VariablesForm: FC<VariableFormProps> = (props) => {
           </Checkbox>
         </Flex>
       </FormControl>
+
+      {/* <FormControl mb={4}>
+        <FormLabel>Enum Values</FormLabel>
+        <Input
+          name='enumValues'
+          placeholder='enum values'
+          value={inputs.enumValues}
+          onChange={(event) => handleInputChange(event)}
+        />
+      </FormControl> */}
 
       <FormControl mb={4}>
         <FormLabel>Unidad</FormLabel>
