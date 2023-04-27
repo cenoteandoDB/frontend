@@ -7,7 +7,7 @@ import { TableTypes } from '../table/types';
 import { AddModalWrapper } from '../modals/add-modal-wrapper';
 
 interface AddButtonProps {
-  inputs: TableTypes;
+  inputs?: TableTypes;
 }
 
 export const AddButton: React.FC<AddButtonProps> = () => {
