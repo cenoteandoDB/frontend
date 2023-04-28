@@ -1,5 +1,5 @@
 export const httpClient = {
-  baseURL: 'http://localhost:8080/',
+  baseURL: import.meta.env.VITE_CLIENT_URL,
   timeout: 10000,
   headers: {
     post: {
