@@ -18,8 +18,11 @@ import { CenoteIssue, CenoteModel } from '../../../../models/CenotesTypes';
 import { CheckIcon, CloseIcon } from '@chakra-ui/icons';
 import { InputRightIcon } from '../input';
 import { ModalWrapperProps } from '../modals/edit-modal-wrapper';
+import { CenoteTag } from '../../../../components/tags';
 
-export type CenotesFormProps = Omit<ModalWrapperProps, 'inputs'> & { inputs: CenoteModel }
+export type CenotesFormProps = Omit<ModalWrapperProps, 'inputs'> & {
+  inputs: CenoteModel;
+};
 
 // TODO finish template and implement other forms
 export const CenotesForm: FC<CenotesFormProps> = (props) => {
@@ -154,6 +157,18 @@ export const CenotesForm: FC<CenotesFormProps> = (props) => {
     });
   };
 
+  const handleCenoteIssue = (label: string) => {
+    
+    const newIssues = inputs.issues.filter((element) => element !== label);
+    const newCenoteObj = {
+      ...inputs,
+      issues: newIssues,
+    } as CenoteModel;
+    setInputs(new CenoteModel(newCenoteObj));
+  };
+
+  console.log(inputs);
+  
   return (
     <>
       <FormControl mb={4}>
@@ -240,9 +255,15 @@ export const CenotesForm: FC<CenotesFormProps> = (props) => {
           <HStack wrap='wrap' gap={2}>
             {inputs.issues.length > 0 &&
               inputs.issues.map((issue, index) => (
-                <Tag key={`${issue}-${index}`} colorScheme='red'>
-                  {issue}
-                </Tag>
+                <CenoteTag
+                  key={`${issue}-${index}`}
+                  iconSide='right'
+                  label={issue}
+                  tagIcon={CloseIcon}
+                  tagSize='md'
+                  colorScheme='red'
+                  onHandleIconClick={handleCenoteIssue}
+                />
               ))}
           </HStack>
           <Select
