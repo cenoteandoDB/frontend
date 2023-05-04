@@ -1,5 +1,4 @@
 import { InternalAxiosRequestConfig } from 'axios';
-import { AuthDto } from '../models/AuthTypes';
 
 export const requestInterceptor = (config: InternalAxiosRequestConfig) => {
   const authHeader = config?.headers?.['Authorization'];
