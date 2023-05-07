@@ -1,7 +1,9 @@
+import { Flex } from '@chakra-ui/react';
 import React, { useContext, useEffect } from 'react';
 
 import { Outlet, useNavigate } from 'react-router-dom';
 import { LoginContext } from '../../context/login';
+import { Footer } from '../footer';
 import { NavBar } from './navbar';
 
 export const NavbarWrapper = () => {
@@ -21,9 +23,10 @@ export const NavbarWrapper = () => {
   }, []);
 
   return (
-    <div>
+    <Flex direction='column' maxW='unset' minH='100vh' padding='unset'>
       {userData?.isLoggedIn ? <NavBar /> : null}
       <Outlet />
-    </div>
+      <Footer />
+    </Flex>
   );
 };

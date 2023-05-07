@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Center, Flex, Heading } from '@chakra-ui/react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { TagsRoutes } from './components/tags-routes';
 import { AdminTablesContext } from './context/admin-context';
 
@@ -11,23 +11,34 @@ interface AdminProps {
 
 export const Admin: React.FC<AdminProps> = (props) => {
   const { route } = props;
+  const location = useLocation();
   
   return (
     <AdminTablesContext.Provider
       value={{
         route: route,
-        setTableData: () => undefined
+        setTableData: () => undefined,
       }}
     >
-      <Center>
-        <Heading>Admin Route</Heading>
-      </Center>
-      <Center>
+      <Center marginTop='20px'>
         <Flex gap={2} mb='20px' width='95%'>
           <TagsRoutes />
         </Flex>
       </Center>
-      <Outlet />
+      {location.pathname === '/admin' ? (
+        <Flex
+          width={'100vw'}
+          height={'75vh'}
+          alignContent={'center'}
+          justifyContent={'center'}
+        >
+          <Center>
+            <Heading>Admin Route</Heading>
+          </Center>
+        </Flex>
+      ) : (
+        <Outlet />
+      )}
     </AdminTablesContext.Provider>
   );
 };
