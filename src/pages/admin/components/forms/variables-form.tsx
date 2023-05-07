@@ -1,17 +1,22 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 
 import {
   Checkbox,
   Flex,
   FormControl,
   FormLabel,
+  HStack,
   Input,
   Select,
   Textarea,
+  VStack,
 } from '@chakra-ui/react';
 import { VariableModel } from '../../../../models/VariablesTypes';
 
 import { ModalWrapperProps } from '../modals/edit-modal-wrapper';
+import { CheckIcon, CloseIcon } from '@chakra-ui/icons';
+import { InputRightIcon } from '../input';
+import { CenoteTag } from '../../../../components/tags';
 
 enum ThemeValues {
   ORGANIZATION = 'ORGANIZATION',
@@ -27,15 +32,18 @@ enum ThemeValues {
   GEOREFERENCE = 'GEOREFERENCE',
 }
 
-export type VariableFormProps = Omit<ModalWrapperProps, 'inputs'> & { inputs: VariableModel };
+export type VariableFormProps = Omit<ModalWrapperProps, 'inputs'> & {
+  inputs: VariableModel;
+};
 
 export const VariablesForm: FC<VariableFormProps> = (props) => {
   const { inputs, setInputs } = props;
+  const [enumValue, setEnumValue] = useState('');
 
   if (!setInputs) {
     return null;
   }
-  
+
   const handleInputChange = (
     event:
       | React.ChangeEvent<HTMLInputElement>
@@ -65,6 +73,23 @@ export const VariablesForm: FC<VariableFormProps> = (props) => {
     } as VariableModel;
     setInputs(new VariableModel(newVariableObj));
   };
+
+  const handleEnumChange = () => {
+    let newEnumValue = inputs.enumValues;
+    if (!newEnumValue) {
+      newEnumValue = [];
+    }
+    const newEnumValues = [enumValue, ...newEnumValue];
+
+    const newVariablesObj = {
+      ...inputs,
+      enumValues: newEnumValues,
+    } as VariableModel;
+    setInputs(new VariableModel(newVariablesObj));
+    setEnumValue('');
+  };
+
+  console.log(inputs.enumValues);
 
   //TODO change unit to a Select with an enum
   return (
@@ -161,6 +186,34 @@ export const VariablesForm: FC<VariableFormProps> = (props) => {
           onChange={(event) => handleInputChange(event)}
         />
       </FormControl> */}
+
+      <FormControl mb={4}>
+        <FormLabel>Enum Values</FormLabel>
+        <VStack alignItems='self-start' mb={2}>
+          <HStack wrap='wrap' gap={2}>
+            {inputs.enumValues &&
+              inputs.enumValues.length > 0 &&
+              inputs.enumValues.map((issue, index) => (
+                <CenoteTag
+                  key={`${issue}-${index}`}
+                  iconSide='right'
+                  label={issue}
+                  tagIcon={CloseIcon}
+                  tagSize='md'
+                  colorScheme='red'
+                  onHandleIconClick={() => undefined}
+                />
+              ))}
+          </HStack>
+        </VStack>
+        <InputRightIcon
+          inputValue={enumValue}
+          inputName='enumValues'
+          onChangeCallback={(event) => setEnumValue(event.target.value)}
+          onClickCallback={handleEnumChange}
+          iconComponent={<CheckIcon />}
+        />
+      </FormControl>
 
       <FormControl mb={4}>
         <FormLabel>Unidad</FormLabel>
