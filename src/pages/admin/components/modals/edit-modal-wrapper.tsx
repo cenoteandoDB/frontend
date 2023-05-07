@@ -4,9 +4,12 @@ import { AdminTablesContext } from '../../context/admin-context';
 import { TableTypes } from '../table/types';
 
 import { useApi } from '../../../../hooks/useApi';
-import ReferenceModel from '../../../../models/ReferencesTypes';
+import { classMap } from '../../../../adapters/api-data/api-data-adapter';
 import { ModalWrapper } from './modal-wrapper';
 import { FormTypes, FormsDictionary } from './types';
+import { CenoteModel } from '../../../../models/CenotesTypes';
+import ReferenceModel from '../../../../models/ReferencesTypes';
+import { VariableModel } from '../../../../models/VariablesTypes';
 
 export interface ModalWrapperProps {
   isOpen?: boolean;
@@ -37,9 +40,10 @@ export const EditModalWrapper: FC<ModalWrapperProps> = (props) => {
 
   useEffect(() => {
     if (data && status === 200) {
-      const newArr = (tableData as ReferenceModel[])
+      const dataType = classMap[route as keyof typeof classMap];
+      const newArr = (tableData as TableTypes[])
         .filter((data) => data.id !== modalState.id)
-        .map((cenote) => new ReferenceModel(cenote));
+        .map((cenote) => dataType(cenote as CenoteModel & VariableModel & ReferenceModel));
       setTableData([modalState, ...newArr]);
       onClose();
     }
