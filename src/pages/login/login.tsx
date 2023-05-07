@@ -1,5 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 
+
+import logo from '../../assets/logo/cenoteando-logo-title-dark.png';
+
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import {
   Button,
@@ -14,6 +17,7 @@ import {
   InputGroup,
   IconButton,
   InputRightElement,
+  Image,
 } from '@chakra-ui/react';
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -61,8 +65,16 @@ export const Login: React.FC = () => {
     >
       <Center width='100vw'>
         <Stack mr='2rem'>
-          <Heading as='h2'>Cenoteando.org</Heading>
-          <Heading as='h2' width='500px' fontWeight='normal'>
+          <Image 
+            alignSelf='center'
+            boxSize='200px'
+            objectFit='contain'
+            alt='cenoteando-logo'
+            src={logo}
+            margin='5px'
+          />
+          
+          <Heading textAlign='center' as='h2' width='500px' fontWeight='normal'>
             Repositorio institucional de cenotes de la facultad de ciencias de
             la UNAM
           </Heading>
