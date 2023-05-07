@@ -38,6 +38,12 @@ export const Login: React.FC = () => {
     {}
   );
 
+  const handleOnKeyPress = (e: React.KeyboardEvent<HTMLInputElement | HTMLButtonElement>) => {
+    if (e.key === 'Enter') {
+      fetch({ email: username, password });
+    }
+  };
+
   useEffect(() => {
     if (data) {
       const user = new AuthDto(data);
@@ -87,6 +93,7 @@ export const Login: React.FC = () => {
               onChange={(event) => setUsername(event.target.value)}
               placeholder='Usuario o email'
               size='lg'
+              onKeyDown={(e) => handleOnKeyPress(e)}
             />
           </FormControl>
           <FormControl>
@@ -98,6 +105,7 @@ export const Login: React.FC = () => {
                 placeholder='Contraseña'
                 size='lg'
                 type={show ? 'text' : 'password'}
+                onKeyDown={(e) => handleOnKeyPress(e)}
               />
               <InputRightElement pt='6px'>
                 <IconButton
@@ -117,6 +125,7 @@ export const Login: React.FC = () => {
               size='lg'
               isLoading={loading}
               onClick={() => fetch({ email: username, password })}
+              onKeyDown={(e) => handleOnKeyPress(e)}
               mb={2}
             >
               Iniciar sesión
