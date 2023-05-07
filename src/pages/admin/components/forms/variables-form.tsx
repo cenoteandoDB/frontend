@@ -177,16 +177,6 @@ export const VariablesForm: FC<VariableFormProps> = (props) => {
         </Flex>
       </FormControl>
 
-      {/* <FormControl mb={4}>
-        <FormLabel>Enum Values</FormLabel>
-        <Input
-          name='enumValues'
-          placeholder='enum values'
-          value={inputs.enumValues}
-          onChange={(event) => handleInputChange(event)}
-        />
-      </FormControl> */}
-
       <FormControl mb={4}>
         <FormLabel>Enum Values</FormLabel>
         <VStack alignItems='self-start' mb={2}>
