@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import logo from '../../../public/logo.png';
+import logo from '../../assets/logo/cenoteando-logo-white.png';
 
 import { Flex, Image, Heading, Text } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
