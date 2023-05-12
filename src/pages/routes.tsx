@@ -7,6 +7,7 @@ import { CenoteandoTableWrapper } from './admin/components/table';
 import { Home } from './home';
 import { Login } from './login';
 import { Map } from './map';
+import { Signup } from './signup';
 
 const ADMIN_KEY = '/admin';
 const MAP_KEY = '/map';
@@ -53,6 +54,10 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <Login />
+  },
+  {
+    path: '/signup',
+    element: <Signup />
   }
 ]);
 

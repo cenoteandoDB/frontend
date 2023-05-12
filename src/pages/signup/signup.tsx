@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import {
   Button,
@@ -7,32 +6,47 @@ import {
   Center,
   Flex,
   FormControl,
-  Text,
-  Heading,
+  IconButton,
   Input,
   InputGroup,
-  IconButton,
   InputRightElement,
+  Text,
 } from '@chakra-ui/react';
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { BrandLogo } from '../../components/brand-logo';
 import { LoginContext } from '../../context/login';
 import { useApi } from '../../hooks/useApi';
 import { AuthDto } from '../../models/AuthTypes';
-import { BrandLogo } from '../../components/brand-logo';
 
-export const Login: React.FC = () => {
+export const Signup = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [show, setShow] = React.useState(false);
+  const [name, setName] = useState('');
+  const [show, setShow] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const { userData, setUserData } = useContext(LoginContext);
   const navigate = useNavigate();
+
   const { data, error, loading, fetch } = useApi(
-    'api/auth/login',
+    'api/auth/register',
     'post',
     {},
     {}
   );
+
+  const handleSubmit = () => {
+    if (name && username && password) {
+      fetch({
+        email: username,
+        password,
+        name,
+      });
+      return;
+    }
+
+    setErrorMessage('Por favor rellena los campos faltantes');
+  };
 
   useEffect(() => {
     if (data) {
@@ -47,11 +61,6 @@ export const Login: React.FC = () => {
     }
   }, [data, userData]);
 
-  // TODO make a component to render errors
-  if (error?.code === AxiosError.ERR_NETWORK) {
-    return <Heading as='h2'>Algo salió mal :C</Heading>;
-  }
-
   return (
     <Flex
       width='100vw'
@@ -62,6 +71,15 @@ export const Login: React.FC = () => {
       <Center width='100vw'>
         <BrandLogo />
         <Card p='12px' gap={4} width='336px' variant='elevated'>
+          <FormControl>
+            <Input
+              name='name'
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+              placeholder='Nombre'
+              size='lg'
+            />
+          </FormControl>
           <FormControl>
             <Input
               name='user'
@@ -98,17 +116,17 @@ export const Login: React.FC = () => {
               width='100%'
               size='lg'
               isLoading={loading}
-              onClick={() => fetch({ email: username, password })}
+              onClick={handleSubmit}
               mb={2}
             >
-              Iniciar sesión
+              Registrarse
             </Button>
-            {error && error.message && (
-              <Text color='red' pl='3px'>
-                Contraseña o Correo equivocados
-              </Text>
-            )}
           </FormControl>
+          {errorMessage && (
+            <Center>
+              <Text color='red'>{errorMessage}</Text>
+            </Center>
+          )}
         </Card>
       </Center>
     </Flex>
