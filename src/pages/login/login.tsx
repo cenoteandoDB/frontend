@@ -15,7 +15,7 @@ import {
   InputRightElement,
 } from '@chakra-ui/react';
 import { AxiosError } from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { LoginContext } from '../../context/login';
 import { useApi } from '../../hooks/useApi';
 import { AuthDto } from '../../models/AuthTypes';
@@ -103,6 +103,9 @@ export const Login: React.FC = () => {
             >
               Iniciar sesión
             </Button>
+            <Center>
+              <Link to='/signup'>¿No tienes cuenta? Registrate</Link>
+            </Center>
             {error && error.message && (
               <Text color='red' pl='3px'>
                 Contraseña o Correo equivocados
