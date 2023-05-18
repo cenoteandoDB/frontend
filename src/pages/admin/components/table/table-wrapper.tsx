@@ -64,7 +64,7 @@ export const CenoteandoTableWrapper: React.FC<TableProps> = ({ route }) => {
         setTableData,
       }}
     >
-      <CenoteandoTable data={columns[1]} columns={columns[0]} />;
+      <CenoteandoTable data={columns[1]} columns={columns[0]} />
     </AdminTablesContext.Provider>
   );
 };

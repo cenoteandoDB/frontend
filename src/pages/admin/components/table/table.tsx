@@ -128,7 +128,7 @@ export const CenoteandoTable: React.FC<TableProps> = (props) => {
           <Card>
             <Box overflow={'scroll'}>
               <TableContainer>
-                <Table variant={'simple'} size='sm' overflow={'scroll'}>
+                <Table variant='striped' size='sm' overflow='scroll'>
                   <Thead>
                     {table.getHeaderGroups().map((headerGroups) => (
                       <Tr key={headerGroups.id}>
