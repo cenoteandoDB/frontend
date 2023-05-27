@@ -4,6 +4,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import { NavbarWrapper } from '../components/navbar';
 import { Admin } from './admin';
 import { CenoteandoTableWrapper } from './admin/components/table';
+import { Cenote } from './cenote';
 import { Home } from './home';
 import { Login } from './login';
 import { Map } from './map';
@@ -52,12 +53,16 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: '/login',
+    path: 'login',
     element: <Login />
   },
   {
-    path: '/signup',
+    path: 'signup',
     element: <Signup />
+  },
+  {
+    path: 'cenote/:id',
+    element: <Cenote />
   }
 ]);
 
