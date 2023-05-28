@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Flex, Heading, Text } from '@chakra-ui/react';
-import { CenoteModel } from '../../../../models/CenotesTypes';
+import { CenoteModel } from '../../models/CenotesTypes';
 
 interface PopupI {
   data: CenoteModel[] | undefined;
