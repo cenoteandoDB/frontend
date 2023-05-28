@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { Box, SimpleGrid } from '@chakra-ui/react';
+import { Box, Heading, SimpleGrid } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import { LoadingSpinner } from '../../components/loading-spinner';
 import { useApi } from '../../hooks/useApi';
@@ -36,15 +36,13 @@ export const Cenote: React.FC = () => {
 
 
   return (
-    <SimpleGrid p='8' columns={2} spacing={10} >
+    <SimpleGrid p='50px' columns={2} spacing={10} gridTemplateColumns='2fr 1fr' >
       <Box
-        borderWidth='1px'
-        borderRadius='sm'
-        bg='white'
+        alignItems='start'
       >
         <CenoteDescription name={name} rating={rating} />
       </Box>
-      <Box borderWidth='1px' borderRadius='sm' bg='white'>
+      <Box borderRadius='sm'>
         <CenoteInformation cenote={[new CenoteModel(data)]}/>
       </Box>
     </SimpleGrid>
