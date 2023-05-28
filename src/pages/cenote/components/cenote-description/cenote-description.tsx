@@ -1,5 +1,6 @@
-import { Box, Heading, Text } from '@chakra-ui/react';
 import React from 'react';
+
+import { Box, Heading, Text } from '@chakra-ui/react';
 
 interface CenoteDescriptionProps {
   name: string;
@@ -7,7 +8,7 @@ interface CenoteDescriptionProps {
 }
 
 export const CenoteDescription: React.FC<CenoteDescriptionProps> = (props) => {
-  const { name, rating}  = props;
+  const { name, rating } = props;
 
   return (
     <Box p='8'>

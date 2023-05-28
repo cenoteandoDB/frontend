@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 
-import { Box } from '@chakra-ui/react';
-import { CenoteDescription } from './components/cenote-description';
+import { Box, SimpleGrid } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import { LoadingSpinner } from '../../components/loading-spinner';
 import { useApi } from '../../hooks/useApi';
+import { CenoteModel } from '../../models/CenotesTypes';
+import { CenoteDescription } from './components/cenote-description';
 import { CenoteInformation } from './components/cenote-information';
 
 export const Cenote: React.FC = () => {
@@ -35,19 +36,17 @@ export const Cenote: React.FC = () => {
 
 
   return (
-    <Box display='flex' p='10' gap='22px' justifyContent='space-evenly'>
+    <SimpleGrid p='8' columns={2} spacing={10} >
       <Box
         borderWidth='1px'
-        flexGrow={2}
         borderRadius='sm'
-        overflow='hidden'
         bg='white'
       >
         <CenoteDescription name={name} rating={rating} />
       </Box>
-      <Box borderWidth='1px' borderRadius='sm' flexGrow={1} bg='white'>
-        <CenoteInformation municipality={name_2} />
+      <Box borderWidth='1px' borderRadius='sm' bg='white'>
+        <CenoteInformation cenote={[new CenoteModel(data)]}/>
       </Box>
-    </Box>
+    </SimpleGrid>
   );
 };
