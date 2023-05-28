@@ -1,33 +1,16 @@
 import { Box, Heading, Text } from '@chakra-ui/react';
-import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { LoadingSpinner } from '../../../../components/loading-spinner';
-import { useApi } from '../../../../hooks/useApi';
+import React from 'react';
 
-export const CenoteDescription: React.FC = () => {
-  const { id } = useParams();
-  const { data, loading, error, fetch } = useApi(`api/cenotes/${id}`, 'get');
+interface CenoteDescriptionProps {
+  name: string;
+  rating: string;
+}
 
-  useEffect(() => {
-    fetch();
-  }, [id]);
-
-  if (error) {
-    return null;
-  }
-
-  if (loading || !data) {
-    return <LoadingSpinner />;
-  }
-
-  console.log(data, loading, error);
-  const {
-    name,
-    social: { rating },
-  } = data;
+export const CenoteDescription: React.FC<CenoteDescriptionProps> = (props) => {
+  const { name, rating}  = props;
 
   return (
-    <Box p='6'>
+    <Box p='8'>
       <Box display='flex' alignItems='baseline' justifyContent='space-between'>
         <Heading as='h2'>{name}</Heading>
         <Box display='flex' flexDirection='column'>
