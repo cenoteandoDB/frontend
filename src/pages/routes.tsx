@@ -24,10 +24,12 @@ const routeBuilder = (
   Component: React.FC<any>
 ): Array<{ path: string; element: JSX.Element }> => {
   const routes: Array<{ path: string; element: JSX.Element }> = [];
-  routesObj.map((route) => routes.push({
-    path: `${parentRoute}/${route}`,
-    element: <Component route={route}/>
-  }));
+  routesObj.map((route) =>
+    routes.push({
+      path: `${parentRoute}/${route}`,
+      element: <Component route={route} />,
+    })
+  );
 
   return routes;
 };
@@ -35,11 +37,11 @@ const routeBuilder = (
 const router = createBrowserRouter([
   {
     path: '/',
-    element:  <NavbarWrapper />,
+    element: <NavbarWrapper />,
     children: [
       {
         path: '/',
-        element: <Home />
+        element: <Home />,
       },
       {
         path: ADMIN_KEY,
@@ -48,22 +50,22 @@ const router = createBrowserRouter([
       },
       {
         path: MAP_KEY,
-        element: <Map />
-      }
+        element: <Map />,
+      },
+      {
+        path: 'cenote/:id',
+        element: <Cenote />,
+      },
     ],
   },
   {
     path: 'login',
-    element: <Login />
+    element: <Login />,
   },
   {
     path: 'signup',
-    element: <Signup />
+    element: <Signup />,
   },
-  {
-    path: 'cenote/:id',
-    element: <Cenote />
-  }
 ]);
 
 export default router;
