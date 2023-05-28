@@ -1,9 +1,9 @@
 import React from 'react';
 import { dataAdapter } from '../../adapters/api-data/api-data-adapter';
 import { LoadingSpinner } from '../../components/loading-spinner';
+import { MapComponentWrapper } from '../../components/map-component';
 import { useApi } from '../../hooks/useApi';
 import { CenoteModel } from '../../models/CenotesTypes';
-import { MapComponentWrapper } from './components/map-component';
 
 export const Map = () => {
   const [cenotes, setCenotes] = React.useState<CenoteModel[] | null>(null);

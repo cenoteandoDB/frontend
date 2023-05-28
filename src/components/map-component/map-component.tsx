@@ -6,10 +6,11 @@ import maplibreGl, {
   LngLatLike,
   Map as MapLibre,
 } from 'maplibre-gl';
-import { CenoteModel } from '../../../../models/CenotesTypes';
-import { clusterLayers, mapLayers, symbolLayer, unclusterLayer } from '../utilities';
 import './map.css';
 import { Popup } from '../popup';
+import { CenoteModel } from '../../models/CenotesTypes';
+import { clusterLayers, mapLayers, symbolLayer, unclusterLayer } from '../../utils';
+
 
 interface MapComponentI {
   cenotes: CenoteModel[] | null;

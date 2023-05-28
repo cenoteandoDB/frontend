@@ -1,7 +1,7 @@
 import React from 'react';
-import { CenoteModel } from '../../../../models/CenotesTypes';
-import { MapLayerSelector } from '../map-layer-selector';
-import { layers } from '../utilities';
+import { CenoteModel } from '../../models/CenotesTypes';
+import { MapLayerSelector } from '../../pages/map/components/map-layer-selector';
+import { layers } from '../../utils';
 import { MapComponent } from './map-component';
 
 interface MapComponentWrapperI {
