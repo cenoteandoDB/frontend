@@ -1,30 +1,39 @@
 import React from 'react';
-import { render } from 'react-dom';
+
 import { Point } from 'geojson';
 import maplibreGl, {
   GeoJSONSource,
   LngLatLike,
-  Map as MapLibre,
+  Map as MapLibre
 } from 'maplibre-gl';
-import './map.css';
-import { Popup } from '../popup';
+import { render } from 'react-dom';
 import { CenoteModel } from '../../models/CenotesTypes';
-import { clusterLayers, mapLayers, symbolLayer, unclusterLayer } from '../../utils';
-
+import {
+  clusterLayers,
+  mapLayers,
+  symbolLayer,
+  unclusterLayer
+} from '../../utils';
+import { Popup } from '../popup';
+import './map.css';
 
 interface MapComponentI {
-  cenotes: CenoteModel[] | null;
-  mapLayer: string;
+  cenotes: CenoteModel[];
+  mapLayer?: string;
 }
 
 export const MapComponent: React.FC<MapComponentI> = (props) => {
-  const { cenotes, mapLayer} = props;
+  const { cenotes, mapLayer } = props;
 
   const mapContainer = React.useRef(null);
   const map = React.useRef<MapLibre | null>(null);
   const [API_KEY] = React.useState('2ovqIDOtsFG069J69Ap2');
+  const isSingleCenote = cenotes?.length === 1;
   const geoJson = cenotes?.map((cenote) => cenote.getGeoJson());
-
+  const defaultCenter = [-88.79325, 20.882081];
+  const centerPoint = isSingleCenote
+    ? geoJson?.[0].geometry.coordinates
+    : defaultCenter;
   //TODO investigate how we can use a custom react component instead of mapGl popup
   const popup = React.useMemo(() => {
     return new maplibreGl.Popup({
@@ -33,8 +42,22 @@ export const MapComponent: React.FC<MapComponentI> = (props) => {
     });
   }, []);
 
+  const renderPopup = (
+    cenoteData: CenoteModel[],
+    coordinates: number[]
+  ) => {
+    if (map !== null && map.current) {
+      const popupNode = document.createElement('div');
+      render(<Popup data={cenoteData} />, popupNode);
+      popup
+        .setLngLat({ lat: coordinates[1], lng: coordinates[0] })
+        .setDOMContent(popupNode)
+        .addTo(map.current);
+    }
+  };
+
   const setClusters = () => {
-    if (geoJson && geoJson.length > 0) {
+    if (geoJson !== null) {
       const sourceData = map.current?.getSource('cenotes');
       if (!sourceData) {
         map.current?.addSource('cenotes', {
@@ -43,9 +66,9 @@ export const MapComponent: React.FC<MapComponentI> = (props) => {
             type: 'FeatureCollection',
             features: geoJson,
           },
-          cluster: true,
+          cluster: !isSingleCenote,
           clusterMaxZoom: 14,
-          clusterRadius: 50,
+          clusterRadius: !isSingleCenote ? 0 : 50,
         });
 
         map.current?.addLayer(clusterLayers);
@@ -61,6 +84,9 @@ export const MapComponent: React.FC<MapComponentI> = (props) => {
     if (map.current) {
       map.current.on('load', () => {
         setClusters();
+        if (isSingleCenote && map.current) {
+          renderPopup(cenotes, geoJson?.[0].geometry.coordinates);
+        }
       });
 
       map.current.on('click', 'clusters', (e) => {
@@ -108,12 +134,10 @@ export const MapComponent: React.FC<MapComponentI> = (props) => {
       map.current.on('mouseenter', 'clusters', (e) => {
         if (map.current) {
           map.current.getCanvas().style.cursor = 'pointer';
-
           if (!e.features?.[0].properties?.['cluster']) {
             const coordinates = (
               e.features?.[0].geometry as Point
             )?.coordinates?.slice();
-
             // Ensure that if the map is zoomed out such that multiple
             // copies of the feature are visible, the popup appears
             // over the copy being pointed to.
@@ -121,16 +145,10 @@ export const MapComponent: React.FC<MapComponentI> = (props) => {
               coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
             }
             if (map !== null) {
-              const popupNode = document.createElement('div');
               const cenoteData = cenotes?.filter(
                 (cenote) => e.features?.[0].id?.toString() === cenote.id
               );
-
-              render(<Popup data={cenoteData} />, popupNode);
-              popup
-                .setLngLat({ lat: coordinates[1], lng: coordinates[0] })
-                .setDOMContent(popupNode)
-                .addTo(map.current);
+              renderPopup(cenoteData, coordinates);
             }
           }
         }
@@ -152,8 +170,8 @@ export const MapComponent: React.FC<MapComponentI> = (props) => {
     map.current = new maplibreGl.Map({
       container: mapContainer.current ?? '',
       style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${API_KEY}`,
-      center: [-88.79325, 20.882081],
-      zoom: 7,
+      center: centerPoint as LngLatLike,
+      zoom: isSingleCenote ? 8 : 7,
     });
     const nav = new maplibreGl.NavigationControl({});
     map.current.addControl(nav, 'top-left');
@@ -164,7 +182,7 @@ export const MapComponent: React.FC<MapComponentI> = (props) => {
   }, [mapLayer]);
 
   return (
-    <div className='map-wrap'>
+    <div className={cenotes?.length === 1 ? 'map-chakra-box' : 'map-wrap'}>
       <div ref={mapContainer} className='map' />
     </div>
   );

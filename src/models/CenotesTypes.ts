@@ -5,14 +5,14 @@ type CenoteSocialProperties = {
   rating?: number;
 };
 
-export interface geoJsonI {
+export type geoJsonI = {
   id: number | string;
   type: 'Feature';
   geometry: {
     type: 'Point';
     coordinates: [number, number];
   };
-}
+};
 
 export enum CenoteType {
   NO_TYPE = 'Sin tipo',
