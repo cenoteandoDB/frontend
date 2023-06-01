@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   AspectRatio,
@@ -12,15 +12,19 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
-import image1 from '../../../../../public/Kankirixché011.jpeg';
-import image2 from '../../../../../public/Kankirixché012.jpeg';
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
+import { useApi } from '../../../../hooks/useApi';
+import { useParams } from 'react-router-dom';
 
 export const CenoteGallery: React.FC = () => {
+  const { id } = useParams();
   const [currentImage, setCurrentImage] = useState(0);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const imageArr = [image1, image2, image1, image2];
-  const imagSize = imageArr.length;
+  const { data, error, loading, fetch } = useApi(
+    `api/cenotes/${id}/photos`,
+    'get'
+  );
+  const imagSize = data?.length || 0;
 
   const prevSlide = () => {
     setCurrentImage((s) => (s === 0 ? imagSize - 1 : s - 1));
@@ -29,14 +33,24 @@ export const CenoteGallery: React.FC = () => {
   const nextSlide = () => {
     setCurrentImage((s) => (s === imagSize - 1 ? 0 : s + 1));
   };
+
+  useEffect(() => {
+    fetch();
+  }, []);
+
+  if (loading || !data || !data.length) {
+    return null;
+  }
+
   return (
     <>
       <Box
         display='flex'
-        w='full'
+        w='85%'
         overflow='hidden'
         pos='relative'
         alignItems='center'
+        alignSelf='center'
       >
         <Flex
           h='400px'
@@ -44,8 +58,14 @@ export const CenoteGallery: React.FC = () => {
           transition='all 0.5s'
           ml={`-${currentImage * 100}%`}
         >
-          {imageArr.map((img, index) => (
-            <Box key={index} boxSize='full' flex='none' cursor='pointer' onClick={onOpen}>
+          {data?.map((img: string | undefined, index: number) => (
+            <Box
+              key={index}
+              boxSize='full'
+              flex='none'
+              cursor='pointer'
+              onClick={onOpen}
+            >
               <Text
                 color='white'
                 fontSize='xs'
@@ -55,7 +75,7 @@ export const CenoteGallery: React.FC = () => {
               >
                 {index + 1} / {imagSize}
               </Text>
-              <Image src={img} boxSize='full' backgroundSize='cover' />
+              <Image src={img} boxSize='full' backgroundSize='fit' loading='lazy' />
             </Box>
           ))}
         </Flex>
@@ -86,7 +106,7 @@ export const CenoteGallery: React.FC = () => {
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay>
             <ModalContent p='5px' maxW='90%'>
-              <Image src={imageArr[currentImage]} />
+              <Image src={data[currentImage]} />
             </ModalContent>
           </ModalOverlay>
         </Modal>
