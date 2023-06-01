@@ -10,7 +10,7 @@ export const NavBar = () => {
   const { userData, setUserData } = useContext(LoginContext);
 
   const handleLogout = () => {
-    window.sessionStorage.clear();
+    window.localStorage.clear();
     setUserData(null);
   };
 

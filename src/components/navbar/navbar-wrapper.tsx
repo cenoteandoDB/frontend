@@ -10,7 +10,7 @@ export const NavbarWrapper = () => {
   const { userData, setUserData } = useContext(LoginContext);
   const navigate = useNavigate();
 
-  const userSession = window.sessionStorage.getItem('userSession');
+  const userSession = window.localStorage.getItem('userSession');
   const userDataParsed = JSON.parse(userSession ?? '{}');
   useEffect(() => {
     if (!userSession) {
@@ -18,7 +18,7 @@ export const NavbarWrapper = () => {
     }
     if (userDataParsed && userDataParsed.isLoggedIn) {
       setUserData(userDataParsed);
-      navigate('/admin');
+      // navigate('/admin');
     }
   }, []);
 

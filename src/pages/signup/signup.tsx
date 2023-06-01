@@ -52,7 +52,7 @@ export const Signup = () => {
     if (data) {
       const user = new AuthDto(data);
       user.isLoggedIn = true;
-      window.sessionStorage.setItem('userSession', JSON.stringify(user));
+      window.localStorage.setItem('userSession', JSON.stringify(user));
       setUserData(user);
       navigate('/admin');
     }

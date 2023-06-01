@@ -4,7 +4,7 @@ export const requestInterceptor = (config: InternalAxiosRequestConfig) => {
   const authHeader = config?.headers?.['Authorization'];
   
   if (!authHeader) {
-    const userSession = window.sessionStorage.getItem('userSession');
+    const userSession = window.localStorage.getItem('userSession');
     const userData = JSON.parse(userSession ?? '{}');
     const tokenType = 'Bearer';
 
