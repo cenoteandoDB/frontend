@@ -1,14 +1,35 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 
 import { createBrowserRouter } from 'react-router-dom';
-import { NavbarWrapper } from '../components/navbar';
-import { Admin } from './admin';
-import { CenoteandoTableWrapper } from './admin/components/table';
-import { Cenote } from './cenote';
-import { Home } from './home';
-import { Login } from './login';
-import { Map } from './map';
-import { Signup } from './signup';
+import { LoadingSpinner } from '../components/loading-spinner';
+
+const Admin = lazy(() =>
+  import('./admin').then(({ Admin }) => ({ default: Admin }))
+);
+const Cenote = lazy(() =>
+  import('./cenote').then(({ Cenote }) => ({ default: Cenote }))
+);
+const CenoteandoTableWrapper = lazy(() =>
+  import('./admin/components/table').then(({ CenoteandoTableWrapper }) => ({
+    default: CenoteandoTableWrapper,
+  }))
+);
+const Home = lazy(() =>
+  import('./home').then(({ Home }) => ({ default: Home }))
+);
+const Map = lazy(() => import('./map').then(({ Map }) => ({ default: Map })));
+const NavbarWrapper = lazy(() =>
+  import('../components/navbar').then(({ NavbarWrapper }) => ({
+    default: NavbarWrapper,
+  }))
+);
+
+const Login = lazy(() =>
+  import('./login').then(({ Login }) => ({ default: Login }))
+);
+const Signup = lazy(() =>
+  import('./signup').then(({ Signup }) => ({ default: Signup }))
+);
 
 const ADMIN_KEY = '/admin';
 const MAP_KEY = '/map';
@@ -27,7 +48,11 @@ const routeBuilder = (
   routesObj.map((route) =>
     routes.push({
       path: `${parentRoute}/${route}`,
-      element: <Component route={route} />,
+      element: (
+        <Suspense fallback={<LoadingSpinner />}>
+          <Component route={route} />
+        </Suspense>
+      ),
     })
   );
 
@@ -37,34 +62,62 @@ const routeBuilder = (
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <NavbarWrapper />,
+    element: (
+      <Suspense fallback={<LoadingSpinner />}>
+        <NavbarWrapper />
+      </Suspense>
+    ),
     children: [
       {
         path: '/',
-        element: <Home />,
+        element: (
+          <Suspense fallback={<LoadingSpinner />}>
+            <Home />
+          </Suspense>
+        ),
       },
       {
         path: ADMIN_KEY,
-        element: <Admin route={ADMIN_KEY} />,
+        element: (
+          <Suspense fallback={<LoadingSpinner />}>
+            <Admin route={ADMIN_KEY} />
+          </Suspense>
+        ),
         children: routeBuilder(ADMIN_KEY, adminRoutes, CenoteandoTableWrapper),
       },
       {
         path: MAP_KEY,
-        element: <Map />,
+        element: (
+          <Suspense fallback={<LoadingSpinner />}>
+            <Map />
+          </Suspense>
+        ),
       },
       {
         path: 'cenote/:id',
-        element: <Cenote />,
+        element: (
+          <Suspense fallback={<LoadingSpinner />}>
+            <Cenote />
+          </Suspense>
+        ),
       },
     ],
   },
   {
     path: 'login',
-    element: <Login />,
+    element: (
+      <Suspense fallback={<LoadingSpinner />}>
+        <Login />
+      </Suspense>
+    ),
   },
   {
     path: 'signup',
-    element: <Signup />,
+    element: (
+      <Suspense fallback={<LoadingSpinner />}>
+        <Signup />
+      </Suspense>
+    ),
   },
 ]);
 
