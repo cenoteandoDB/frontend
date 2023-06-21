@@ -139,6 +139,9 @@ export const CenoteandoTable: React.FC<TableProps> = (props) => {
                                 <Flex
                                   gap={1}
                                   onClick={header.column.getToggleSortingHandler()}
+                                  style={{
+                                    cursor: 'pointer',
+                                  }}
                                 >
                                   {flexRender(
                                     header.column.columnDef.header,
@@ -206,10 +209,8 @@ export const CenoteandoTable: React.FC<TableProps> = (props) => {
                 }}
               >
                 {[10, 20, 30, 40, 50].map((pageSize) => (
-                  <option  key={pageSize} value={pageSize}>
-                    <Text color='light.text'>
-                      Show {pageSize}
-                    </Text>
+                  <option key={pageSize} value={pageSize}>
+                    <Text color='light.text'>Show {pageSize}</Text>
                   </option>
                 ))}
               </Select>
@@ -217,8 +218,10 @@ export const CenoteandoTable: React.FC<TableProps> = (props) => {
           </Flex>
           <Flex width='33%' gap={2} justify='center'>
             <Box alignSelf='flex-start'>
-              <Text fontSize='md' color='light.principal'>Página</Text>
-              <Text as='b'  color='light.principal'>
+              <Text fontSize='md' color='light.principal'>
+                Página
+              </Text>
+              <Text as='b' color='light.principal'>
                 {table.getState().pagination.pageIndex + 1} de{' '}
                 {table.getPageCount()}
               </Text>
