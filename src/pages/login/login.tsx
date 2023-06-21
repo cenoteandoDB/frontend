@@ -1,8 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 
-
-import logo from '../../assets/logo/cenoteando-logo-title-dark.png';
-
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import {
   Button,
@@ -16,7 +13,6 @@ import {
   InputGroup,
   IconButton,
   InputRightElement,
-  Image,
 } from '@chakra-ui/react';
 import { AxiosError } from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
