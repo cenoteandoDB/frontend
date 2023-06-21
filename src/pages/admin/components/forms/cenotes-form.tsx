@@ -226,10 +226,6 @@ export const CenotesForm: FC<CenotesFormProps> = (props) => {
                 onChange={(event) => handleChange(event)}
               />
             </InputGroup>
-            <Select flex={1}>
-              <option value='NORT'>N</option>
-              <option value='SOUTH'>S</option>
-            </Select>
           </Flex>
           <Flex gap={6}>
             <InputGroup flex={3}>
@@ -241,10 +237,6 @@ export const CenotesForm: FC<CenotesFormProps> = (props) => {
                 onChange={(event) => handleChange(event)}
               />
             </InputGroup>
-            <Select flex={1}>
-              <option value='WEST'>W</option>
-              <option value='EAST'>E</option>
-            </Select>
           </Flex>
         </Flex>
       </FormControl>

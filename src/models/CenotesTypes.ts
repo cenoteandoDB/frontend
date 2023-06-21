@@ -1,4 +1,6 @@
 import { GeoJsonProperties } from 'geojson';
+import moment from 'moment';
+import 'moment/dist/locale/es-mx';
 
 type CenoteSocialProperties = {
   totalComments: number;
@@ -48,6 +50,7 @@ export class CenoteModel {
   updatedAt!: string;
 
   constructor(jsonObj?: CenoteModel) {
+    moment().locale('es-mx');
     if (jsonObj) {
       this.id = jsonObj.id;
       this.type = jsonObj.type;
@@ -58,8 +61,8 @@ export class CenoteModel {
       this.geojson = jsonObj.geojson;
       this.gadm = jsonObj.gadm;
       this.social = jsonObj.social;
-      this.createdAt = jsonObj.createdAt;
-      this.updatedAt = jsonObj.updatedAt;
+      this.createdAt = this.formatDate(jsonObj.createdAt);
+      this.updatedAt = this.formatDate(jsonObj.updatedAt);
     } else {
       this.getDefaults();
     }
@@ -87,6 +90,10 @@ export class CenoteModel {
     };
     this.createdAt = '';
     this.updatedAt = '';
+  }
+
+  private formatDate(unformatedDate: string) {
+    return moment(unformatedDate).format('LL');
   }
 
   getLatitude(): number | null {
