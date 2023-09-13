@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Box, Card, Heading, Text } from '@chakra-ui/react';
+import { CenotesCard } from '../shared/card';
 
 interface CenoteDescriptionProps {
   name: string;
@@ -11,7 +12,7 @@ export const CenoteDescription: React.FC<CenoteDescriptionProps> = (props) => {
   const { name, rating } = props;
 
   return (
-    <Card p='8' bg='white' variant='outline'>
+    <CenotesCard>
       <Box display='flex' alignItems='baseline' justifyContent='space-between'>
         <Heading as='h2'>{name}</Heading>
         <Box display='flex' flexDirection='column'>
@@ -34,6 +35,6 @@ export const CenoteDescription: React.FC<CenoteDescriptionProps> = (props) => {
           perspiciatis quisquam! At nulla esse veniam itaque?
         </Text>
       </Box>
-    </Card>
+    </CenotesCard>
   );
 };
