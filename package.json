@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy:site": "pnpm build && firebase deploy"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.17",
