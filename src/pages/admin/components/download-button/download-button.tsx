@@ -15,7 +15,7 @@ export const DownloadButton: React.FC<DownloadButtonProps> = (props) => {
   }
 
   return (
-    <Flex gap={2}>
+    <Flex gap={2} justifyContent='center'>
       <Link to={link} target='_blank' >
         <IconButton aria-label='' size='sm' variant='ghost'>
           <DownloadIcon />

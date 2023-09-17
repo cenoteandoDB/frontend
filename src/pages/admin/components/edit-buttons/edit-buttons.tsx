@@ -16,7 +16,7 @@ export const EditContent: React.FC<EditContentProps> = (props) => {
 
   return (
     <>
-      <Flex gap={2}>
+      <Flex gap={2} justifyContent='center'>
         <IconButton aria-label='' onClick={onOpen} size='sm' variant='ghost'>
           <EditIcon />
         </IconButton>
