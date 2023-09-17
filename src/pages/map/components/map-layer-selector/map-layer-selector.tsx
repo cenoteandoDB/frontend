@@ -5,12 +5,19 @@ interface MapLayerSelectorI {
   selector: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
-export const MapLayerSelector: React.FC<MapLayerSelectorI> = ({ options, selector }) => {
+export const MapLayerSelector: React.FC<MapLayerSelectorI> = ({
+  options,
+  selector,
+}) => {
   return (
     <div className='basemaps-wrapper'>
       <select className='basemaps' onChange={selector}>
         {options.map((item, index) => {
-          return <option key={`${item}-${index}`}  value={item}>{item}</option>;
+          return (
+            <option key={`${item}-${index}`} value={item}>
+              {item}
+            </option>
+          );
         })}
       </select>
     </div>

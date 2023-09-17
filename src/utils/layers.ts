@@ -1,4 +1,8 @@
-import { CircleLayerSpecification, SymbolLayerSpecification } from 'maplibre-gl';
+import {
+  CircleLayerSpecification,
+  FillLayerSpecification,
+  SymbolLayerSpecification,
+} from 'maplibre-gl';
 
 export const clusterLayers: CircleLayerSpecification = {
   id: 'clusters',
@@ -45,5 +49,21 @@ export const unclusterLayer: CircleLayerSpecification = {
     'circle-radius': 10,
     'circle-stroke-width': 5,
     'circle-stroke-color': '#fff',
+  },
+};
+
+export const clusterLayer: FillLayerSpecification = {
+  id: 'layer-prueba',
+  type: 'fill',
+  source: 'layer1',
+  paint: {
+    // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
+    // with three steps to implement three types of circles:
+    //   * Blue, 20px circles when point count is less than 100
+    //   * Yellow, 30px circles when point count is between 100 and 750
+    //   * Pink, 40px circles when point count is greater than or equal to 750
+
+    'fill-color': 'red',
+    'fill-opacity': 0.5,
   },
 };

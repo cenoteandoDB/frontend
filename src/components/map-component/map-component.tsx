@@ -4,26 +4,29 @@ import { Point } from 'geojson';
 import maplibreGl, {
   GeoJSONSource,
   LngLatLike,
-  Map as MapLibre
+  Map as MapLibre,
 } from 'maplibre-gl';
 import { render } from 'react-dom';
 import { CenoteModel } from '../../models/CenotesTypes';
 import {
   clusterLayers,
+  layers,
   mapLayers,
   symbolLayer,
-  unclusterLayer
+  unclusterLayer,
 } from '../../utils';
 import { Popup } from '../popup';
 import './map.css';
+import { clusterLayer } from '../../utils/layers';
 
 interface MapComponentI {
   cenotes: CenoteModel[];
   mapLayer?: string;
+  layer: string | null;
 }
 
 export const MapComponent: React.FC<MapComponentI> = (props) => {
-  const { cenotes, mapLayer } = props;
+  const { cenotes, mapLayer, layer } = props;
 
   const mapContainer = React.useRef(null);
   const map = React.useRef<MapLibre | null>(null);
@@ -42,10 +45,7 @@ export const MapComponent: React.FC<MapComponentI> = (props) => {
     });
   }, []);
 
-  const renderPopup = (
-    cenoteData: CenoteModel[],
-    coordinates: number[]
-  ) => {
+  const renderPopup = (cenoteData: CenoteModel[], coordinates: number[]) => {
     if (map !== null && map.current) {
       const popupNode = document.createElement('div');
       render(<Popup data={cenoteData} />, popupNode);
@@ -57,27 +57,108 @@ export const MapComponent: React.FC<MapComponentI> = (props) => {
   };
 
   const setClusters = () => {
-    if (geoJson !== null) {
-      const sourceData = map.current?.getSource('cenotes');
-      if (!sourceData) {
-        map.current?.addSource('cenotes', {
-          type: 'geojson',
-          data: {
-            type: 'FeatureCollection',
-            features: geoJson,
+    // if (geoJson !== null) {
+    //   const sourceData = map.current?.getSource('cenotes');
+    //   if (!sourceData) {
+    //     map.current?.addSource('cenotes', {
+    //       type: 'geojson',
+    //       data: {
+    //         type: 'FeatureCollection',
+    //         features: geoJson,
+    //       },
+    //       cluster: !isSingleCenote,
+    //       clusterMaxZoom: 14,
+    //       clusterRadius: !isSingleCenote ? 0 : 50,
+    //     });
+
+    //     map.current?.addLayer(clusterLayers);
+
+    //     map.current?.addLayer(symbolLayer);
+
+    //     map.current?.addLayer(unclusterLayer);
+    //   }
+    // }
+    // if (layer) {
+    const sourceData = map.current?.getSource('layer1');
+
+    if (!sourceData) {
+      map.current?.addSource('layer1', {
+        type: 'geojson',
+        data: {
+          type: 'Feature',
+          geometry: {
+            type: 'Polygon',
+            coordinates: [
+              [
+                [
+                  -3609213.9654000029,
+                  757889.90470000356
+                ],
+                [
+                  -3609192.8687999994,
+                  757884.56379999965
+                ],
+                [
+                  -3609178.5334999934,
+                  757885.21630000323
+                ],
+                [
+                  -3609165.5475000069,
+                  757877.22500000522
+                ],
+                [
+                 -3609157.6906000003,
+                  757875.92159999907
+                ],
+                [
+                  -3609146.15860001,
+                  757882.31510000303
+                ],
+                [
+                  -3609144.697800003,
+                  757892.54630000144
+                ],
+                [
+                  -3609143.6669000089,
+                  757908.36630000174
+                ],
+                [
+                  -3609161.2410999984,
+                  757919.03840000182
+                ],
+                [
+                  -3609172.7079999968,
+                  757938.05450000241
+                ],
+                [
+                  -3609187.8612000048,
+                  757949.36310000718
+                ],
+                [
+                  -3609211.1546000093,
+                  757945.31920000911
+                ],
+                [
+                  -3609223.5873000026,
+                  757937.39070000499
+                ],
+                [
+                  -3609224.3062999994,
+                  757926.31819999963
+                ],
+                [
+                  -3609217.8575000092,
+                  757915.57200000435
+                ],
+              ],
+            ],
           },
-          cluster: !isSingleCenote,
-          clusterMaxZoom: 14,
-          clusterRadius: !isSingleCenote ? 0 : 50,
-        });
+        },
+      });
 
-        map.current?.addLayer(clusterLayers);
-
-        map.current?.addLayer(symbolLayer);
-
-        map.current?.addLayer(unclusterLayer);
-      }
+      map.current?.addLayer(clusterLayer);
     }
+    // }
   };
 
   React.useEffect(() => {
@@ -175,7 +256,7 @@ export const MapComponent: React.FC<MapComponentI> = (props) => {
     });
     const nav = new maplibreGl.NavigationControl({});
     map.current.addControl(nav, 'top-left');
-  }, [API_KEY, cenotes, geoJson, popup]);
+  }, [API_KEY, cenotes, geoJson, popup, layer]);
 
   React.useEffect(() => {
     map.current?.setStyle(mapLayers(mapLayer));
