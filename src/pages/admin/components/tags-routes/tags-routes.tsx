@@ -23,7 +23,7 @@ export const TagsRoutes = () => {
           key={`${adminRoute}-${index}`}
           variant={tagStyle(`${route}/${adminRoute}`)}
         >
-          <Link to={`${adminRoute}`}>Tabla de {adminRoute}</Link>
+          <Link to={`${adminRoute}`}>{adminRoute}</Link>
         </Tag>
       ))}
     </>

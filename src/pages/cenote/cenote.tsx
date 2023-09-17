@@ -26,7 +26,6 @@ export const Cenote: React.FC = () => {
     return <LoadingSpinner />;
   }
 
-  console.log(data, loading, error);
   const {
     name,
     social: { rating },

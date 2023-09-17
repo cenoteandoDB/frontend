@@ -89,8 +89,6 @@ export const VariablesForm: FC<VariableFormProps> = (props) => {
     setEnumValue('');
   };
 
-  console.log(inputs.enumValues);
-
   //TODO change unit to a Select with an enum
   return (
     <>

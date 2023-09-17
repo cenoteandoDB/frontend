@@ -9,18 +9,26 @@ import { httpClient } from './services/http-client';
 import { requestInterceptor } from './interceptors/http-interceptors';
 import { LoginContextProvider } from './context/login';
 import { theme } from './utils/theme-colors';
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+
+const client = new ApolloClient({
+  uri: 'http://127.0.0.1:5001/cenoteando/us-central1/graphql',
+  cache: new InMemoryCache(),
+});
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <ChakraProvider theme={theme}>
-      <ApiInstanceProvider
-        config={httpClient}
-        requestInterceptors={[requestInterceptor]}
-      >
-        <LoginContextProvider>
-          <RouterProvider router={router} />
-        </LoginContextProvider>
-      </ApiInstanceProvider>
-    </ChakraProvider>
+    <ApolloProvider client={client}>
+      <ChakraProvider theme={theme}>
+        <ApiInstanceProvider
+          config={httpClient}
+          requestInterceptors={[requestInterceptor]}
+        >
+          <LoginContextProvider>
+            <RouterProvider router={router} />
+          </LoginContextProvider>
+        </ApiInstanceProvider>
+      </ChakraProvider>
+    </ApolloProvider>
   </React.StrictMode>
 );

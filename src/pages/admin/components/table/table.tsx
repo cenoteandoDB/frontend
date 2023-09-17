@@ -124,9 +124,9 @@ export const CenoteandoTable: React.FC<TableProps> = (props) => {
             <AddButton />
           </Box>
         </Flex>
-        <Flex width='100%'>
+        <Flex width='100%' justifyContent='center'>
           <Card>
-            <Box overflow={'scroll'}>
+            <Box >
               <TableContainer>
                 <Table variant='striped' size='sm' overflow='scroll'>
                   <Thead>

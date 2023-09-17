@@ -29,6 +29,7 @@ export enum CenoteIssue {
 }
 
 export class CenoteModel {
+  __typename!: string;
   id!: string;
   arangoId?: string;
   type!: CenoteType;

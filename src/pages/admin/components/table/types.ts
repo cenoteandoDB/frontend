@@ -5,6 +5,7 @@ import {
 } from '../../../../models/CenotesTypes';
 import ReferenceModel from '../../../../models/ReferencesTypes';
 import { VariableModel } from '../../../../models/VariablesTypes';
+import { LayersQuery } from '../../../../__generated__/graphql';
 
 interface EditTableContent {
   edit: JSX.Element;

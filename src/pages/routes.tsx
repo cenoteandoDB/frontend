@@ -33,7 +33,7 @@ const Signup = lazy(() =>
 
 const ADMIN_KEY = '/admin';
 const MAP_KEY = '/map';
-export const adminRoutes = ['cenotes', 'variables', 'references'];
+export const adminRoutes = ['cenotes', 'variables', 'references', 'layers'];
 
 // Builds children of admin page dynamically
 // Because admin route will have tables with different data it's easier to build this routes

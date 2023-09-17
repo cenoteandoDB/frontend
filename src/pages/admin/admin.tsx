@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { Center, Flex, Heading } from '@chakra-ui/react';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Center, Flex } from '@chakra-ui/react';
+import { Outlet, useLocation } from 'react-router-dom';
+import { BrandLogo } from '../../components/brand-logo';
 import { TagsRoutes } from './components/tags-routes';
 import { AdminTablesContext } from './context/admin-context';
-import { BrandLogo } from '../../components/brand-logo';
 
 interface AdminProps {
   route: string;
@@ -13,7 +13,7 @@ interface AdminProps {
 export const Admin: React.FC<AdminProps> = (props) => {
   const { route } = props;
   const location = useLocation();
-  
+
   return (
     <AdminTablesContext.Provider
       value={{

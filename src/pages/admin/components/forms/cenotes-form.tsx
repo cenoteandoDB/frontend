@@ -167,7 +167,6 @@ export const CenotesForm: FC<CenotesFormProps> = (props) => {
     setInputs(new CenoteModel(newCenoteObj));
   };
 
-  console.log(inputs);
   
   return (
     <>

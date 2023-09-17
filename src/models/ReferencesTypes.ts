@@ -1,4 +1,5 @@
 export default class ReferenceModel {
+  __typename!: string;
   id!: string;
   authors!: string;
   hasFile!: boolean;
