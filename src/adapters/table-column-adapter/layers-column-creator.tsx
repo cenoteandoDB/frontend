@@ -28,7 +28,7 @@ class LayersColumns implements TableColumnInterface {
       id: data?.id,
       nombre: data?.name,
       descripcion: data?.description,
-      metadatos: <DownloadButton link={data?.metadados} />,
+      metadatos: <DownloadButton link={data?.metadata} />,
     }));
 
     if (!columnHeaders) {

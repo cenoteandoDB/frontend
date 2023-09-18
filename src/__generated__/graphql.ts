@@ -138,7 +138,7 @@ export type MapLayer = {
   id: Scalars['ID']['output'];
   json?: Maybe<Scalars['String']['output']>;
   layer?: Maybe<Scalars['String']['output']>;
-  metadados?: Maybe<Scalars['String']['output']>;
+  metadata?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
   thumbnail?: Maybe<Scalars['String']['output']>;
 };
@@ -453,7 +453,7 @@ export type VariableWithData = {
 export type LayersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type LayersQuery = { __typename?: 'Query', layers?: Array<{ __typename?: 'MapLayer', description?: string | null, id: string, name: string, metadados?: string | null } | null> | null };
+export type LayersQuery = { __typename?: 'Query', layers?: Array<{ __typename?: 'MapLayer', description?: string | null, id: string, name: string, metadata?: string | null } | null> | null };
 
 export type LayersJsonQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -461,5 +461,5 @@ export type LayersJsonQueryVariables = Exact<{ [key: string]: never; }>;
 export type LayersJsonQuery = { __typename?: 'Query', layers?: Array<{ __typename?: 'MapLayer', name: string, json?: string | null } | null> | null };
 
 
-export const LayersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Layers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"layers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"metadados"}}]}}]}}]} as unknown as DocumentNode<LayersQuery, LayersQueryVariables>;
+export const LayersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Layers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"layers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"metadata"}}]}}]}}]} as unknown as DocumentNode<LayersQuery, LayersQueryVariables>;
 export const LayersJsonDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"LayersJson"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"layers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"json"}}]}}]}}]} as unknown as DocumentNode<LayersJsonQuery, LayersJsonQueryVariables>;
