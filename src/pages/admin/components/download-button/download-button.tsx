@@ -10,14 +10,10 @@ interface DownloadButtonProps {
 export const DownloadButton: React.FC<DownloadButtonProps> = (props) => {
   const { link } = props;
 
-  if (!link) {
-    return null;
-  }
-
   return (
     <Flex gap={2} justifyContent='center'>
-      <Link to={link} target='_blank' >
-        <IconButton aria-label='' size='sm' variant='ghost'>
+      <Link to={link ?? ''} target='_blank' >
+        <IconButton aria-label='' size='sm' variant='ghost' isDisabled={!link}>
           <DownloadIcon />
         </IconButton>
       </Link>
