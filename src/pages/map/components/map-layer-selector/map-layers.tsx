@@ -1,7 +1,5 @@
-import { gql } from '../../../../__generated__';
 import { useQuery } from '@apollo/client';
 import {
-  Button,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
@@ -10,10 +8,10 @@ import {
   DrawerOverlay,
   Radio,
   RadioGroup,
-  Stack,
-  useDisclosure,
+  Stack
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { MutableRefObject } from 'react';
+import { gql } from '../../../../__generated__';
 import { MapContext } from '../../context/map-context';
 
 const GET_LAYERS_JSON = gql(/* GraphQL */ `
@@ -25,12 +23,22 @@ const GET_LAYERS_JSON = gql(/* GraphQL */ `
   }
 `);
 
-export const MapLayers = () => {
+interface MapLayersProps {
+  isOpen: boolean;
+  onClose: () => void;
+  buttonRef: MutableRefObject<null>;
+}
+
+export const MapLayers: React.FC<MapLayersProps> = ({
+  isOpen,
+  onClose,
+  buttonRef,
+}) => {
   const { data } = useQuery(GET_LAYERS_JSON);
   const { setLayer } = React.useContext(MapContext);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const [currentLayer, setCurrentLayer] = React.useState<string>('');
-  const btnRef = React.useRef(null);
+
   const layers = data?.layers;
 
   React.useEffect(() => {
@@ -39,16 +47,15 @@ export const MapLayers = () => {
     }
   }, [currentLayer]);
 
+  console.log(layers);
+
   return (
     <>
-      <Button ref={btnRef} colorScheme='teal' onClick={onOpen}>
-        Open
-      </Button>
       <Drawer
         isOpen={isOpen}
         placement='right'
         onClose={onClose}
-        finalFocusRef={btnRef}
+        finalFocusRef={buttonRef}
       >
         <DrawerOverlay />
         <DrawerContent>

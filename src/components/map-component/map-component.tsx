@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { MutableRefObject } from 'react';
 
 import { Point } from 'geojson';
 import maplibreGl, {
@@ -18,15 +18,19 @@ import {
 import { Popup } from '../popup';
 import './map.css';
 import { clusterLayer } from '../../utils/layers';
+import { Button, IconButton } from '@chakra-ui/react';
+import { SettingsIcon } from '@chakra-ui/icons';
 
 interface MapComponentI {
   cenotes: CenoteModel[];
   mapLayer?: string;
   layer: string | null;
+  onOpen: () => void;
+  buttonRef: MutableRefObject<null>;
 }
 
 export const MapComponent: React.FC<MapComponentI> = (props) => {
-  const { cenotes, mapLayer, layer } = props;
+  const { cenotes, mapLayer, layer, onOpen, buttonRef } = props;
 
   const mapContainer = React.useRef(null);
   const map = React.useRef<MapLibre | null>(null);
@@ -81,83 +85,20 @@ export const MapComponent: React.FC<MapComponentI> = (props) => {
     // if (layer) {
     const sourceData = map.current?.getSource('layer1');
 
-    if (!sourceData) {
-      map.current?.addSource('layer1', {
-        type: 'geojson',
-        data: {
-          type: 'Feature',
-          geometry: {
-            type: 'Polygon',
-            coordinates: [
-              [
-                [
-                  -3609213.9654000029,
-                  757889.90470000356
-                ],
-                [
-                  -3609192.8687999994,
-                  757884.56379999965
-                ],
-                [
-                  -3609178.5334999934,
-                  757885.21630000323
-                ],
-                [
-                  -3609165.5475000069,
-                  757877.22500000522
-                ],
-                [
-                 -3609157.6906000003,
-                  757875.92159999907
-                ],
-                [
-                  -3609146.15860001,
-                  757882.31510000303
-                ],
-                [
-                  -3609144.697800003,
-                  757892.54630000144
-                ],
-                [
-                  -3609143.6669000089,
-                  757908.36630000174
-                ],
-                [
-                  -3609161.2410999984,
-                  757919.03840000182
-                ],
-                [
-                  -3609172.7079999968,
-                  757938.05450000241
-                ],
-                [
-                  -3609187.8612000048,
-                  757949.36310000718
-                ],
-                [
-                  -3609211.1546000093,
-                  757945.31920000911
-                ],
-                [
-                  -3609223.5873000026,
-                  757937.39070000499
-                ],
-                [
-                  -3609224.3062999994,
-                  757926.31819999963
-                ],
-                [
-                  -3609217.8575000092,
-                  757915.57200000435
-                ],
-              ],
-            ],
-          },
-        },
-      });
+    // if (!sourceData) {
+    //   map.current?.addSource('layer1', {
+    //     type: 'geojson',
+    //     data: {
+    //       type: 'Feature',
+    //       geometry: {
+    //         type: 'Polygon',
+    //         coordinates: [],
+    //       },
+    //     },
+    //   });
 
-      map.current?.addLayer(clusterLayer);
-    }
+    //   map.current?.addLayer(clusterLayer);
+    // }
     // }
   };
 
@@ -264,7 +205,19 @@ export const MapComponent: React.FC<MapComponentI> = (props) => {
 
   return (
     <div className={cenotes?.length === 1 ? 'map-chakra-box' : 'map-wrap'}>
-      <div ref={mapContainer} className='map' />
+      <div ref={mapContainer} className='map'>
+        <div className='sidebar flex-center right'>
+          <IconButton
+            aria-label=''
+            ref={buttonRef}
+            colorScheme='teal'
+            onClick={onOpen}
+            icon={<SettingsIcon />}
+          >
+            Open
+          </IconButton>
+        </div>
+      </div>
     </div>
   );
 };

@@ -17,3 +17,20 @@
   position: relative;
   width: 100%;
 }
+
+.flex-center {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-center.right {
+  right: 0px;
+}
+
+.sidebar {
+  transition: transform 1s;
+  z-index: 1;
+  height: 100%;
+}
