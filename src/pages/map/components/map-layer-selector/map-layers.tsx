@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client';
+import { useLazyQuery, useQuery } from '@apollo/client';
 import {
   Drawer,
   DrawerBody,
@@ -8,17 +8,18 @@ import {
   DrawerOverlay,
   Radio,
   RadioGroup,
-  Stack
+  Stack,
 } from '@chakra-ui/react';
 import React, { MutableRefObject } from 'react';
+import { LoadingSpinner } from '../../../../components/loading-spinner';
 import { gql } from '../../../../__generated__';
 import { MapContext } from '../../context/map-context';
 
 const GET_LAYERS_JSON = gql(/* GraphQL */ `
   query LayersJson {
     layers {
+      id
       name
-      json
     }
   }
 `);
@@ -27,27 +28,23 @@ interface MapLayersProps {
   isOpen: boolean;
   onClose: () => void;
   buttonRef: MutableRefObject<null>;
+  layer: string | null;
+  setLayer: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 export const MapLayers: React.FC<MapLayersProps> = ({
   isOpen,
   onClose,
   buttonRef,
+  layer,
+  setLayer,
 }) => {
-  const { data } = useQuery(GET_LAYERS_JSON);
-  const { setLayer } = React.useContext(MapContext);
-
-  const [currentLayer, setCurrentLayer] = React.useState<string>('');
-
+  const { data, loading, error } = useQuery(GET_LAYERS_JSON);
   const layers = data?.layers;
 
-  React.useEffect(() => {
-    if (data) {
-      setLayer(currentLayer);
-    }
-  }, [currentLayer]);
-
-  console.log(layers);
+  if (loading) {
+    <LoadingSpinner />;
+  }
 
   return (
     <>
@@ -63,11 +60,11 @@ export const MapLayers: React.FC<MapLayersProps> = ({
           <DrawerHeader>Layers</DrawerHeader>
 
           <DrawerBody>
-            <RadioGroup onChange={setCurrentLayer} value={currentLayer}>
+            <RadioGroup onChange={setLayer} value={layer ?? undefined}>
               <Stack direction='column'>
                 {layers?.map((layer, index) => {
                   return (
-                    <Radio key={`${index}`} value={layer?.json ?? ''}>
+                    <Radio key={`${index}`} value={layer?.id ?? ''}>
                       {layer?.name}
                     </Radio>
                   );

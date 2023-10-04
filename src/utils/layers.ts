@@ -56,6 +56,9 @@ export const clusterLayer: FillLayerSpecification = {
   id: 'layer-prueba',
   type: 'fill',
   source: 'layer1',
+  layout: {
+    visibility: 'visible'
+  },
   paint: {
     // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
     // with three steps to implement three types of circles:
@@ -63,7 +66,8 @@ export const clusterLayer: FillLayerSpecification = {
     //   * Yellow, 30px circles when point count is between 100 and 750
     //   * Pink, 40px circles when point count is greater than or equal to 750
 
-    'fill-color': 'red',
-    'fill-opacity': 0.5,
+    'fill-color': '#051AF0',
+    'fill-outline-color': '#000000',
+    'fill-antialias': false
   },
 };

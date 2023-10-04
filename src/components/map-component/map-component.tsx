@@ -20,17 +20,41 @@ import './map.css';
 import { clusterLayer } from '../../utils/layers';
 import { Button, IconButton } from '@chakra-ui/react';
 import { SettingsIcon } from '@chakra-ui/icons';
+import { useQuery } from '@apollo/client';
+import { gql } from '../../__generated__';
+import { LayerQuery } from '../../__generated__/graphql';
+import { LoadingSpinner } from '../loading-spinner';
+
+const GET_GEOJSON_LAYER = gql(/* GraphQL */ `
+  query Layer($layerId: ID!) {
+    layer(id: $layerId) {
+      json
+    }
+  }
+`);
 
 interface MapComponentI {
   cenotes: CenoteModel[];
   mapLayer?: string;
-  layer: string | null;
+  layerId: string | null;
   onOpen: () => void;
   buttonRef: MutableRefObject<null>;
 }
 
 export const MapComponent: React.FC<MapComponentI> = (props) => {
-  const { cenotes, mapLayer, layer, onOpen, buttonRef } = props;
+  const { cenotes, mapLayer, layerId, onOpen, buttonRef } = props;
+
+  console.log({ layerId });
+
+  const { data, loading, error } = useQuery(GET_GEOJSON_LAYER, {
+    variables: {
+      layerId: layerId ?? '',
+    },
+  });
+
+  const geoJsonFromQuery = data?.layer?.json;
+  console.log({geoJsonFromQuery});
+  
 
   const mapContainer = React.useRef(null);
   const map = React.useRef<MapLibre | null>(null);
@@ -49,6 +73,11 @@ export const MapComponent: React.FC<MapComponentI> = (props) => {
     });
   }, []);
 
+  let parsedGeoJson: LayerQuery | undefined = undefined;
+  if (geoJsonFromQuery) {
+    parsedGeoJson = JSON.parse(geoJsonFromQuery);
+  }
+
   const renderPopup = (cenoteData: CenoteModel[], coordinates: number[]) => {
     if (map !== null && map.current) {
       const popupNode = document.createElement('div');
@@ -60,46 +89,44 @@ export const MapComponent: React.FC<MapComponentI> = (props) => {
     }
   };
 
+  //TODO refactor code to include layers dinamically
   const setClusters = () => {
-    // if (geoJson !== null) {
-    //   const sourceData = map.current?.getSource('cenotes');
-    //   if (!sourceData) {
-    //     map.current?.addSource('cenotes', {
-    //       type: 'geojson',
-    //       data: {
-    //         type: 'FeatureCollection',
-    //         features: geoJson,
-    //       },
-    //       cluster: !isSingleCenote,
-    //       clusterMaxZoom: 14,
-    //       clusterRadius: !isSingleCenote ? 0 : 50,
-    //     });
+    if (geoJson !== null) {
+      const sourceData = map.current?.getSource('cenotes');
+      if (!sourceData) {
+        map.current?.addSource('cenotes', {
+          type: 'geojson',
+          data: {
+            type: 'FeatureCollection',
+            features: geoJson,
+          },
+          cluster: !isSingleCenote,
+          clusterMaxZoom: 14,
+          clusterRadius: !isSingleCenote ? 0 : 50,
+        });
 
-    //     map.current?.addLayer(clusterLayers);
+        map.current?.addLayer(clusterLayers);
 
-    //     map.current?.addLayer(symbolLayer);
+        map.current?.addLayer(symbolLayer);
 
-    //     map.current?.addLayer(unclusterLayer);
-    //   }
-    // }
-    // if (layer) {
+        map.current?.addLayer(unclusterLayer);
+      }
+    }
     const sourceData = map.current?.getSource('layer1');
 
-    // if (!sourceData) {
-    //   map.current?.addSource('layer1', {
-    //     type: 'geojson',
-    //     data: {
-    //       type: 'Feature',
-    //       geometry: {
-    //         type: 'Polygon',
-    //         coordinates: [],
-    //       },
-    //     },
-    //   });
+    if (!sourceData) {
+      if (parsedGeoJson) {
+        map.current?.addSource('layer1', {
+          type: 'geojson',
+          data: {
+            ...parsedGeoJson,
+          },
+        });
 
-    //   map.current?.addLayer(clusterLayer);
-    // }
-    // }
+        map.current?.addLayer(clusterLayer);
+        console.log('Added layer');
+      }
+    }
   };
 
   React.useEffect(() => {
@@ -197,7 +224,7 @@ export const MapComponent: React.FC<MapComponentI> = (props) => {
     });
     const nav = new maplibreGl.NavigationControl({});
     map.current.addControl(nav, 'top-left');
-  }, [API_KEY, cenotes, geoJson, popup, layer]);
+  }, [API_KEY, cenotes, geoJson, popup, geoJsonFromQuery]);
 
   React.useEffect(() => {
     map.current?.setStyle(mapLayers(mapLayer));
@@ -205,6 +232,7 @@ export const MapComponent: React.FC<MapComponentI> = (props) => {
 
   return (
     <div className={cenotes?.length === 1 ? 'map-chakra-box' : 'map-wrap'}>
+      {loading && <LoadingSpinner/>}
       <div ref={mapContainer} className='map'>
         <div className='sidebar flex-center right'>
           <IconButton

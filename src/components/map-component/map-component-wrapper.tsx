@@ -4,7 +4,7 @@ import React from 'react';
 import { CenoteModel } from '../../models/CenotesTypes';
 import {
   MapLayers,
-  MapLayerSelector
+  MapLayerSelector,
 } from '../../pages/map/components/map-layer-selector';
 import { MapContext } from '../../pages/map/context/map-context';
 import { layers } from '../../utils';
@@ -14,18 +14,21 @@ interface MapComponentWrapperI {
   data: CenoteModel[];
 }
 
+//TODO refactor component to make the query calls here, based on the selection in MapLayers
 export const MapComponentWrapper: React.FC<MapComponentWrapperI> = (props) => {
   const { data } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef(null);
   const [cenoteLayers, setCenotesLayers] = React.useState('');
-  const [layer, setLayer] = React.useState<string | null>('');
+  const [layerId, setLayer] = React.useState<string | null>('');
 
   const onSelectedOptionCallback = (
     e: React.ChangeEvent<HTMLSelectElement>
   ) => {
     setCenotesLayers(e.target.value);
   };
+
+  console.log(`Current layer id ${layerId}`);
 
   return (
     <>
@@ -39,11 +42,17 @@ export const MapComponentWrapper: React.FC<MapComponentWrapperI> = (props) => {
           options={layers}
           selector={onSelectedOptionCallback}
         />
-        <MapLayers isOpen={isOpen} onClose={onClose} buttonRef={btnRef} />
+        <MapLayers
+          isOpen={isOpen}
+          onClose={onClose}
+          buttonRef={btnRef}
+          layer={layerId}
+          setLayer={setLayer}
+        />
         <MapComponent
           cenotes={data}
           mapLayer={cenoteLayers}
-          layer={layer}
+          layerId={layerId}
           onOpen={onOpen}
           buttonRef={btnRef}
         />
