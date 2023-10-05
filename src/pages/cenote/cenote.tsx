@@ -6,8 +6,8 @@ import { LoadingSpinner } from '../../components/loading-spinner';
 import { useApi } from '../../hooks/useApi';
 import { CenoteModel } from '../../models/CenotesTypes';
 import { CenoteDescription } from './components/cenote-description';
-import { CenoteInformation } from './components/cenote-information';
 import { CenoteGallery } from './components/cenote-gallery';
+import { CenoteInformation } from './components/cenote-information';
 import { CenoteServices } from './components/cenote-services';
 
 export const Cenote: React.FC = () => {

@@ -6,7 +6,6 @@ import {
   MapLayers,
   MapLayerSelector,
 } from '../../pages/map/components/map-layer-selector';
-import { MapContext } from '../../pages/map/context/map-context';
 import { layers } from '../../utils';
 import { MapComponent } from './map-component';
 
@@ -20,7 +19,9 @@ export const MapComponentWrapper: React.FC<MapComponentWrapperI> = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef(null);
   const [cenoteLayers, setCenotesLayers] = React.useState('');
-  const [layerId, setLayer] = React.useState<string | null>('');
+  const [selectedLayerIds, setSelectedLayerIds] = React.useState<
+    string[] | null
+  >(null);
 
   const onSelectedOptionCallback = (
     e: React.ChangeEvent<HTMLSelectElement>
@@ -28,35 +29,25 @@ export const MapComponentWrapper: React.FC<MapComponentWrapperI> = (props) => {
     setCenotesLayers(e.target.value);
   };
 
-  console.log(`Current layer id ${layerId}`);
+  console.log(`Current layer id ${selectedLayerIds}`);
 
   return (
     <>
-      <MapContext.Provider
-        value={{
-          layer: '',
-          setLayer: setLayer,
-        }}
-      >
-        <MapLayerSelector
-          options={layers}
-          selector={onSelectedOptionCallback}
-        />
-        <MapLayers
-          isOpen={isOpen}
-          onClose={onClose}
-          buttonRef={btnRef}
-          layer={layerId}
-          setLayer={setLayer}
-        />
-        <MapComponent
-          cenotes={data}
-          mapLayer={cenoteLayers}
-          layerId={layerId}
-          onOpen={onOpen}
-          buttonRef={btnRef}
-        />
-      </MapContext.Provider>
+      <MapLayerSelector options={layers} selector={onSelectedOptionCallback} />
+      <MapLayers
+        isOpen={isOpen}
+        onClose={onClose}
+        buttonRef={btnRef}
+        layerIds={selectedLayerIds}
+        setSelectedLayerIds={setSelectedLayerIds}
+      />
+      <MapComponent
+        cenotes={data}
+        mapLayer={cenoteLayers}
+        selectedLayerIds={selectedLayerIds}
+        onOpen={onOpen}
+        buttonRef={btnRef}
+      />
     </>
   );
 };

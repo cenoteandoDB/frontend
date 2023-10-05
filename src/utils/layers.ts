@@ -52,22 +52,35 @@ export const unclusterLayer: CircleLayerSpecification = {
   },
 };
 
-export const clusterLayer: FillLayerSpecification = {
-  id: 'layer-prueba',
-  type: 'fill',
-  source: 'layer1',
+export const lineLayers = (idAndSource: string, color: string) => ({
+  id: idAndSource,
+  type: 'line',
+  source: idAndSource,
   layout: {
-    visibility: 'visible'
+    'line-join': 'round',
+    'line-cap': 'round',
   },
   paint: {
-    // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
-    // with three steps to implement three types of circles:
-    //   * Blue, 20px circles when point count is less than 100
-    //   * Yellow, 30px circles when point count is between 100 and 750
-    //   * Pink, 40px circles when point count is greater than or equal to 750
-
-    'fill-color': '#051AF0',
-    'fill-outline-color': '#000000',
-    'fill-antialias': false
+    'line-color': color,
+    'line-width': 2,
   },
+});
+
+export const fillLayers = (idAndSource: string, color: string) => ({
+  id: idAndSource,
+  type: 'fill',
+  source: idAndSource,
+  layout: {
+    visibility: 'visible',
+  },
+  paint: {
+    'fill-color': color,
+    'fill-outline-color': '#000000',
+    'fill-antialias': false,
+  },
+});
+
+export const layersMap = {
+  MultiLineString: lineLayers,
+  Polygon: fillLayers,
 };

@@ -1,19 +1,19 @@
-import { useLazyQuery, useQuery } from '@apollo/client';
+import React, { MutableRefObject } from 'react';
+
+import { useQuery } from '@apollo/client';
 import {
+  Checkbox,
+  CheckboxGroup,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
   DrawerContent,
   DrawerHeader,
   DrawerOverlay,
-  Radio,
-  RadioGroup,
   Stack,
 } from '@chakra-ui/react';
-import React, { MutableRefObject } from 'react';
 import { LoadingSpinner } from '../../../../components/loading-spinner';
 import { gql } from '../../../../__generated__';
-import { MapContext } from '../../context/map-context';
 
 const GET_LAYERS_JSON = gql(/* GraphQL */ `
   query LayersJson {
@@ -28,19 +28,24 @@ interface MapLayersProps {
   isOpen: boolean;
   onClose: () => void;
   buttonRef: MutableRefObject<null>;
-  layer: string | null;
-  setLayer: React.Dispatch<React.SetStateAction<string | null>>;
+  layerIds: string[] | null;
+  setSelectedLayerIds: React.Dispatch<React.SetStateAction<string[] | null>>;
 }
 
 export const MapLayers: React.FC<MapLayersProps> = ({
   isOpen,
   onClose,
   buttonRef,
-  layer,
-  setLayer,
+  layerIds,
+  setSelectedLayerIds,
 }) => {
   const { data, loading, error } = useQuery(GET_LAYERS_JSON);
   const layers = data?.layers;
+
+  const handleCheckBoxClick = (event: string[]) => {
+    setSelectedLayerIds([...event]);
+    console.log('layer set ', event);
+  };
 
   if (loading) {
     <LoadingSpinner />;
@@ -60,17 +65,20 @@ export const MapLayers: React.FC<MapLayersProps> = ({
           <DrawerHeader>Layers</DrawerHeader>
 
           <DrawerBody>
-            <RadioGroup onChange={setLayer} value={layer ?? undefined}>
+            <CheckboxGroup
+              onChange={(e: string[]) => handleCheckBoxClick(e)}
+              defaultValue={layerIds ?? []}
+            >
               <Stack direction='column'>
                 {layers?.map((layer, index) => {
                   return (
-                    <Radio key={`${index}`} value={layer?.id ?? ''}>
+                    <Checkbox key={`${index}`} value={layer?.id ?? ''}>
                       {layer?.name}
-                    </Radio>
+                    </Checkbox>
                   );
                 })}
               </Stack>
-            </RadioGroup>
+            </CheckboxGroup>
           </DrawerBody>
         </DrawerContent>
       </Drawer>
