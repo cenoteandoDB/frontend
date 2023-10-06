@@ -53,7 +53,6 @@ export enum AuditLogType {
 
 export type Cenote = {
   __typename?: 'Cenote';
-  _id: Scalars['ID']['output'];
   _key: Scalars['ID']['output'];
   alternativeNames?: Maybe<Array<Scalars['String']['output']>>;
   createdAt?: Maybe<Scalars['DateTime']['output']>;
@@ -132,6 +131,12 @@ export type CoordinatesInput = {
   longitude: Scalars['Longitude']['input'];
 };
 
+export type DeleteMofInput = {
+  cenote: Scalars['ID']['input'];
+  timestamp: Scalars['DateTime']['input'];
+  variable: Scalars['ID']['input'];
+};
+
 export type MapLayer = {
   __typename?: 'MapLayer';
   description?: Maybe<Scalars['String']['output']>;
@@ -162,6 +167,7 @@ export type Mutation = {
   createMof?: Maybe<VariableWithData>;
   createSpecies?: Maybe<Species>;
   createVariable?: Maybe<Variable>;
+  deleteMof?: Maybe<Scalars['Boolean']['output']>;
   register?: Maybe<User>;
   updateCenote?: Maybe<Cenote>;
   updateEmail?: Maybe<User>;
@@ -192,6 +198,11 @@ export type MutationCreateSpeciesArgs = {
 
 export type MutationCreateVariableArgs = {
   new_variable: NewVariableInput;
+};
+
+
+export type MutationDeleteMofArgs = {
+  delete_mof_input: DeleteMofInput;
 };
 
 

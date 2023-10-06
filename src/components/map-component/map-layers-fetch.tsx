@@ -44,7 +44,6 @@ export const MapLayersFetch: React.FC<MapLayersFetchProps> = ({
   map,
   layerId,
 }) => {
-  console.log(`Calling ${layerId}`);
   let parsedGeoJson: any | undefined = undefined;
   let geoJsonType = '';
   const { data } = useQuery(GET_GEOJSON_LAYER, {
@@ -61,9 +60,7 @@ export const MapLayersFetch: React.FC<MapLayersFetchProps> = ({
     console.log({ geoJsonType });
   }
 
-  console.log({ parsedGeoJson });
   const sourceData = map.current?.getSource(layerId);
-
   if (!sourceData) {
     if (parsedGeoJson) {
       map.current?.addSource(layerId, {
@@ -72,12 +69,7 @@ export const MapLayersFetch: React.FC<MapLayersFetchProps> = ({
           ...parsedGeoJson,
         },
       });
-
-      //TODO fix type issue and add remaining layer types
       const layerFunc = layersMap[`${geoJsonType}`];
-
-      console.log({ layerFunc });
-
       map.current?.addLayer(layerFunc(layerId, getRandomHexColor()));
     }
   }

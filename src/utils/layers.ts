@@ -1,7 +1,6 @@
 import {
-  CircleLayerSpecification,
-  FillLayerSpecification,
-  SymbolLayerSpecification,
+  CircleLayerSpecification, LayerSpecification,
+  SymbolLayerSpecification
 } from 'maplibre-gl';
 
 export const clusterLayers: CircleLayerSpecification = {
@@ -52,35 +51,58 @@ export const unclusterLayer: CircleLayerSpecification = {
   },
 };
 
-export const lineLayers = (idAndSource: string, color: string) => ({
-  id: idAndSource,
-  type: 'line',
-  source: idAndSource,
-  layout: {
-    'line-join': 'round',
-    'line-cap': 'round',
-  },
-  paint: {
-    'line-color': color,
-    'line-width': 2,
-  },
-});
+const pointLayers = (idAndSource: string, color: string) =>
+  ({
+    id: idAndSource,
+    type: 'circle',
+    source: idAndSource,
+    paint: {
+      // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
+      // with three steps to implement three types of circles:
+      //   * Blue, 20px circles when point count is less than 100
+      //   * Yellow, 30px circles when point count is between 100 and 750
+      //   * Pink, 40px circles when point count is greater than or equal to 750
+      'circle-color': color,
+      'circle-radius': 5,
+    },
+  } as LayerSpecification);
 
-export const fillLayers = (idAndSource: string, color: string) => ({
-  id: idAndSource,
-  type: 'fill',
-  source: idAndSource,
-  layout: {
-    visibility: 'visible',
-  },
-  paint: {
-    'fill-color': color,
-    'fill-outline-color': '#000000',
-    'fill-antialias': false,
-  },
-});
+const lineLayers = (idAndSource: string, color: string) =>
+  ({
+    id: idAndSource,
+    type: 'line',
+    source: idAndSource,
+    layout: {
+      'line-join': 'round',
+      'line-cap': 'round',
+    },
+    paint: {
+      'line-color': color,
+      'line-width': 2,
+    },
+  } as LayerSpecification);
 
-export const layersMap = {
+const fillLayers = (idAndSource: string, color: string) =>
+  ({
+    id: idAndSource,
+    type: 'fill',
+    source: idAndSource,
+    layout: {
+      visibility: 'visible',
+    },
+    paint: {
+      'fill-color': color,
+      'fill-outline-color': '#000000',
+      'fill-antialias': false,
+    },
+  } as LayerSpecification);
+
+export const layersMap: Record<
+  string,
+  (idAndSource: string, color: string) => LayerSpecification
+> = {
   MultiLineString: lineLayers,
   Polygon: fillLayers,
+  Point: pointLayers,
+  MultiPolygon: fillLayers
 };
