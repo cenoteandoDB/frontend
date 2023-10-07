@@ -1,7 +1,9 @@
 import React from 'react';
+
 import ReferenceModel from '../../models/ReferencesTypes';
 import { EditContent } from '../../pages/admin/components/edit-buttons';
 import {
+  ReferenceTableColumns,
   TableColumns,
   TableTypes,
 } from '../../pages/admin/components/table/types';
@@ -25,15 +27,18 @@ export class ReferenceColumnCreator extends ColumnCreator {
 
 class ReferenceColumns implements TableColumnInterface {
   buildColumnHeaders(tableData: ReferenceModel[]): [string[], TableColumns[]] {
-    const columnHeaders = tableData.map((data) => ({
-      id: data.id,
-      authors: data.authors,
-      shortName: data.shortName,
-      reference: data.reference,
-      type: data.type,
-      year: data.year,
-      edit: <EditContent inputs={data} />,
-    }));
+    const columnHeaders = tableData.map(
+      (data) =>
+        ({
+          id: data.id,
+          autores: data.authors,
+          nombre_corto: data.shortName,
+          referencia: data.reference,
+          tipo: data.type,
+          año: data.year,
+          editar: <EditContent inputs={data} />,
+        } as ReferenceTableColumns)
+    );
     return [Object.keys(columnHeaders[0]), columnHeaders];
   }
 }

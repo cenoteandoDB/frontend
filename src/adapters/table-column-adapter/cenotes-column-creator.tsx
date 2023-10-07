@@ -16,7 +16,7 @@ export class CenotesColumnCreator extends ColumnCreator {
   constructor(tableData: CenoteModel[]) {
     super();
     this.tableData = tableData;
-    this.enableFilter = ['edit', 'ficha'];
+    this.enableFilter = ['editar', 'ficha'];
   }
 
   public factoryMethod(): TableColumnInterface {
@@ -30,15 +30,15 @@ class CenotesColumns implements TableColumnInterface {
       (data) =>
         ({
           id: data.id,
-          name: data.name,
-          state: data.gadm?.name_1,
-          municipality: data.gadm?.name_2,
-          type: CenoteType[data.type as keyof typeof CenoteType],
-          issues: data.issues,
-          createdAt: data.createdAt,
-          updatedAt: data.updatedAt,
-          touristic: data.touristic,
-          edit: <EditContent inputs={data} />,
+          nombre: data.name,
+          estado: data.gadm?.name_1,
+          municipalidad: data.gadm?.name_2,
+          tipo: CenoteType[data.type as keyof typeof CenoteType],
+          problemas: data.issues,
+          creado: data.formatCreatedAtDate(),
+          actualizado: data.formatUpdatedAtDate(),
+          turistico: data.touristic,
+          editar: <EditContent inputs={data} />,
           ficha: <ViewButton link={data.id} />,
         } as CenoteTableColumns)
     );

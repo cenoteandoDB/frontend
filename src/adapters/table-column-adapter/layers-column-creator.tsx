@@ -12,7 +12,7 @@ export class LayersColumnCreator extends ColumnCreator {
   constructor(tableData: LayersQuery['layers']) {
     super();
     this.tableData = tableData;
-    this.enableFilter = ['metadatos'];
+    this.enableFilter = ['metadatos', 'indice'];
   }
 
   public factoryMethod(): TableColumnInterface {
@@ -24,7 +24,8 @@ class LayersColumns implements TableColumnInterface {
   buildColumnHeaders(
     tableData: LayersQuery['layers']
   ): [string[], TableColumns[]] {
-    const columnHeaders = tableData?.map((data) => ({
+    const columnHeaders = tableData?.map((data, index) => ({
+      indice: index + 1,
       id: data?.id,
       nombre: data?.name,
       descripcion: data?.description,

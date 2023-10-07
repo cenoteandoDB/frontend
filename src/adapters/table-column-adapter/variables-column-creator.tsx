@@ -31,18 +31,18 @@ class VariablesColumns implements TableColumnInterface {
       (data) =>
         ({
           id: data.id,
-          name: data.name,
-          description: data.description,
-          theme: data.theme,
-          accessLevel: data.accessLevel,
-          dataType: data.type,
-          origin: data.origin,
-          timeSeries: data.timeseries,
-          multiple: data.multiple,
+          nombre: data.name,
+          descripcion: data.description,
+          tema: data.theme,
+          nivel_de_acceso: data.accessLevel,
+          tipo_dato: data.type,
+          origen: data.origin,
+          series: data.timeseries,
+          multiplos: data.multiple,
           enumValues: data.enumValues,
-          unit: data.units,
-          methodology: data.methodology,
-          edit: <EditContent inputs={data} />,
+          unidad: data.units,
+          metodologia: data.methodology,
+          editar: <EditContent inputs={data} />,
         } as VariablesTableColumns)
     );
     return [Object.keys(columnHeaders[0]), columnHeaders];

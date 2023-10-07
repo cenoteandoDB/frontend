@@ -24,6 +24,7 @@ export const Popup: React.FC<PopupI> = (props) => {
         {cenoteData.name} - {cenoteData.type}
       </Heading>
       {cenoteData.touristic ? <Text fontSize='md'>Turistico</Text> : null}
+      <Text>Coordinates {cenoteData.geojson.geometry.coordinates[0]}, {cenoteData.geojson.geometry.coordinates[1]}</Text>
     </Flex>
   );
 };

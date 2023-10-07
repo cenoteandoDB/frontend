@@ -4,11 +4,11 @@ import { Point } from 'geojson';
 import maplibreGl, {
   GeoJSONSource,
   LngLatLike,
-  Map as MapLibre
+  Map as MapLibre,
 } from 'maplibre-gl';
 import { render } from 'react-dom';
 import { CenoteModel } from '../../models/CenotesTypes';
-import { mapLayers } from '../../utils';
+import { clusterLayers, mapLayers, symbolLayer, unclusterLayer } from '../../utils';
 import { Popup } from '../popup';
 import { MapLayersFetch } from './map-layers-fetch';
 import './map.css';
@@ -75,44 +75,29 @@ export const MapComponent: React.FC<MapComponentI> = (props) => {
   };
 
   //TODO refactor code to include layers dinamically
-  // const setClusters = () => {
-  //   if (geoJson !== null) {
-  //     const sourceData = map.current?.getSource('cenotes');
-  //     if (!sourceData) {
-  //       map.current?.addSource('cenotes', {
-  //         type: 'geojson',
-  //         data: {
-  //           type: 'FeatureCollection',
-  //           features: geoJson,
-  //         },
-  //         cluster: !isSingleCenote,
-  //         clusterMaxZoom: 14,
-  //         clusterRadius: !isSingleCenote ? 0 : 50,
-  //       });
+  const setClusters = () => {
+    if (geoJson !== null) {
+      const sourceData = map.current?.getSource('cenotes');
+      if (!sourceData) {
+        map.current?.addSource('cenotes', {
+          type: 'geojson',
+          data: {
+            type: 'FeatureCollection',
+            features: geoJson,
+          },
+          cluster: !isSingleCenote,
+          clusterMaxZoom: 14,
+          clusterRadius: !isSingleCenote ? 0 : 50,
+        });
 
-  //       map.current?.addLayer(clusterLayers);
+        map.current?.addLayer(clusterLayers);
 
-  //       map.current?.addLayer(symbolLayer);
+        map.current?.addLayer(symbolLayer);
 
-  //       map.current?.addLayer(unclusterLayer);
-  //     }
-  //   }
-  //   const sourceData = map.current?.getSource('layer1');
-
-  //   if (!sourceData) {
-  //     if (parsedGeoJson) {
-  //       map.current?.addSource('layer1', {
-  //         type: 'geojson',
-  //         data: {
-  //           ...parsedGeoJson,
-  //         },
-  //       });
-
-  //       map.current?.addLayer(clusterLayer);
-  //       console.log('Added layer');
-  //     }
-  //   }
-  // };
+        map.current?.addLayer(unclusterLayer);
+      }
+    }
+  };
 
   React.useEffect(() => {
     if (map.current) {
@@ -197,7 +182,7 @@ export const MapComponent: React.FC<MapComponentI> = (props) => {
       });
 
       map.current.on('data', () => {
-        // setClusters();
+        setClusters();
       });
 
       removeLayers();
@@ -220,9 +205,7 @@ export const MapComponent: React.FC<MapComponentI> = (props) => {
 
   return (
     <div className={cenotes?.length === 1 ? 'map-chakra-box' : 'map-wrap'}>
-      <div ref={mapContainer} className='map'>
-        
-      </div>
+      <div ref={mapContainer} className='map'></div>
       {selectedLayerIds &&
         map &&
         selectedLayerIds?.length > 0 &&
