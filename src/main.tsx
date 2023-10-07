@@ -11,6 +11,11 @@ import { LoginContextProvider } from './context/login';
 import { theme } from './utils/theme-colors';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 
+// Disable console log for production
+if (import.meta.env.PROD)
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  console.log = () => {};
+
 const client = new ApolloClient({
   uri: import.meta.env.APOLLO_CLIENT_URL,
   cache: new InMemoryCache(),
