@@ -12,7 +12,7 @@ import { theme } from './utils/theme-colors';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 
 const client = new ApolloClient({
-  uri: 'http://127.0.0.1:5001/cenoteando/us-central1/graphql',
+  uri: import.meta.env.APOLLO_CLIENT_URL,
   cache: new InMemoryCache(),
 });
 
