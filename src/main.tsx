@@ -17,7 +17,7 @@ if (import.meta.env.PROD)
   console.log = () => {};
 
 const client = new ApolloClient({
-  uri: import.meta.env.APOLLO_CLIENT_URL,
+  uri: import.meta.env.VITE_APOLLO_CLIENT_URL,
   cache: new InMemoryCache(),
 });
 

@@ -6,7 +6,7 @@ import { gql } from '../../../../__generated__';
 import { CenoteandoTable } from './table';
 
 const GET_LAYERS_LISTS = gql(/* GraphQL */ `
-  query Layers {
+  query LayersTableQuery {
     layers {
       description
       id

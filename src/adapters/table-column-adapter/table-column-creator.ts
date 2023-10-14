@@ -3,12 +3,12 @@ import {
   TableColumns,
   TableTypes,
 } from '../../pages/admin/components/table/types';
-import { LayersQuery } from '../../__generated__/graphql';
+import { LayersTableQueryQuery } from '../../__generated__/graphql';
 import { TableColumnInterface } from './table-column-interface';
 
 export abstract class ColumnCreator {
 
-  abstract tableData: TableTypes[] |  LayersQuery['layers'];
+  abstract tableData: TableTypes[] |  LayersTableQueryQuery['layers'];
   abstract enableFilter: string[]
 
   public abstract factoryMethod(): TableColumnInterface;
