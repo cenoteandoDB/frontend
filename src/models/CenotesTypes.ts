@@ -18,14 +18,14 @@ export type geoJsonI = {
 
 export enum CenoteType {
   NO_TYPE = 'Sin tipo',
-  CENOTE = 'CENOTE',
+  CENOTE = 'Cenote',
   DRY_CAVE = 'Cueva seca',
   WATER_WELL = 'Pozo',
   WATERY = 'Acuoso',
 }
 
 export enum CenoteIssue {
-  GEOTAG_NOT_VERIFIED = 'GEOTAG_NOT_VERIFIED',
+  GEOTAG_NOT_VERIFIED = 'Geo Tag no verificado',
 }
 
 export class CenoteModel {

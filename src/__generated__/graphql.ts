@@ -137,6 +137,181 @@ export type DeleteMofInput = {
   variable: Scalars['ID']['input'];
 };
 
+export enum GbifNameType {
+  Blacklisted = 'BLACKLISTED',
+  Candidatus = 'CANDIDATUS',
+  Cultivar = 'CULTIVAR',
+  Doubtful = 'DOUBTFUL',
+  Hybrid = 'HYBRID',
+  Informal = 'INFORMAL',
+  NoName = 'NO_NAME',
+  Otu = 'OTU',
+  Placeholder = 'PLACEHOLDER',
+  Scientific = 'SCIENTIFIC',
+  Virus = 'VIRUS'
+}
+
+export type GbifNameUsage = {
+  __typename?: 'GBIFNameUsage';
+  authorship?: Maybe<Scalars['String']['output']>;
+  basionym?: Maybe<Scalars['String']['output']>;
+  basionymKey?: Maybe<Scalars['Int']['output']>;
+  canonicalName?: Maybe<Scalars['String']['output']>;
+  class?: Maybe<Scalars['String']['output']>;
+  classKey?: Maybe<Scalars['Int']['output']>;
+  constituentKey?: Maybe<Scalars['String']['output']>;
+  datasetKey?: Maybe<Scalars['String']['output']>;
+  family?: Maybe<Scalars['String']['output']>;
+  familyKey?: Maybe<Scalars['Int']['output']>;
+  genus?: Maybe<Scalars['String']['output']>;
+  genusKey?: Maybe<Scalars['Int']['output']>;
+  issues?: Maybe<Array<Scalars['String']['output']>>;
+  key?: Maybe<Scalars['Int']['output']>;
+  kingdom?: Maybe<Scalars['String']['output']>;
+  kingdomKey?: Maybe<Scalars['Int']['output']>;
+  lastCrawled?: Maybe<Scalars['String']['output']>;
+  lastInterpreted?: Maybe<Scalars['String']['output']>;
+  nameKey?: Maybe<Scalars['Int']['output']>;
+  nameType?: Maybe<GbifNameType>;
+  nomenclaturalStatus?: Maybe<Array<Scalars['String']['output']>>;
+  nubKey?: Maybe<Scalars['Int']['output']>;
+  numDescendants?: Maybe<Scalars['Int']['output']>;
+  order?: Maybe<Scalars['String']['output']>;
+  orderKey?: Maybe<Scalars['Int']['output']>;
+  origin?: Maybe<GbifOrigin>;
+  parent?: Maybe<Scalars['String']['output']>;
+  parentKey?: Maybe<Scalars['Int']['output']>;
+  phylum?: Maybe<Scalars['String']['output']>;
+  phylumKey?: Maybe<Scalars['Int']['output']>;
+  publishedIn?: Maybe<Scalars['String']['output']>;
+  rank?: Maybe<GbifTaxonomicRank>;
+  remarks?: Maybe<Scalars['String']['output']>;
+  scientificName?: Maybe<Scalars['String']['output']>;
+  sourceTaxonKey?: Maybe<Scalars['Int']['output']>;
+  species?: Maybe<Scalars['String']['output']>;
+  speciesKey?: Maybe<Scalars['Int']['output']>;
+  taxonID?: Maybe<Scalars['String']['output']>;
+  taxonomicStatus?: Maybe<GbifTaxonomicStatus>;
+  vernacularName?: Maybe<Scalars['String']['output']>;
+};
+
+export enum GbifOrigin {
+  Autonym = 'AUTONYM',
+  BasionymPlaceholder = 'BASIONYM_PLACEHOLDER',
+  DenormedClassification = 'DENORMED_CLASSIFICATION',
+  ExAuthorSynonym = 'EX_AUTHOR_SYNONYM',
+  ImplicitName = 'IMPLICIT_NAME',
+  MissingAccepted = 'MISSING_ACCEPTED',
+  Other = 'OTHER',
+  Proparte = 'PROPARTE',
+  Source = 'SOURCE',
+  VerbatimAccepted = 'VERBATIM_ACCEPTED',
+  VerbatimBasionym = 'VERBATIM_BASIONYM',
+  VerbatimParent = 'VERBATIM_PARENT'
+}
+
+export type GbifSuggestion = {
+  __typename?: 'GBIFSuggestion';
+  canonicalName?: Maybe<Scalars['String']['output']>;
+  class?: Maybe<Scalars['String']['output']>;
+  family?: Maybe<Scalars['String']['output']>;
+  genus?: Maybe<Scalars['String']['output']>;
+  key: Scalars['ID']['output'];
+  kingdom?: Maybe<Scalars['String']['output']>;
+  order?: Maybe<Scalars['String']['output']>;
+  phylum?: Maybe<Scalars['String']['output']>;
+  rank?: Maybe<GbifTaxonomicRank>;
+  species?: Maybe<Scalars['String']['output']>;
+};
+
+export enum GbifTaxonomicRank {
+  Aberration = 'ABERRATION',
+  Biovar = 'BIOVAR',
+  Chemoform = 'CHEMOFORM',
+  Chemovar = 'CHEMOVAR',
+  Class = 'CLASS',
+  Cohort = 'COHORT',
+  Convariety = 'CONVARIETY',
+  Cultivar = 'CULTIVAR',
+  CultivarGroup = 'CULTIVAR_GROUP',
+  Domain = 'DOMAIN',
+  Family = 'FAMILY',
+  Form = 'FORM',
+  FormaSpecialis = 'FORMA_SPECIALIS',
+  Genus = 'GENUS',
+  Grandorder = 'GRANDORDER',
+  Grex = 'GREX',
+  Infraclass = 'INFRACLASS',
+  Infracohort = 'INFRACOHORT',
+  Infrafamily = 'INFRAFAMILY',
+  InfragenericName = 'INFRAGENERIC_NAME',
+  Infragenus = 'INFRAGENUS',
+  Infrakingdom = 'INFRAKINGDOM',
+  Infralegion = 'INFRALEGION',
+  Infraorder = 'INFRAORDER',
+  Infraphylum = 'INFRAPHYLUM',
+  InfraspecificName = 'INFRASPECIFIC_NAME',
+  InfrasubspecificName = 'INFRASUBSPECIFIC_NAME',
+  Infratribe = 'INFRATRIBE',
+  Kingdom = 'KINGDOM',
+  Legion = 'LEGION',
+  Magnorder = 'MAGNORDER',
+  Morph = 'MORPH',
+  Morphovar = 'MORPHOVAR',
+  Natio = 'NATIO',
+  Order = 'ORDER',
+  Other = 'OTHER',
+  Parvclass = 'PARVCLASS',
+  Parvorder = 'PARVORDER',
+  Pathovar = 'PATHOVAR',
+  Phagovar = 'PHAGOVAR',
+  Phylum = 'PHYLUM',
+  Proles = 'PROLES',
+  Race = 'RACE',
+  Section = 'SECTION',
+  Series = 'SERIES',
+  Serovar = 'SEROVAR',
+  Species = 'SPECIES',
+  SpeciesAggregate = 'SPECIES_AGGREGATE',
+  Strain = 'STRAIN',
+  Subclass = 'SUBCLASS',
+  Subcohort = 'SUBCOHORT',
+  Subfamily = 'SUBFAMILY',
+  Subform = 'SUBFORM',
+  Subgenus = 'SUBGENUS',
+  Subkingdom = 'SUBKINGDOM',
+  Sublegion = 'SUBLEGION',
+  Suborder = 'SUBORDER',
+  Subphylum = 'SUBPHYLUM',
+  Subsection = 'SUBSECTION',
+  Subseries = 'SUBSERIES',
+  Subspecies = 'SUBSPECIES',
+  Subtribe = 'SUBTRIBE',
+  Subvariety = 'SUBVARIETY',
+  Superclass = 'SUPERCLASS',
+  Supercohort = 'SUPERCOHORT',
+  Superfamily = 'SUPERFAMILY',
+  Superkingdom = 'SUPERKINGDOM',
+  Superlegion = 'SUPERLEGION',
+  Superorder = 'SUPERORDER',
+  Superphylum = 'SUPERPHYLUM',
+  Supertribe = 'SUPERTRIBE',
+  SupragenericName = 'SUPRAGENERIC_NAME',
+  Tribe = 'TRIBE',
+  Unranked = 'UNRANKED',
+  Variety = 'VARIETY'
+}
+
+export enum GbifTaxonomicStatus {
+  Accepted = 'ACCEPTED',
+  Doubtful = 'DOUBTFUL',
+  HeterotypicSynonym = 'HETEROTYPIC_SYNONYM',
+  HomotypicSynonym = 'HOMOTYPIC_SYNONYM',
+  Misapplied = 'MISAPPLIED',
+  ProparteSynonym = 'PROPARTE_SYNONYM',
+  Synonym = 'SYNONYM'
+}
+
 export type MapLayer = {
   __typename?: 'MapLayer';
   description?: Maybe<Scalars['String']['output']>;
@@ -243,8 +418,8 @@ export type NewMeasurementOrFactInput = {
 };
 
 export type NewSpeciesInput = {
-  aphiaId?: InputMaybe<Scalars['String']['input']>;
-  iNaturalistId?: InputMaybe<Scalars['String']['input']>;
+  gbifId?: InputMaybe<Scalars['ID']['input']>;
+  iNaturalistId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type NewVariableInput = {
@@ -270,10 +445,12 @@ export type Query = {
   cenotes?: Maybe<Array<Maybe<Cenote>>>;
   cenotesBounds?: Maybe<CenoteBounds>;
   cenotesCsv?: Maybe<Scalars['String']['output']>;
+  gbifSpeciesSuggestion?: Maybe<Array<GbifSuggestion>>;
+  iNaturalistSearch: INaturalistSearchTaxonResponse;
   layer?: Maybe<MapLayer>;
   layers?: Maybe<Array<Maybe<MapLayer>>>;
   species?: Maybe<Array<Maybe<Species>>>;
-  speciesByAphiaId?: Maybe<Species>;
+  speciesByGBIFId?: Maybe<Species>;
   speciesByINaturalistId?: Maybe<Species>;
   speciesById?: Maybe<Species>;
   speciesCsv?: Maybe<Scalars['String']['output']>;
@@ -308,18 +485,30 @@ export type QueryCenoteDataByVariableArgs = {
 };
 
 
+export type QueryGbifSpeciesSuggestionArgs = {
+  q: Scalars['String']['input'];
+  rank?: InputMaybe<GbifTaxonomicRank>;
+};
+
+
+export type QueryINaturalistSearchArgs = {
+  perPage?: InputMaybe<Scalars['Int']['input']>;
+  q: Scalars['String']['input'];
+};
+
+
 export type QueryLayerArgs = {
   id: Scalars['ID']['input'];
 };
 
 
-export type QuerySpeciesByAphiaIdArgs = {
-  aphiaId: Scalars['String']['input'];
+export type QuerySpeciesByGbifIdArgs = {
+  gbifId: Scalars['ID']['input'];
 };
 
 
 export type QuerySpeciesByINaturalistIdArgs = {
-  iNaturalist: Scalars['String']['input'];
+  iNaturalistId: Scalars['ID']['input'];
 };
 
 
@@ -351,15 +540,17 @@ export type RegisterInput = {
 export type Species = {
   __typename?: 'Species';
   _id: Scalars['ID']['output'];
-  aphiaId?: Maybe<Scalars['String']['output']>;
   createdAt?: Maybe<Scalars['DateTime']['output']>;
-  iNaturalistId?: Maybe<Scalars['String']['output']>;
+  gbifDetails?: Maybe<GbifNameUsage>;
+  gbifId?: Maybe<Scalars['ID']['output']>;
+  iNaturalistDetails?: Maybe<INaturalistTaxonRecord>;
+  iNaturalistId?: Maybe<Scalars['ID']['output']>;
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type UpdateSpeciesInput = {
-  aphiaId?: InputMaybe<Scalars['String']['input']>;
-  iNaturalistId?: InputMaybe<Scalars['String']['input']>;
+  gbifId?: InputMaybe<Scalars['ID']['input']>;
+  iNaturalistId?: InputMaybe<Scalars['ID']['input']>;
   id: Scalars['ID']['input'];
 };
 
@@ -461,12 +652,100 @@ export type VariableWithData = {
   measurements: Array<MeasurementOrFact>;
 };
 
+export type INaturalistFlagCounts = {
+  __typename?: 'iNaturalistFlagCounts';
+  resolved?: Maybe<Scalars['Int']['output']>;
+  unresolved?: Maybe<Scalars['Int']['output']>;
+};
+
+export type INaturalistPhoto = {
+  __typename?: 'iNaturalistPhoto';
+  attribution?: Maybe<Scalars['String']['output']>;
+  flags?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  id?: Maybe<Scalars['Int']['output']>;
+  large_url?: Maybe<Scalars['String']['output']>;
+  license_code?: Maybe<Scalars['String']['output']>;
+  medium_url?: Maybe<Scalars['String']['output']>;
+  original_dimensions?: Maybe<INaturalistPhotoDimensions>;
+  original_url?: Maybe<Scalars['String']['output']>;
+  small_url?: Maybe<Scalars['String']['output']>;
+  square_url?: Maybe<Scalars['String']['output']>;
+  url?: Maybe<Scalars['String']['output']>;
+};
+
+export type INaturalistPhotoDimensions = {
+  __typename?: 'iNaturalistPhotoDimensions';
+  height?: Maybe<Scalars['Int']['output']>;
+  width?: Maybe<Scalars['Int']['output']>;
+};
+
+export type INaturalistSearchTaxonResponse = {
+  __typename?: 'iNaturalistSearchTaxonResponse';
+  page?: Maybe<Scalars['Int']['output']>;
+  per_page?: Maybe<Scalars['Int']['output']>;
+  results?: Maybe<Array<Maybe<INaturalistTaxonResult>>>;
+  total_results?: Maybe<Scalars['Int']['output']>;
+};
+
+export type INaturalistTaxonPhoto = {
+  __typename?: 'iNaturalistTaxonPhoto';
+  photo?: Maybe<INaturalistPhoto>;
+  taxon_id?: Maybe<Scalars['Int']['output']>;
+};
+
+export type INaturalistTaxonRecord = {
+  __typename?: 'iNaturalistTaxonRecord';
+  ancestor_ids?: Maybe<Array<Maybe<Scalars['Int']['output']>>>;
+  ancestry?: Maybe<Scalars['String']['output']>;
+  atlas_id?: Maybe<Scalars['Int']['output']>;
+  complete_species_count?: Maybe<Scalars['Int']['output']>;
+  created_at?: Maybe<Scalars['String']['output']>;
+  current_synonymous_taxon_ids?: Maybe<Array<Maybe<Scalars['Int']['output']>>>;
+  default_photo?: Maybe<INaturalistPhoto>;
+  extinct?: Maybe<Scalars['Boolean']['output']>;
+  flag_counts?: Maybe<INaturalistFlagCounts>;
+  iconic_taxon_id?: Maybe<Scalars['Int']['output']>;
+  iconic_taxon_name?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['Int']['output']>;
+  is_active?: Maybe<Scalars['Boolean']['output']>;
+  matched_term?: Maybe<Scalars['String']['output']>;
+  min_species_ancestry?: Maybe<Scalars['String']['output']>;
+  min_species_taxon_id?: Maybe<Scalars['Int']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  observations_count?: Maybe<Scalars['Int']['output']>;
+  parent_id?: Maybe<Scalars['Int']['output']>;
+  photos_locked?: Maybe<Scalars['Boolean']['output']>;
+  preferred_common_name?: Maybe<Scalars['String']['output']>;
+  rank?: Maybe<Scalars['String']['output']>;
+  rank_level?: Maybe<Scalars['Int']['output']>;
+  taxon_changes_count?: Maybe<Scalars['Int']['output']>;
+  taxon_photos?: Maybe<Array<Maybe<INaturalistTaxonPhoto>>>;
+  taxon_schemes_count?: Maybe<Scalars['Int']['output']>;
+  universal_search_rank?: Maybe<Scalars['Int']['output']>;
+  wikipedia_url?: Maybe<Scalars['String']['output']>;
+};
+
+export type INaturalistTaxonResult = {
+  __typename?: 'iNaturalistTaxonResult';
+  matches?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  record?: Maybe<INaturalistTaxonRecord>;
+  score?: Maybe<Scalars['Float']['output']>;
+  type?: Maybe<Scalars['String']['output']>;
+};
+
 export type LayerQueryVariables = Exact<{
   layerId: Scalars['ID']['input'];
 }>;
 
 
 export type LayerQuery = { __typename?: 'Query', layer?: { __typename?: 'MapLayer', json?: string | null } | null };
+
+export type DownloadLayerQueryQueryVariables = Exact<{
+  layerId: Scalars['ID']['input'];
+}>;
+
+
+export type DownloadLayerQueryQuery = { __typename?: 'Query', layer?: { __typename?: 'MapLayer', layer?: string | null } | null };
 
 export type LayersTableQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -480,5 +759,6 @@ export type LayersJsonQuery = { __typename?: 'Query', layers?: Array<{ __typenam
 
 
 export const LayerDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Layer"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"layerId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"layer"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"layerId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"json"}}]}}]}}]} as unknown as DocumentNode<LayerQuery, LayerQueryVariables>;
+export const DownloadLayerQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"DownloadLayerQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"layerId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"layer"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"layerId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"layer"}}]}}]}}]} as unknown as DocumentNode<DownloadLayerQueryQuery, DownloadLayerQueryQueryVariables>;
 export const LayersTableQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"LayersTableQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"layers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"metadata"}}]}}]}}]} as unknown as DocumentNode<LayersTableQueryQuery, LayersTableQueryQueryVariables>;
 export const LayersJsonDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"LayersJson"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"layers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<LayersJsonQuery, LayersJsonQueryVariables>;
