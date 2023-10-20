@@ -29,7 +29,7 @@ export const Admin: React.FC<AdminProps> = (props) => {
       {location.pathname === '/admin' ? (
         <Flex
           width={'100vw'}
-          height={'75vh'}
+          minHeight="72.1vh"
           alignContent={'center'}
           justifyContent={'center'}
         >
