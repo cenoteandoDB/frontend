@@ -28,7 +28,6 @@ export const MapComponentWrapper: React.FC<MapComponentWrapperI> = (props) => {
 
   return (
     <>
-      <MapLayerSelector options={layers} selector={onSelectedOptionCallback} />
       <MapLayers
         selectedLayerIds={selectedLayerIds}
         setSelectedLayerIds={setSelectedLayerIds}

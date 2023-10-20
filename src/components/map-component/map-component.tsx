@@ -22,7 +22,7 @@ interface MapComponentI {
 //TODO clean code and refactor
 
 export const MapComponent: React.FC<MapComponentI> = (props) => {
-  const { cenotes, mapLayer, selectedLayerIds } = props;
+  const { cenotes, selectedLayerIds } = props;
   const [selectedLayerIdsCopy, setSelectedLayerIdsCopy] = React.useState<
     string[] | null
   >(null);
@@ -191,17 +191,13 @@ export const MapComponent: React.FC<MapComponentI> = (props) => {
     // Instantiation of the map
     map.current = new maplibreGl.Map({
       container: mapContainer.current ?? '',
-      style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${API_KEY}`,
+      style: `https://api.maptiler.com/maps/hybrid/style.json?key=${API_KEY}`,
       center: centerPoint as LngLatLike,
       zoom: isSingleCenote ? 8 : 7,
     });
     const nav = new maplibreGl.NavigationControl({});
     map.current.addControl(nav, 'top-left');
   }, [API_KEY, cenotes, geoJson, popup, selectedLayerIds]);
-
-  React.useEffect(() => {
-    map.current?.setStyle(mapLayers(mapLayer));
-  }, [mapLayer]);
 
   return (
     <div className={cenotes?.length === 1 ? 'map-chakra-box' : 'map-wrap'}>
