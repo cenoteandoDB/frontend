@@ -3,7 +3,7 @@ name: Deploy to Firebase Hosting
 on:
   pull_request:
     branches:
-      - implement_gha
+      - master
   # push:
   #   branches:
   #     - main  # Reemplaza 'main' con la rama principal de tu repositorio
@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Node.js and pnpm
         uses: pnpm/setup-pnpm@v2
