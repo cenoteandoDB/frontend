@@ -27,10 +27,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Login to Firebase
-        run: firebase login
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      # - name: Login to Firebase
+      #   run: firebase login
+      #   env:
+      #     FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
       - name: Build your app
         run: pnpm deploy:site
+        env: 
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
