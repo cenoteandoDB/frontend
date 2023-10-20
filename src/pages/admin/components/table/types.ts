@@ -1,44 +1,48 @@
 import {
-  CenoteType,
   CenoteIssue,
-  CenoteModel,
+  CenoteModel, CenoteType
 } from '../../../../models/CenotesTypes';
 import ReferenceModel from '../../../../models/ReferencesTypes';
 import { VariableModel } from '../../../../models/VariablesTypes';
 
 interface EditTableContent {
-  edit: JSX.Element;
+  editar: JSX.Element;
 }
 
 export interface CenoteTableColumns extends EditTableContent {
   id: string;
-  name: string;
-  state: string;
-  municipality: string;
-  type: CenoteType;
-  issues: CenoteIssue[];
-  createdAt: string;
-  updatedAt: string;
-  touristic: boolean;
+  nombre: string;
+  estado: string;
+  municipalidad: string;
+  tipo: CenoteType;
+  problemas: CenoteIssue[];
+  creado: string;
+  actualizado: string;
+  turistico: boolean;
 }
 
 export interface VariablesTableColumns extends EditTableContent {
   id: string;
-  name: string;
-  description: string;
-  theme: string;
-  timeSeries: boolean;
-  multiple: boolean;
-  unit: string | null;
-  methodology: string | null;
+  nombre: string;
+  descripcion: string;
+  tema: string;
+  nivel_de_acceso: string;
+  tipo_dato: string
+  origen: string;
+  series: boolean;
+  multiplos: boolean;
+  enumValues: string[];
+  unidad: string | null;
+  metodologia: string | null;
 }
 
 export interface ReferenceTableColumns extends EditTableContent {
   id: string;
-  authors: string;
-  shortName: string;
-  type: string;
-  year: string;
+  autores: string;
+  nombre_corto: string;
+  referencia: string;
+  tipo: string;
+  año: string;
 }
 
 export type TableColumns = CenoteTableColumns | VariableModel | object;

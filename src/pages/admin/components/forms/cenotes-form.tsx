@@ -1,24 +1,23 @@
 import React, { FC, useState } from 'react';
 
-import {
-  FormControl,
-  FormLabel,
-  Input,
-  Flex,
-  Select,
-  InputLeftAddon,
-  InputGroup,
-  Tag,
-  VStack,
-  Checkbox,
-  HStack,
-  FormHelperText,
-} from '@chakra-ui/react';
-import { CenoteIssue, CenoteModel } from '../../../../models/CenotesTypes';
 import { CheckIcon, CloseIcon } from '@chakra-ui/icons';
+import {
+  Checkbox,
+  Flex,
+  FormControl,
+  FormHelperText,
+  FormLabel,
+  HStack,
+  Input,
+  InputGroup,
+  InputLeftAddon,
+  Select,
+  VStack,
+} from '@chakra-ui/react';
+import { CenoteTag } from '../../../../components/tags';
+import { CenoteIssue, CenoteModel } from '../../../../models/CenotesTypes';
 import { InputRightIcon } from '../input';
 import { ModalWrapperProps } from '../modals/edit-modal-wrapper';
-import { CenoteTag } from '../../../../components/tags';
 
 export type CenotesFormProps = Omit<ModalWrapperProps, 'inputs'> & {
   inputs: CenoteModel;
@@ -63,6 +62,8 @@ export const CenotesForm: FC<CenotesFormProps> = (props) => {
         },
       };
 
+      
+      
       const newCenotesObj = {
         ...inputs,
         geojson,
@@ -70,6 +71,7 @@ export const CenotesForm: FC<CenotesFormProps> = (props) => {
       setInputs(new CenoteModel(newCenotesObj));
       return;
     }
+    console.log({inputs});
     const newCenoteObj = {
       ...inputs,
       [targetName]: targetValue,
@@ -158,7 +160,6 @@ export const CenotesForm: FC<CenotesFormProps> = (props) => {
   };
 
   const handleCenoteIssue = (label: string) => {
-    
     const newIssues = inputs.issues.filter((element) => element !== label);
     const newCenoteObj = {
       ...inputs,
@@ -167,8 +168,6 @@ export const CenotesForm: FC<CenotesFormProps> = (props) => {
     setInputs(new CenoteModel(newCenoteObj));
   };
 
-  console.log(inputs);
-  
   return (
     <>
       <FormControl mb={4}>

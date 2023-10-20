@@ -3,11 +3,13 @@ import {
   TableColumns,
   TableTypes,
 } from '../../pages/admin/components/table/types';
+import { LayersTableQueryQuery } from '../../__generated__/graphql';
 import { TableColumnInterface } from './table-column-interface';
 
 export abstract class ColumnCreator {
 
-  abstract tableData: TableTypes[];
+  abstract tableData: TableTypes[] |  LayersTableQueryQuery['layers'];
+  abstract enableFilter: string[]
 
   public abstract factoryMethod(): TableColumnInterface;
 
@@ -28,7 +30,7 @@ export abstract class ColumnCreator {
           }
           return columnAcc;
         },
-        enableColumnFilter: column !== 'edit'
+        enableColumnFilter: !this.enableFilter.includes(column)
       });
     });
   

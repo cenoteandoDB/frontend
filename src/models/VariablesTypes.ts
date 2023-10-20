@@ -5,6 +5,7 @@ export enum Origin {
 }
 
 export class VariableModel {
+  __typename!: string;
   id!: string;
   accessLevel!: string;
   description!: string;

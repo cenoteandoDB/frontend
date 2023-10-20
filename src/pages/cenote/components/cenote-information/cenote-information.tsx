@@ -42,7 +42,7 @@ export const CenoteInformation: React.FC<CenoteInformationProps> = (props) => {
       <Box display='flex' flexDirection='column' gap='16px'>
         <Heading as='h4'>Ubicación</Heading>
         <Box maxH='sm'>
-          <MapComponent cenotes={cenote} />
+          <MapComponent cenotes={cenote} selectedLayerIds={[]} />
         </Box>
       </Box>
       <Box display='flex' flexDirection='column' gap='22px' mt='22px'>

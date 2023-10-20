@@ -4,26 +4,30 @@ import { Point } from 'geojson';
 import maplibreGl, {
   GeoJSONSource,
   LngLatLike,
-  Map as MapLibre
+  Map as MapLibre,
 } from 'maplibre-gl';
 import { render } from 'react-dom';
 import { CenoteModel } from '../../models/CenotesTypes';
-import {
-  clusterLayers,
-  mapLayers,
-  symbolLayer,
-  unclusterLayer
-} from '../../utils';
+import { clusterLayers, mapLayers, symbolLayer, unclusterLayer } from '../../utils';
 import { Popup } from '../popup';
+import { MapLayersFetch } from './map-layers-fetch';
 import './map.css';
 
 interface MapComponentI {
   cenotes: CenoteModel[];
   mapLayer?: string;
+  selectedLayerIds: string[] | null;
 }
 
+//TODO clean code and refactor
+
 export const MapComponent: React.FC<MapComponentI> = (props) => {
-  const { cenotes, mapLayer } = props;
+  const { cenotes, selectedLayerIds } = props;
+  const [selectedLayerIdsCopy, setSelectedLayerIdsCopy] = React.useState<
+    string[] | null
+  >(null);
+
+  console.log({ selectedLayerIdsCopy });
 
   const mapContainer = React.useRef(null);
   const map = React.useRef<MapLibre | null>(null);
@@ -42,10 +46,7 @@ export const MapComponent: React.FC<MapComponentI> = (props) => {
     });
   }, []);
 
-  const renderPopup = (
-    cenoteData: CenoteModel[],
-    coordinates: number[]
-  ) => {
+  const renderPopup = (cenoteData: CenoteModel[], coordinates: number[]) => {
     if (map !== null && map.current) {
       const popupNode = document.createElement('div');
       render(<Popup data={cenoteData} />, popupNode);
@@ -56,6 +57,24 @@ export const MapComponent: React.FC<MapComponentI> = (props) => {
     }
   };
 
+  const removeLayers = () => {
+    if (selectedLayerIdsCopy && selectedLayerIdsCopy?.length > 0) {
+      const layersToRemove = selectedLayerIdsCopy?.filter(
+        (x) => !selectedLayerIds?.includes(x)
+      );
+
+      console.log({ selectedLayerIdsCopy });
+
+      if (layersToRemove && layersToRemove.length > 0) {
+        layersToRemove?.forEach((x) => {
+          map.current?.removeLayer(x);
+        });
+        setSelectedLayerIdsCopy(selectedLayerIds);
+      }
+    }
+  };
+
+  //TODO refactor code to include layers dinamically
   const setClusters = () => {
     if (geoJson !== null) {
       const sourceData = map.current?.getSource('cenotes');
@@ -82,8 +101,9 @@ export const MapComponent: React.FC<MapComponentI> = (props) => {
 
   React.useEffect(() => {
     if (map.current) {
+      setSelectedLayerIdsCopy(selectedLayerIds);
       map.current.on('load', () => {
-        setClusters();
+        // setClusters();
         if (isSingleCenote && map.current) {
           renderPopup(cenotes, geoJson?.[0].geometry.coordinates);
         }
@@ -164,26 +184,30 @@ export const MapComponent: React.FC<MapComponentI> = (props) => {
       map.current.on('data', () => {
         setClusters();
       });
+
+      removeLayers();
       return; //stops map from intializing more than once
     }
     // Instantiation of the map
     map.current = new maplibreGl.Map({
       container: mapContainer.current ?? '',
-      style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${API_KEY}`,
+      style: `https://api.maptiler.com/maps/hybrid/style.json?key=${API_KEY}`,
       center: centerPoint as LngLatLike,
       zoom: isSingleCenote ? 8 : 7,
     });
     const nav = new maplibreGl.NavigationControl({});
     map.current.addControl(nav, 'top-left');
-  }, [API_KEY, cenotes, geoJson, popup]);
-
-  React.useEffect(() => {
-    map.current?.setStyle(mapLayers(mapLayer));
-  }, [mapLayer]);
+  }, [API_KEY, cenotes, geoJson, popup, selectedLayerIds]);
 
   return (
     <div className={cenotes?.length === 1 ? 'map-chakra-box' : 'map-wrap'}>
-      <div ref={mapContainer} className='map' />
+      <div ref={mapContainer} className='map'></div>
+      {selectedLayerIds &&
+        map &&
+        selectedLayerIds?.length > 0 &&
+        selectedLayerIds?.map((layer, index) => (
+          <MapLayersFetch key={`layer-${index}`} layerId={layer} map={map} />
+        ))}
     </div>
   );
 };

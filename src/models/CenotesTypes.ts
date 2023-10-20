@@ -18,17 +18,18 @@ export type geoJsonI = {
 
 export enum CenoteType {
   NO_TYPE = 'Sin tipo',
-  CENOTE = 'CENOTE',
+  CENOTE = 'Cenote',
   DRY_CAVE = 'Cueva seca',
   WATER_WELL = 'Pozo',
   WATERY = 'Acuoso',
 }
 
 export enum CenoteIssue {
-  GEOTAG_NOT_VERIFIED = 'GEOTAG_NOT_VERIFIED',
+  GEOTAG_NOT_VERIFIED = 'Geo Tag no verificado',
 }
 
 export class CenoteModel {
+  __typename!: string;
   id!: string;
   arangoId?: string;
   type!: CenoteType;
@@ -50,6 +51,8 @@ export class CenoteModel {
   updatedAt!: string;
 
   constructor(jsonObj?: CenoteModel) {
+    // console.log(jsonObj?.createdAt);
+    
     moment().locale('es-mx');
     if (jsonObj) {
       this.id = jsonObj.id;
@@ -61,8 +64,8 @@ export class CenoteModel {
       this.geojson = jsonObj.geojson;
       this.gadm = jsonObj.gadm;
       this.social = jsonObj.social;
-      this.createdAt = this.formatDate(jsonObj.createdAt);
-      this.updatedAt = this.formatDate(jsonObj.updatedAt);
+      this.createdAt = jsonObj.createdAt;
+      this.updatedAt = jsonObj.updatedAt;
     } else {
       this.getDefaults();
     }
@@ -92,8 +95,12 @@ export class CenoteModel {
     this.updatedAt = '';
   }
 
-  private formatDate(unformatedDate: string) {
-    return moment(unformatedDate).format('LL');
+  formatCreatedAtDate() {
+    return moment(this.createdAt).format('LL');
+  }
+
+  formatUpdatedAtDate() {
+    return moment(this.updatedAt).format('LL');
   }
 
   getLatitude(): number | null {

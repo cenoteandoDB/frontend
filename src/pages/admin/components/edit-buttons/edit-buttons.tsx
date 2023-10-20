@@ -16,15 +16,11 @@ export const EditContent: React.FC<EditContentProps> = (props) => {
 
   return (
     <>
-      <Flex gap={2}>
+      <Flex gap={2} justifyContent='center'>
         <IconButton aria-label='' onClick={onOpen} size='sm' variant='ghost'>
           <EditIcon />
         </IconButton>
-        <Link to={`/cenote/${inputs.id}`} target="_blank">
-          <IconButton aria-label='' size='sm' variant='ghost'>
-            <ViewIcon />
-          </IconButton>
-        </Link>
+        
       </Flex>
       {isOpen && (
         <EditModalWrapper isOpen={isOpen} inputs={inputs} onClose={onClose} />
