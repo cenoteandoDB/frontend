@@ -19,7 +19,7 @@ jobs:
       - name: Set up Node.js and pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 7
+          version: 8
 
       - name: Install Firebase CLI
         run: pnpm install -g firebase-tools
@@ -28,7 +28,7 @@ jobs:
         run: pnpm install
 
       - name: Login to Firebase
-        run: firebase login:ci
+        run: firebase login
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
