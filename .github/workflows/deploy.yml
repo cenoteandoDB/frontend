@@ -22,7 +22,7 @@ jobs:
           version: 7
 
       - name: Install Firebase CLI
-        run: npm install -g firebase-tools
+        run: pnpm install -g firebase-tools
 
       - name: Install dependencies
         run: pnpm install
