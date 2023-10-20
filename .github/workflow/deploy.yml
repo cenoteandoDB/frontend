@@ -1,0 +1,36 @@
+name: Deploy to Firebase Hosting
+
+on:
+  pull_request:
+    branches:
+      - implement_gha
+  # push:
+  #   branches:
+  #     - main  # Reemplaza 'main' con la rama principal de tu repositorio
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js and pnpm
+        uses: pnpm/setup-pnpm@v2
+        with:
+          version: '7.29.1'
+
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+
+      - name: Install dependencies
+        run: pnpm install
+
+      # - name: Login to Firebase
+      #   run: firebase login:ci
+      #   env:
+      #     FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+
+      - name: Build your app
+        run: pnpm deploy:site
