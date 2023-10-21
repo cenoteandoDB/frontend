@@ -1,9 +1,15 @@
-import {
-  CenoteModel
-} from '../../../../models/CenotesTypes';
+import { CenoteModel } from '../../../../models/CenotesTypes';
 import ReferenceModel from '../../../../models/ReferencesTypes';
 import { VariableModel } from '../../../../models/VariablesTypes';
-import { CenotesTableQueryQuery, CenoteType, CenoteIssue } from '../../../../__generated__/graphql';
+import { CenoteIssue, CenoteType } from '../../../../__generated__/graphql';
+
+export const adaptCenoteType: Record<CenoteType, string> = {
+  [CenoteType.Cenote]: 'Cenote',
+  [CenoteType.DryCave]: 'Cueva Seca',
+  [CenoteType.NoType]: 'Sin Tipo',
+  [CenoteType.Watery]: 'Acuático',
+  [CenoteType.WaterWell]: 'Pozo de Agua',
+};
 
 interface EditTableContent {
   editar?: JSX.Element;
@@ -14,7 +20,7 @@ export interface CenoteTableColumns extends EditTableContent {
   nombre: string;
   estado: string;
   municipalidad: string;
-  tipo?: CenoteType;
+  tipo?: string;
   problemas?: (CenoteIssue | null)[] | null;
   creado: string;
   actualizado: string;
@@ -27,7 +33,7 @@ export interface VariablesTableColumns extends EditTableContent {
   descripcion: string;
   tema: string;
   nivel_de_acceso: string;
-  tipo_dato: string
+  tipo_dato: string;
   origen: string;
   series: boolean;
   multiplos: boolean;

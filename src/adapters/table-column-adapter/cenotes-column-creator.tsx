@@ -3,6 +3,7 @@ import React from 'react';
 import { CenoteModel } from '../../models/CenotesTypes';
 import { EditContent } from '../../pages/admin/components/edit-buttons';
 import {
+  adaptCenoteType,
   CenoteTableColumns
 } from '../../pages/admin/components/table/types';
 import { ViewButton } from '../../pages/admin/components/view-button';
@@ -50,7 +51,7 @@ class CenotesColumns implements TableColumnInterface {
           nombre: data.name,
           estado: data.location.municipality,
           municipalidad: data.location.state,
-          tipo: data.type,
+          tipo: adaptCenoteType[data.type],
           problemas: data.issues,
           creado: formatDate(data.createdAt),
           actualizado: formatDate(data.updatedAt),
