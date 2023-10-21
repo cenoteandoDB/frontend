@@ -38,9 +38,9 @@ export abstract class ColumnCreator {
     const product = this.factoryMethod();
     const [tableHeaders, readyTableData] = product.buildColumnHeaders(this.tableData);
     const populatedTableHeaders = this.populateColumns(tableHeaders);
-    if (!populatedTableHeaders || !readyTableData) {
-      return null;
-    }
+    
+    if (!populatedTableHeaders || !readyTableData) return null;
+    
     return [populatedTableHeaders, readyTableData];
   }
 }

@@ -442,7 +442,7 @@ export type Query = {
   cenoteById?: Maybe<Cenote>;
   cenoteDataByTheme?: Maybe<Array<VariableWithData>>;
   cenoteDataByVariable?: Maybe<VariableWithData>;
-  cenotes?: Maybe<Array<Maybe<Cenote>>>;
+  cenotes: Array<Cenote>;
   cenotesBounds?: Maybe<CenoteBounds>;
   cenotesCsv?: Maybe<Scalars['String']['output']>;
   gbifSpeciesSuggestion?: Maybe<Array<GbifSuggestion>>;
@@ -750,7 +750,7 @@ export type DownloadLayerQueryQuery = { __typename?: 'Query', layer?: { __typena
 export type CenotesTableQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CenotesTableQueryQuery = { __typename?: 'Query', cenotes?: Array<{ __typename?: 'Cenote', id: string, name: string, type: CenoteType, createdAt?: any | null, updatedAt?: any | null, touristic: boolean, issues?: Array<CenoteIssue | null> | null, location: { __typename?: 'CenoteLocation', state: string, municipality: string } } | null> | null };
+export type CenotesTableQueryQuery = { __typename?: 'Query', cenotes: Array<{ __typename?: 'Cenote', id: string, name: string, type: CenoteType, createdAt?: any | null, updatedAt?: any | null, touristic: boolean, issues?: Array<CenoteIssue | null> | null, location: { __typename?: 'CenoteLocation', state: string, municipality: string } }> };
 
 export type LayersTableQueryQueryVariables = Exact<{ [key: string]: never; }>;
 

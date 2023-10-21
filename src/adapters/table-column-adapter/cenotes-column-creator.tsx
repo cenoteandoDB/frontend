@@ -31,20 +31,7 @@ class CenotesColumns implements TableColumnInterface {
   buildColumnHeaders(
     tableData: CenotesTableQueryQuery['cenotes']
   ): [string[], CenoteTableColumns[]] {
-    if (!tableData) {
-      const defaultValues = {
-        id: '',
-        nombre: '',
-        estado: '',
-        municipalidad: '',
-        creado: '',
-        actualizado: '',
-        turistico: false,
-      };
-      return [[''], [defaultValues]];
-    }
     const columnHeaders = tableData
-      .filter((x): x is NonNullable<typeof x> => x !== null)
       .map((data) => {
         return {
           id: data.id,
