@@ -1,13 +1,14 @@
 import React from 'react';
 
-import { EditIcon, ViewIcon } from '@chakra-ui/icons';
+import { EditIcon } from '@chakra-ui/icons';
 import { Flex, IconButton, useDisclosure } from '@chakra-ui/react';
+import { CenotesTableQueryQuery } from '../../../../__generated__/graphql';
 import { EditModalWrapper } from '../modals/edit-modal-wrapper';
 import { TableTypes } from '../table/types';
-import { Link } from 'react-router-dom';
 
 export interface EditContentProps {
-  inputs: TableTypes;
+  inputs?: TableTypes;
+  newInput: CenotesTableQueryQuery['cenotes'][0];
 }
 
 export const EditContent: React.FC<EditContentProps> = (props) => {
@@ -20,7 +21,6 @@ export const EditContent: React.FC<EditContentProps> = (props) => {
         <IconButton aria-label='' onClick={onOpen} size='sm' variant='ghost'>
           <EditIcon />
         </IconButton>
-        
       </Flex>
       {isOpen && (
         <EditModalWrapper isOpen={isOpen} inputs={inputs} onClose={onClose} />

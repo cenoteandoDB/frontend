@@ -6,17 +6,9 @@ import { dataAdapter } from '../../../../adapters/api-data/api-data-adapter';
 import { columnFactory } from '../../../../adapters/table-column-adapter/column-factory';
 import { LoadingSpinner } from '../../../../components/loading-spinner';
 import { AdminTablesContext } from '../../context/admin-context';
-import { LayersTableWrapper } from './layers-table-wrapper';
-import { CenoteandoTable } from './table';
+import { CenoteandoTable } from './cenoteando-table';
 import { TableTypes } from './types';
-
-const TABLE_DICTIONARY: Record<string, () => JSX.Element | null> = {
-  //CENOTES: CenotesTableWrapper,
-  //VARIABLES: VariablesTableWrapper,
-  layers: LayersTableWrapper,
-};
-
-const getComponent = (table: string) => TABLE_DICTIONARY[`${table}`];
+import { getTableComponent } from './table-wrapper-dictionary';
 
 interface TableProps {
   route: string;
@@ -32,8 +24,6 @@ interface TableProps {
 // we extract from a dictionary the route to fetch
 export const CenoteandoTableWrapper: React.FC<TableProps> = ({ route }) => {
   const [tableData, setTableData] = useState<TableTypes[] | null>(null);
-  //TODO implement destructuration
-  const columns = columnFactory(tableData)?.buildColumnHeaders() || undefined;
   const { data, loading, error, fetch } = useApi(`api/${route}`, 'get', {
     size: 3000,
   });
@@ -48,20 +38,9 @@ export const CenoteandoTableWrapper: React.FC<TableProps> = ({ route }) => {
     fetch();
   }, [route]);
 
-  if (route === 'layers') {
-    const CenoteandoTableWrapper = getComponent(route);
-
-    return (
-      <AdminTablesContext.Provider
-        value={{
-          route: route,
-          tableData,
-          setTableData,
-        }}
-      >
-        <CenoteandoTableWrapper />
-      </AdminTablesContext.Provider>
-    );
+  if (route === 'layers' || route === 'cenotes') {
+    const CenoteandoTableWrapper = getTableComponent(route);
+    return <CenoteandoTableWrapper />;
   }
 
   //TODO implement error handling
@@ -72,6 +51,8 @@ export const CenoteandoTableWrapper: React.FC<TableProps> = ({ route }) => {
   if (loading) {
     return <LoadingSpinner />;
   }
+
+  const columns = columnFactory(tableData)?.buildColumnHeaders() || undefined;
 
   if (!columns?.[0] || !columns?.[1]) {
     return null;

@@ -15,6 +15,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
 const documents = {
     "\n  query Layer($layerId: ID!) {\n    layer(id: $layerId) {\n      json\n    }\n  }\n": types.LayerDocument,
     "\n  query DownloadLayerQuery($layerId: ID!) {\n    layer(id: $layerId) {\n      layer\n    }\n  }\n": types.DownloadLayerQueryDocument,
+    "\n  query CenotesTableQuery {\n    cenotes {\n      id\n      name\n      location {\n        state\n        municipality\n      }\n      type\n      createdAt\n      updatedAt\n      touristic\n      issues\n    }\n  }\n": types.CenotesTableQueryDocument,
     "\n  query LayersTableQuery {\n    layers {\n      description\n      id\n      name\n      metadata\n    }\n  }\n": types.LayersTableQueryDocument,
     "\n  query LayersJson {\n    layers {\n      id\n      name\n    }\n  }\n": types.LayersJsonDocument,
 };
@@ -41,6 +42,10 @@ export function gql(source: "\n  query Layer($layerId: ID!) {\n    layer(id: $la
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query DownloadLayerQuery($layerId: ID!) {\n    layer(id: $layerId) {\n      layer\n    }\n  }\n"): (typeof documents)["\n  query DownloadLayerQuery($layerId: ID!) {\n    layer(id: $layerId) {\n      layer\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query CenotesTableQuery {\n    cenotes {\n      id\n      name\n      location {\n        state\n        municipality\n      }\n      type\n      createdAt\n      updatedAt\n      touristic\n      issues\n    }\n  }\n"): (typeof documents)["\n  query CenotesTableQuery {\n    cenotes {\n      id\n      name\n      location {\n        state\n        municipality\n      }\n      type\n      createdAt\n      updatedAt\n      touristic\n      issues\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

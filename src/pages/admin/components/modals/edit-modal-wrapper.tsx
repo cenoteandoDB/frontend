@@ -10,10 +10,11 @@ import { FormTypes, FormsDictionary } from './types';
 import { CenoteModel } from '../../../../models/CenotesTypes';
 import ReferenceModel from '../../../../models/ReferencesTypes';
 import { VariableModel } from '../../../../models/VariablesTypes';
+import { CenotesTableQueryQuery } from '../../../../__generated__/graphql';
 
 export interface ModalWrapperProps {
   isOpen?: boolean;
-  inputs?: TableTypes;
+  inputs?: TableTypes | CenotesTableQueryQuery['cenotes'][0];
   setInputs?: React.Dispatch<React.SetStateAction<TableTypes>>;
   onClose?: () => void;
 }

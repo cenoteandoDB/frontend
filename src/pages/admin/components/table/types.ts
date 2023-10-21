@@ -1,12 +1,12 @@
 import {
-  CenoteIssue,
-  CenoteModel, CenoteType
+  CenoteModel
 } from '../../../../models/CenotesTypes';
 import ReferenceModel from '../../../../models/ReferencesTypes';
 import { VariableModel } from '../../../../models/VariablesTypes';
+import { CenotesTableQueryQuery, CenoteType, CenoteIssue } from '../../../../__generated__/graphql';
 
 interface EditTableContent {
-  editar: JSX.Element;
+  editar?: JSX.Element;
 }
 
 export interface CenoteTableColumns extends EditTableContent {
@@ -14,8 +14,8 @@ export interface CenoteTableColumns extends EditTableContent {
   nombre: string;
   estado: string;
   municipalidad: string;
-  tipo: CenoteType;
-  problemas: CenoteIssue[];
+  tipo?: CenoteType;
+  problemas?: (CenoteIssue | null)[] | null;
   creado: string;
   actualizado: string;
   turistico: boolean;
