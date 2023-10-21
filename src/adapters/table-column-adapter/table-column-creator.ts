@@ -3,22 +3,19 @@ import {
   TableColumns,
   TableTypes,
 } from '../../pages/admin/components/table/types';
-import { LayersTableQueryQuery } from '../../__generated__/graphql';
+import { CenotesTableQueryQuery, LayersTableQueryQuery } from '../../__generated__/graphql';
 import { TableColumnInterface } from './table-column-interface';
 
 export abstract class ColumnCreator {
 
-  abstract tableData: TableTypes[] |  LayersTableQueryQuery['layers'];
+  abstract tableData: TableTypes[] | CenotesTableQueryQuery['cenotes'] | LayersTableQueryQuery['layers'];
   abstract enableFilter: string[]
 
   public abstract factoryMethod(): TableColumnInterface;
 
-  private populateColumns<T extends TableTypes>(data: string[]): ColumnDef<T, string>[] | null {
-    if (!data) {
-      return null;
-    }
+  private populateColumns<T extends TableTypes>(tableHeaderKeys: string[]): ColumnDef<T, string>[] {
     const columns: ColumnDef<T, string>[] = [];
-    data.map((column) => {
+    tableHeaderKeys.map((column) => {
       columns.push({
         accessorKey: column,
         id: column,
@@ -37,9 +34,13 @@ export abstract class ColumnCreator {
     return columns;
   }
 
-  public buildColumnHeaders(): [ColumnDef<TableTypes, string>[] | null, TableColumns[]] {
+  public buildColumnHeaders(): [ColumnDef<TableTypes, string>[], TableColumns[]] | null{
     const product = this.factoryMethod();
-    const [tableKeys, readyTableData] = product.buildColumnHeaders(this.tableData);
-    return [this.populateColumns(tableKeys), readyTableData];
+    const [tableHeaders, readyTableData] = product.buildColumnHeaders(this.tableData);
+    const populatedTableHeaders = this.populateColumns(tableHeaders);
+    if (!populatedTableHeaders || !readyTableData) {
+      return null;
+    }
+    return [populatedTableHeaders, readyTableData];
   }
 }
