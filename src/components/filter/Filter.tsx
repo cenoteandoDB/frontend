@@ -18,9 +18,6 @@ export function Filter({
     [column.getFacetedUniqueValues()]
   );
 
-  console.log({column});
-  
-
   return (
     <>
       <InputGroup>
