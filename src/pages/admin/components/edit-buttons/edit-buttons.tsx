@@ -45,14 +45,14 @@ export const EditContent: React.FC<EditContentProps> = (props) => {
 
   return (
     <>
-      {/* <Flex gap={2} justifyContent='center'>
+      <Flex gap={2} justifyContent='center'>
         <IconButton aria-label='' onClick={onOpen} size='sm' variant='ghost'>
           <EditIcon />
         </IconButton>
       </Flex>
       {isOpen && (
         <EditModalWrapper isOpen={isOpen} inputs={inputs} onClose={onClose} />
-      )} */}
+      )}
     </>
   );
 };

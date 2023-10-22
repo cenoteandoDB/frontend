@@ -11,6 +11,10 @@ export const adaptCenoteType: Record<CenoteType, string> = {
   [CenoteType.WaterWell]: 'Pozo de Agua',
 };
 
+export const adaptCenoteIssue: Record<CenoteIssue, string> = {
+  [CenoteIssue.GeotagNotVerified]: 'Geo tag no verificada',
+};
+
 interface EditTableContent {
   editar?: JSX.Element;
 }
@@ -21,7 +25,7 @@ export interface CenoteTableColumns extends EditTableContent {
   estado: string;
   municipalidad: string;
   tipo?: string;
-  problemas?: (CenoteIssue | null)[] | null;
+  problemas?: string[];
   creado: string;
   actualizado: string;
   turistico: boolean;
