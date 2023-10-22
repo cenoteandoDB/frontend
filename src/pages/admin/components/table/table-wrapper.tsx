@@ -7,46 +7,8 @@ import { columnFactory } from '../../../../adapters/table-column-adapter/column-
 import { LoadingSpinner } from '../../../../components/loading-spinner';
 import { AdminTablesContext } from '../../context/admin-context';
 import { CenoteandoTable } from './cenoteando-table';
-import { TableTypes } from './types';
 import { getTableComponent } from './table-wrapper-dictionary';
-import { useDisclosure } from '@chakra-ui/react';
-
-interface ModalContextType {
-  isOpen: boolean;
-  onClose: () => void;
-  onOpen: () => void;
-}
-
-export const ModalContext = React.createContext<ModalContextType | undefined>(
-  undefined
-);
-
-interface ModalContextProviderProps {
-  children: JSX.Element;
-}
-
-export const CustomModalContextProvider: React.FC<
-  ModalContextProviderProps
-> = ({ children }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const contextValue = React.useMemo(
-    () => ({
-      isOpen,
-      onClose,
-      onOpen,
-    }),
-    [isOpen]
-  );
-
-  console.log('rendering');
-
-  return (
-    <ModalContext.Provider value={contextValue}>
-      {children}
-    </ModalContext.Provider>
-  );
-};
+import { TableTypes } from './types';
 
 interface TableProps {
   route: string;
@@ -104,9 +66,7 @@ export const CenoteandoTableWrapper: React.FC<TableProps> = ({ route }) => {
         setTableData,
       }}
     >
-      <CustomModalContextProvider>
-        <CenoteandoTable data={columns[1]} columns={columns[0]} />
-      </CustomModalContextProvider>
+      <CenoteandoTable data={columns[1]} columns={columns[0]} />
     </AdminTablesContext.Provider>
   );
 };
