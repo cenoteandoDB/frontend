@@ -43,7 +43,7 @@ class CenotesColumns implements TableColumnInterface {
           creado: formatDate(data.createdAt),
           actualizado: formatDate(data.updatedAt),
           turistico: data.touristic,
-          editar: <EditContent newInput={data} />,
+          editar: <EditContent inputs={data} />,
           ficha: <ViewButton link={data.id} />,
         };
       });

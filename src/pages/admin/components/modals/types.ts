@@ -16,7 +16,6 @@ export type FormTypes =
   | FC<VariableFormProps>;
 
 export const FormsDictionary = {
-  cenotes: CenotesForm,
   variables: VariablesForm,
   references: ReferencesForm,
 };
