@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect } from 'react';
 
+import { ChevronDownIcon, ChevronUpIcon, SearchIcon } from '@chakra-ui/icons';
 import {
   Badge,
   Box,
   Button,
   Card,
-  Center,
-  Flex,
+  Center, Flex,
   Input,
   InputGroup,
   InputLeftElement,
@@ -20,9 +20,8 @@ import {
   Th,
   Thead,
   Tr,
-  VStack,
+  VStack
 } from '@chakra-ui/react';
-import { ChevronDownIcon, ChevronUpIcon, SearchIcon } from '@chakra-ui/icons';
 import { rankItem } from '@tanstack/match-sorter-utils';
 import {
   ColumnDef,
@@ -36,11 +35,11 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  useReactTable,
+  useReactTable
 } from '@tanstack/react-table';
-import { TableTypes } from './types';
 import { Filter } from '../../../../components/filter';
 import { AddButton } from '../add-button.tsx';
+import { TableTypes } from './types';
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   // Rank the item
@@ -91,13 +90,14 @@ export const CenoteandoTable: React.FC<TableProps> = (props) => {
   });
 
   const sortedDataLength = table.getPreSortedRowModel().rows.length;
+  const pageSize: number | string = table.getState().pagination.pageSize;
 
   useEffect(() => {
     setTableData(data);
   }, [data]);
 
   return (
-    <Center>
+    <Center minH='container.sm'>
       <VStack spacing={4} width='95%' mb='50px'>
         <Flex width='100%' gap={5}>
           <Box>
@@ -126,8 +126,11 @@ export const CenoteandoTable: React.FC<TableProps> = (props) => {
         </Flex>
         <Flex width='100%' justifyContent='center'>
           <Card>
-            <Box >
-              <TableContainer>
+            <Box>
+              <TableContainer
+                maxH='container.sm'
+                overflowY={pageSize > 10 ? 'scroll' : 'auto'}
+              >
                 <Table variant='striped' size='sm' overflow='scroll'>
                   <Thead>
                     {table.getHeaderGroups().map((headerGroups) => (
@@ -203,16 +206,22 @@ export const CenoteandoTable: React.FC<TableProps> = (props) => {
                 colorScheme='light'
                 color='light.text'
                 bg='light.500'
-                value={table.getState().pagination.pageSize}
+                value={pageSize}
                 onChange={(e) => {
+                  if (e.target.value === 'todos') {
+                    table.setPageSize(sortedDataLength);
+                    return;
+                  }
                   table.setPageSize(Number(e.target.value));
                 }}
               >
-                {[10, 20, 30, 40, 50].map((pageSize) => (
-                  <option key={pageSize} value={pageSize}>
-                    <Text color='light.text'>Show {pageSize}</Text>
-                  </option>
-                ))}
+                {[10, 20, 30, 40, 50, 60, 70, 80, 90, 100, sortedDataLength].map(
+                  (pageSize) => (
+                    <option key={pageSize} value={pageSize}>
+                      <Text color='light.text'>Mostrar {pageSize}</Text>
+                    </option>
+                  )
+                )}
               </Select>
             </Box>
           </Flex>
