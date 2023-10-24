@@ -15,6 +15,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
 const documents = {
     "\n  query Layer($layerId: ID!) {\n    layer(id: $layerId) {\n      json\n    }\n  }\n": types.LayerDocument,
     "\n  query DownloadLayerQuery($layerId: ID!) {\n    layer(id: $layerId) {\n      layer\n    }\n  }\n": types.DownloadLayerQueryDocument,
+    "\n  mutation CreateCenote($newCenote: NewCenoteInput!) {\n    createCenote(new_cenote: $newCenote) {\n      id\n      location {\n        coordinates {\n          latitude\n          longitude\n        }\n      }\n    }\n  }\n": types.CreateCenoteDocument,
     "\n  \n  query CenoteById($cenoteId: ID!) {\n    cenoteById(id: $cenoteId) {\n      ...UpdateCenoteFields\n    }\n  }\n": types.CenoteByIdDocument,
     "\n  \n  mutation UpdateCenote($updatedCenote: UpdatedCenoteInput!) {\n    updateCenote(updated_cenote: $updatedCenote) {\n      ...UpdateCenoteFields\n    }\n  }\n": types.UpdateCenoteDocument,
     "\n  fragment UpdateCenoteFields on Cenote {\n    id\n    name\n    type\n    touristic\n    issues\n    alternativeNames\n  }\n": types.UpdateCenoteFieldsFragmentDoc,
@@ -45,6 +46,10 @@ export function gql(source: "\n  query Layer($layerId: ID!) {\n    layer(id: $la
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query DownloadLayerQuery($layerId: ID!) {\n    layer(id: $layerId) {\n      layer\n    }\n  }\n"): (typeof documents)["\n  query DownloadLayerQuery($layerId: ID!) {\n    layer(id: $layerId) {\n      layer\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation CreateCenote($newCenote: NewCenoteInput!) {\n    createCenote(new_cenote: $newCenote) {\n      id\n      location {\n        coordinates {\n          latitude\n          longitude\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation CreateCenote($newCenote: NewCenoteInput!) {\n    createCenote(new_cenote: $newCenote) {\n      id\n      location {\n        coordinates {\n          latitude\n          longitude\n        }\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
