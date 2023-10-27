@@ -17,16 +17,16 @@ import {
   ModalHeader,
   ModalOverlay,
   Select,
-  VStack
+  VStack,
 } from '@chakra-ui/react';
-import { CenoteTag } from '../../../../../components/tags';
+import { CenoteTag } from '../../../../../../components/tags';
 import {
   CenoteByIdQuery,
   CenoteIssue,
-  UpdateCenoteFieldsFragment
-} from '../../../../../__generated__/graphql';
-import { InputRightIcon } from '../../input';
-import { ModalWrapperProps } from '../../modals/edit-modal-wrapper';
+  UpdateCenoteFieldsFragment,
+} from '../../../../../../__generated__/graphql';
+import { InputRightIcon } from '../../../input';
+import { ModalWrapperProps } from '../../../modals/edit-modal-wrapper';
 import { CenoteUpdateButton } from './cenote-update-button';
 
 export type CenoteFormProps = Omit<ModalWrapperProps, 'modalState'> & {
@@ -48,7 +48,6 @@ export const CenoteForm: FC<CenoteFormProps> = ({
   const [helperText, setHelperText] = useState({
     alternativeNames: '',
   });
-
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const targetName = event.target.name;
@@ -73,7 +72,17 @@ export const CenoteForm: FC<CenoteFormProps> = ({
         return;
       }
 
-      if (!modalState.issues) return null;
+      console.log({ modalState });
+
+      if (!modalState.issues) {
+        setIssues(targetValue);
+        const newIssuesObj = {
+          ...modalState,
+          issues: [targetValue],
+        };
+        setModalState(newIssuesObj);
+        return;
+      }
 
       const issues = [targetValue, ...modalState.issues];
       setIssues(targetValue);
@@ -96,7 +105,21 @@ export const CenoteForm: FC<CenoteFormProps> = ({
   };
 
   const handleOnClickAlternativeNames = () => {
-    if (!alternativeNames || !modalState.alternativeNames) return;
+    console.log({ modalState });
+
+    if (!modalState.alternativeNames) {
+      const newCenoteObj = {
+        ...modalState,
+        alternativeNames: [alternativeNames],
+      };
+      setModalState(newCenoteObj);
+      setAlternativeNames('');
+      setHelperText({
+        alternativeNames: '',
+      });
+      return;
+    }
+
     const newAlternativeNamesArr = [
       alternativeNames,
       ...modalState.alternativeNames,
@@ -264,8 +287,6 @@ export const CenoteForm: FC<CenoteFormProps> = ({
                 <option value='GEOTAG_NOT_VERIFIED'>
                   Geotag no verificado
                 </option>
-                <option value='ANOTHER_PROBLEM'>Otro Problema</option>
-                <option value='ANOTHER_PROBLEM_1'>Otro Problema</option>
               </Select>
             </VStack>
           </FormControl>

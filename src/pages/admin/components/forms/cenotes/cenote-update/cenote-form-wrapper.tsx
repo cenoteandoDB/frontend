@@ -4,8 +4,8 @@ import {
   CenoteByIdQuery,
   CenotesTableQueryQuery,
   UpdateCenoteFieldsFragment,
-} from '../../../../../__generated__/graphql';
-import { UPDATE_CENOTE_FRAGMENT } from '../fragments/cenote-form-fragments';
+} from '../../../../../../__generated__/graphql';
+import { UPDATE_CENOTE_FRAGMENT } from '../../fragments/cenote-form-fragments';
 import { CenoteForm } from './cenote-form';
 
 const GET_EDITABLE_CENOTE = gql`

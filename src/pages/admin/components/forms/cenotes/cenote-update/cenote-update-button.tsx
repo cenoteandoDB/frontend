@@ -5,8 +5,8 @@ import React from 'react';
 import {
   UpdateCenoteFieldsFragment,
   UpdateCenoteMutation,
-} from '../../../../../__generated__/graphql';
-import { UPDATE_CENOTE_FRAGMENT } from '../fragments/cenote-form-fragments';
+} from '../../../../../../__generated__/graphql';
+import { UPDATE_CENOTE_FRAGMENT } from '../../fragments/cenote-form-fragments';
 
 const UPDATE_CENOTE_BY_ID = gql`
   ${UPDATE_CENOTE_FRAGMENT}

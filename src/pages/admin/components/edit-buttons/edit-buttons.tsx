@@ -8,7 +8,7 @@ import { TableTypes } from '../table/types';
 import {
   CenoteFormWrapper,
   CenoteFormWrapperProps,
-} from '../forms/cenotes/cenote-form-wrapper';
+} from '../forms/cenotes/cenote-update/cenote-form-wrapper';
 
 export interface EditContentProps {
   inputs?: TableTypes | CenotesTableQueryQuery['cenotes'][0];
