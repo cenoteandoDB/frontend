@@ -348,6 +348,8 @@ export type Mutation = {
   updateEmail?: Maybe<User>;
   updateSpecies?: Maybe<Species>;
   updateVariable?: Maybe<Variable>;
+  uploadMap?: Maybe<Scalars['Boolean']['output']>;
+  uploadPhoto?: Maybe<Scalars['Boolean']['output']>;
 };
 
 
@@ -406,6 +408,16 @@ export type MutationUpdateVariableArgs = {
   updated_variable: UpdateVariableInput;
 };
 
+
+export type MutationUploadMapArgs = {
+  mapInput: PhotoOrMapUploadInput;
+};
+
+
+export type MutationUploadPhotoArgs = {
+  photoInput: PhotoOrMapUploadInput;
+};
+
 export type NewCenoteInput = {
   coordinates: CoordinatesInput;
 };
@@ -434,6 +446,13 @@ export type NewVariableInput = {
   timeseries?: InputMaybe<Scalars['Boolean']['input']>;
   type?: InputMaybe<VariableType>;
   units?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type PhotoOrMapUploadInput = {
+  cenoteId: Scalars['ID']['input'];
+  content: Scalars['String']['input'];
+  extension: Scalars['String']['input'];
+  filename: Scalars['String']['input'];
 };
 
 export type Query = {
