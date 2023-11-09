@@ -7,7 +7,8 @@ import {
   Box,
   Button,
   Card,
-  Center, Flex,
+  Center,
+  Flex,
   Input,
   InputGroup,
   InputLeftElement,
@@ -20,7 +21,7 @@ import {
   Th,
   Thead,
   Tr,
-  VStack
+  VStack,
 } from '@chakra-ui/react';
 import { rankItem } from '@tanstack/match-sorter-utils';
 import {
@@ -35,7 +36,7 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  useReactTable
+  useReactTable,
 } from '@tanstack/react-table';
 import { Filter } from '../../../../components/filter';
 import { AddButton } from '../add-button.tsx';
@@ -124,7 +125,7 @@ export const CenoteandoTable: React.FC<TableProps> = (props) => {
             <AddButton />
           </Box>
         </Flex>
-        <Flex width='100%' justifyContent='center'>
+        <VStack spacing={4} width='100%' justifyContent='center' direction='column'>
           <Card>
             <Box>
               <TableContainer
@@ -198,63 +199,73 @@ export const CenoteandoTable: React.FC<TableProps> = (props) => {
               </TableContainer>
             </Box>
           </Card>
-        </Flex>
-        <Flex width='100%' justify='space-evenly'>
-          <Flex width='33%' justify='flex-start' gap={4}>
-            <Box>
-              <Select
-                colorScheme='light'
-                color='light.text'
-                bg='light.500'
-                value={pageSize}
-                onChange={(e) => {
-                  if (e.target.value === 'todos') {
-                    table.setPageSize(sortedDataLength);
-                    return;
-                  }
-                  table.setPageSize(Number(e.target.value));
-                }}
-              >
-                {[10, 20, 30, 40, 50, 60, 70, 80, 90, 100, sortedDataLength].map(
-                  (pageSize) => (
+          <Flex width='100%' justify='space-evenly'>
+            <Flex width='33%' justify='flex-start' gap={4}>
+              <Box>
+                <Select
+                  colorScheme='light'
+                  color='light.text'
+                  bg='light.500'
+                  value={pageSize}
+                  onChange={(e) => {
+                    if (e.target.value === 'todos') {
+                      table.setPageSize(sortedDataLength);
+                      return;
+                    }
+                    table.setPageSize(Number(e.target.value));
+                  }}
+                >
+                  {[
+                    10,
+                    20,
+                    30,
+                    40,
+                    50,
+                    60,
+                    70,
+                    80,
+                    90,
+                    100,
+                    sortedDataLength,
+                  ].map((pageSize) => (
                     <option key={pageSize} value={pageSize}>
                       <Text color='light.text'>Mostrar {pageSize}</Text>
                     </option>
-                  )
-                )}
-              </Select>
-            </Box>
+                  ))}
+                </Select>
+              </Box>
+            </Flex>
+            <Flex width='33%' gap={2} justify='center'>
+              <Box alignSelf='flex-start'>
+                <Text fontSize='md' color='light.principal'>
+                  Página
+                </Text>
+                <Text as='b' color='light.principal'>
+                  {table.getState().pagination.pageIndex + 1} de{' '}
+                  {table.getPageCount()}
+                </Text>
+              </Box>
+            </Flex>
+            <Flex width='33%' gap={2} justify='flex-end'>
+              <Box>
+                <Button
+                  onClick={() => table.previousPage()}
+                  isDisabled={!table.getCanPreviousPage()}
+                >
+                  Anterior
+                </Button>
+              </Box>
+              <Box>
+                <Button
+                  onClick={() => table.nextPage()}
+                  isDisabled={!table.getCanNextPage()}
+                >
+                  Siguiente
+                </Button>
+              </Box>
+            </Flex>
           </Flex>
-          <Flex width='33%' gap={2} justify='center'>
-            <Box alignSelf='flex-start'>
-              <Text fontSize='md' color='light.principal'>
-                Página
-              </Text>
-              <Text as='b' color='light.principal'>
-                {table.getState().pagination.pageIndex + 1} de{' '}
-                {table.getPageCount()}
-              </Text>
-            </Box>
-          </Flex>
-          <Flex width='33%' gap={2} justify='flex-end'>
-            <Box>
-              <Button
-                onClick={() => table.previousPage()}
-                isDisabled={!table.getCanPreviousPage()}
-              >
-                Anterior
-              </Button>
-            </Box>
-            <Box>
-              <Button
-                onClick={() => table.nextPage()}
-                isDisabled={!table.getCanNextPage()}
-              >
-                Siguiente
-              </Button>
-            </Box>
-          </Flex>
-        </Flex>
+        </VStack>
       </VStack>
     </Center>
   );
