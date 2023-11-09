@@ -22,6 +22,7 @@ const documents = {
     "\n  query CenotesTableQuery {\n    cenotes {\n      id\n      name\n      location {\n        state\n        municipality\n      }\n      type\n      createdAt\n      updatedAt\n      touristic\n      issues\n    }\n  }\n": types.CenotesTableQueryDocument,
     "\n  query LayersTableQuery {\n    layers {\n      description\n      id\n      name\n      metadata\n    }\n  }\n": types.LayersTableQueryDocument,
     "\n  query LayersJson {\n    layers {\n      id\n      name\n    }\n  }\n": types.LayersJsonDocument,
+    "\n  query CenotesGeoJson {\n    cenotes {\n      id\n      name\n      type\n      touristic\n      geojson\n    }\n  }\n": types.CenotesGeoJsonDocument,
 };
 
 /**
@@ -74,6 +75,10 @@ export function gql(source: "\n  query LayersTableQuery {\n    layers {\n      d
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query LayersJson {\n    layers {\n      id\n      name\n    }\n  }\n"): (typeof documents)["\n  query LayersJson {\n    layers {\n      id\n      name\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query CenotesGeoJson {\n    cenotes {\n      id\n      name\n      type\n      touristic\n      geojson\n    }\n  }\n"): (typeof documents)["\n  query CenotesGeoJson {\n    cenotes {\n      id\n      name\n      type\n      touristic\n      geojson\n    }\n  }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};

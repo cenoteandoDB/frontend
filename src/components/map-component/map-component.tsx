@@ -4,18 +4,20 @@ import { Point } from 'geojson';
 import maplibreGl, {
   GeoJSONSource,
   LngLatLike,
-  Map as MapLibre,
+  Map as MapLibre
 } from 'maplibre-gl';
-import { render } from 'react-dom';
-import { CenoteModel } from '../../models/CenotesTypes';
-import { clusterLayers, mapLayers, symbolLayer, unclusterLayer } from '../../utils';
+import { createRoot } from 'react-dom/client';
+import {
+  clusterLayers, symbolLayer,
+  unclusterLayer
+} from '../../utils';
+import { CenotesGeoJsonQuery } from '../../__generated__/graphql';
 import { Popup } from '../popup';
 import { MapLayersFetch } from './map-layers-fetch';
 import './map.css';
 
 interface MapComponentI {
-  cenotes: CenoteModel[];
-  mapLayer?: string;
+  cenotes: CenotesGeoJsonQuery['cenotes'];
   selectedLayerIds: string[] | null;
 }
 
@@ -27,18 +29,20 @@ export const MapComponent: React.FC<MapComponentI> = (props) => {
     string[] | null
   >(null);
 
-  console.log({ selectedLayerIdsCopy });
-
   const mapContainer = React.useRef(null);
   const map = React.useRef<MapLibre | null>(null);
   const [API_KEY] = React.useState('2ovqIDOtsFG069J69Ap2');
   const isSingleCenote = cenotes?.length === 1;
-  const geoJson = cenotes?.map((cenote) => cenote.getGeoJson());
+  const geoJson = cenotes?.map((cenote) => ({
+    id: cenote.id,
+    geometry: cenote.geojson.geometry,
+    properties: cenote.geojson.properties,
+    type: cenote.geojson.type,
+  }));
   const defaultCenter = [-88.79325, 20.882081];
   const centerPoint = isSingleCenote
     ? geoJson?.[0].geometry.coordinates
     : defaultCenter;
-  //TODO investigate how we can use a custom react component instead of mapGl popup
   const popup = React.useMemo(() => {
     return new maplibreGl.Popup({
       closeButton: true,
@@ -46,10 +50,14 @@ export const MapComponent: React.FC<MapComponentI> = (props) => {
     });
   }, []);
 
-  const renderPopup = (cenoteData: CenoteModel[], coordinates: number[]) => {
+  const renderPopup = (
+    cenoteData: CenotesGeoJsonQuery['cenotes'],
+    coordinates: number[]
+  ) => {
     if (map !== null && map.current) {
       const popupNode = document.createElement('div');
-      render(<Popup data={cenoteData} />, popupNode);
+      const mapRoot = createRoot(popupNode);
+      mapRoot.render(<Popup data={cenoteData} />);
       popup
         .setLngLat({ lat: coordinates[1], lng: coordinates[0] })
         .setDOMContent(popupNode)
@@ -62,8 +70,6 @@ export const MapComponent: React.FC<MapComponentI> = (props) => {
       const layersToRemove = selectedLayerIdsCopy?.filter(
         (x) => !selectedLayerIds?.includes(x)
       );
-
-      console.log({ selectedLayerIdsCopy });
 
       if (layersToRemove && layersToRemove.length > 0) {
         layersToRemove?.forEach((x) => {
