@@ -21,7 +21,6 @@ import {
 } from '@chakra-ui/react';
 import { CenoteTag } from '../../../../../../components/tags';
 import {
-  CenoteByIdQuery,
   CenoteIssue,
   UpdateCenoteFieldsFragment,
 } from '../../../../../../__generated__/graphql';
@@ -231,34 +230,6 @@ export const CenoteForm: FC<CenoteFormProps> = ({
               />
             </Flex>
           </FormControl>
-
-          {/* <FormControl mb={4}>
-            <Flex direction='column'>
-              <FormLabel>Coordenadas</FormLabel>
-              <Flex gap={6} mb={4}>
-                <InputGroup flex={3}>
-                  <InputLeftAddon>Latitud</InputLeftAddon>
-                  <Input
-                    name='geojson-latitud'
-                    type='number'
-                    value={modalState.geojson.geometry.coordinates[1]}
-                    onChange={(event) => handleChange(event)}
-                  />
-                </InputGroup>
-              </Flex>
-              <Flex gap={6}>
-                <InputGroup flex={3}>
-                  <InputLeftAddon>Longitude</InputLeftAddon>
-                  <Input
-                    name='geojson-longitude'
-                    type='number'
-                    value={modalState.geojson.geometry.coordinates[0]}
-                    onChange={(event) => handleChange(event)}
-                  />
-                </InputGroup>
-              </Flex>
-            </Flex>
-          </FormControl> */}
 
           <FormControl mb={4}>
             <FormLabel>Problemas</FormLabel>
