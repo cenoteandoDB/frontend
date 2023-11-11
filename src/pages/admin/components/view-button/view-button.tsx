@@ -4,7 +4,7 @@ import { ViewIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 
-interface ViewButtonProps {
+export interface ViewButtonProps {
   link: string;
 }
 

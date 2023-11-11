@@ -10,10 +10,11 @@ import { FormTypes, FormsDictionary } from './types';
 import { CenoteModel } from '../../../../models/CenotesTypes';
 import ReferenceModel from '../../../../models/ReferencesTypes';
 import { VariableModel } from '../../../../models/VariablesTypes';
+import { CenotesTableQueryQuery } from '../../../../__generated__/graphql';
 
 export interface ModalWrapperProps {
   isOpen?: boolean;
-  inputs?: TableTypes;
+  inputs?: TableTypes | CenotesTableQueryQuery['cenotes'][0];
   setInputs?: React.Dispatch<React.SetStateAction<TableTypes>>;
   onClose?: () => void;
 }
@@ -31,8 +32,16 @@ export const EditModalWrapper: FC<ModalWrapperProps> = (props) => {
     {}
   );
 
+  if (route === 'cenotes') {
+    return null;
+  }
+
   const FormComponent: FormTypes =
     FormsDictionary[route as keyof typeof FormsDictionary];
+
+  if (!FormComponent) {
+    return null;
+  }
 
   if (!isOpen || !onClose) {
     return null;
@@ -43,7 +52,9 @@ export const EditModalWrapper: FC<ModalWrapperProps> = (props) => {
       const dataType = classMap[route as keyof typeof classMap];
       const newArr = (tableData as TableTypes[])
         .filter((data) => data.id !== modalState.id)
-        .map((cenote) => dataType(cenote as CenoteModel & VariableModel & ReferenceModel));
+        .map((cenote) =>
+          dataType(cenote as CenoteModel & VariableModel & ReferenceModel)
+        );
       setTableData([modalState, ...newArr]);
       onClose();
     }

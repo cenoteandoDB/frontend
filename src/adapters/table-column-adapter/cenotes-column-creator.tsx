@@ -1,11 +1,15 @@
 import React from 'react';
-import { CenoteModel, CenoteType } from '../../models/CenotesTypes';
+
+import { CenoteModel } from '../../models/CenotesTypes';
 import { EditContent } from '../../pages/admin/components/edit-buttons';
 import {
+  adaptCenoteIssue,
+  adaptCenoteType,
   CenoteTableColumns,
-  TableColumns,
 } from '../../pages/admin/components/table/types';
 import { ViewButton } from '../../pages/admin/components/view-button';
+import { formatDate } from '../../utils/formatDate';
+import { CenotesTableQueryQuery } from '../../__generated__/graphql';
 import { ColumnCreator } from './table-column-creator';
 import { TableColumnInterface } from './table-column-interface';
 
@@ -25,23 +29,26 @@ export class CenotesColumnCreator extends ColumnCreator {
 }
 
 class CenotesColumns implements TableColumnInterface {
-  buildColumnHeaders(tableData: CenoteModel[]): [string[], TableColumns[]] {
-    const columnHeaders = tableData.map(
-      (data) =>
-        ({
+  buildColumnHeaders(
+    tableData: CenotesTableQueryQuery['cenotes']
+  ): [string[], CenoteTableColumns[]] {
+    const columnHeaders = tableData
+      .map((data) => {
+        const filteredDataIssues = (data.issues && data.issues.filter((x): x is NonNullable<typeof x> => x !== null).map((y) => adaptCenoteIssue[y])) ?? [];
+        return {
           id: data.id,
           nombre: data.name,
-          estado: data.gadm?.name_1,
-          municipalidad: data.gadm?.name_2,
-          tipo: CenoteType[data.type as keyof typeof CenoteType],
-          problemas: data.issues,
-          creado: data.formatCreatedAtDate(),
-          actualizado: data.formatUpdatedAtDate(),
+          estado: data.location.municipality,
+          municipalidad: data.location.state,
+          tipo: adaptCenoteType[data.type],
+          problemas: filteredDataIssues,
+          creado: formatDate(data.createdAt),
+          actualizado: formatDate(data.updatedAt),
           turistico: data.touristic,
           editar: <EditContent inputs={data} />,
           ficha: <ViewButton link={data.id} />,
-        } as CenoteTableColumns)
-    );
+        };
+      });
     return [Object.keys(columnHeaders[0]), columnHeaders];
   }
 }

@@ -1,35 +1,33 @@
 import React from 'react';
-import { dataAdapter } from '../../adapters/api-data/api-data-adapter';
+
+import { gql, useQuery } from '@apollo/client';
 import { LoadingSpinner } from '../../components/loading-spinner';
 import { MapComponentWrapper } from '../../components/map-component';
-import { useApi } from '../../hooks/useApi';
-import { CenoteModel } from '../../models/CenotesTypes';
+import { CenotesGeoJsonQuery } from '../../__generated__/graphql';
+
+const GET_CENOTES_FOR_MAP = gql`
+  query CenotesGeoJson {
+    cenotes {
+      id
+      name
+      type
+      touristic
+      geojson
+    }
+  }
+`;
 
 export const Map = () => {
-  const [cenotes, setCenotes] = React.useState<CenoteModel[] | null>(null);
-  const { data, loading, error, fetch } = useApi('api/cenotes', 'get', {
-    size: 3000,
-  });
-
-  React.useEffect(() => {
-    if (data) {
-      setCenotes(dataAdapter('cenotes', data));
-    }
-  }, [data]);
-
-  React.useEffect(() => {
-    fetch();
-  }, []);
+  const { data, error, loading } =
+    useQuery<CenotesGeoJsonQuery>(GET_CENOTES_FOR_MAP);
 
   if (!data && loading) {
-    return (
-      <LoadingSpinner />
-    );
+    return <LoadingSpinner />;
   }
 
-  if (!cenotes) {
+  if (!data?.cenotes) {
     return null;
   }
 
-  return <MapComponentWrapper data={cenotes} />;
+  return <MapComponentWrapper data={data.cenotes} />;
 };

@@ -348,6 +348,8 @@ export type Mutation = {
   updateEmail?: Maybe<User>;
   updateSpecies?: Maybe<Species>;
   updateVariable?: Maybe<Variable>;
+  uploadMap?: Maybe<Scalars['Boolean']['output']>;
+  uploadPhoto?: Maybe<Scalars['Boolean']['output']>;
 };
 
 
@@ -406,6 +408,16 @@ export type MutationUpdateVariableArgs = {
   updated_variable: UpdateVariableInput;
 };
 
+
+export type MutationUploadMapArgs = {
+  mapInput: PhotoOrMapUploadInput;
+};
+
+
+export type MutationUploadPhotoArgs = {
+  photoInput: PhotoOrMapUploadInput;
+};
+
 export type NewCenoteInput = {
   coordinates: CoordinatesInput;
 };
@@ -436,13 +448,20 @@ export type NewVariableInput = {
   units?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type PhotoOrMapUploadInput = {
+  cenoteId: Scalars['ID']['input'];
+  content: Scalars['String']['input'];
+  extension: Scalars['String']['input'];
+  filename: Scalars['String']['input'];
+};
+
 export type Query = {
   __typename?: 'Query';
   auditLogs?: Maybe<Array<Maybe<AuditLog>>>;
   cenoteById?: Maybe<Cenote>;
   cenoteDataByTheme?: Maybe<Array<VariableWithData>>;
   cenoteDataByVariable?: Maybe<VariableWithData>;
-  cenotes?: Maybe<Array<Maybe<Cenote>>>;
+  cenotes: Array<Cenote>;
   cenotesBounds?: Maybe<CenoteBounds>;
   cenotesCsv?: Maybe<Scalars['String']['output']>;
   gbifSpeciesSuggestion?: Maybe<Array<GbifSuggestion>>;
@@ -747,6 +766,40 @@ export type DownloadLayerQueryQueryVariables = Exact<{
 
 export type DownloadLayerQueryQuery = { __typename?: 'Query', layer?: { __typename?: 'MapLayer', layer?: string | null } | null };
 
+export type CreateCenoteMutationVariables = Exact<{
+  newCenote: NewCenoteInput;
+}>;
+
+
+export type CreateCenoteMutation = { __typename?: 'Mutation', createCenote?: { __typename?: 'Cenote', id: string, location: { __typename?: 'CenoteLocation', coordinates: { __typename?: 'Coordinates', latitude: any, longitude: any } } } | null };
+
+export type CenoteByIdQueryVariables = Exact<{
+  cenoteId: Scalars['ID']['input'];
+}>;
+
+
+export type CenoteByIdQuery = { __typename?: 'Query', cenoteById?: (
+    { __typename?: 'Cenote' }
+    & { ' $fragmentRefs'?: { 'UpdateCenoteFieldsFragment': UpdateCenoteFieldsFragment } }
+  ) | null };
+
+export type UpdateCenoteMutationVariables = Exact<{
+  updatedCenote: UpdatedCenoteInput;
+}>;
+
+
+export type UpdateCenoteMutation = { __typename?: 'Mutation', updateCenote?: (
+    { __typename?: 'Cenote' }
+    & { ' $fragmentRefs'?: { 'UpdateCenoteFieldsFragment': UpdateCenoteFieldsFragment } }
+  ) | null };
+
+export type UpdateCenoteFieldsFragment = { __typename?: 'Cenote', id: string, name: string, type: CenoteType, touristic: boolean, issues?: Array<CenoteIssue | null> | null, alternativeNames?: Array<string> | null } & { ' $fragmentName'?: 'UpdateCenoteFieldsFragment' };
+
+export type CenotesTableQueryQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CenotesTableQueryQuery = { __typename?: 'Query', cenotes: Array<{ __typename?: 'Cenote', id: string, name: string, type: CenoteType, createdAt?: any | null, updatedAt?: any | null, touristic: boolean, issues?: Array<CenoteIssue | null> | null, location: { __typename?: 'CenoteLocation', state: string, municipality: string } }> };
+
 export type LayersTableQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -757,8 +810,18 @@ export type LayersJsonQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type LayersJsonQuery = { __typename?: 'Query', layers?: Array<{ __typename?: 'MapLayer', id: string, name: string } | null> | null };
 
+export type CenotesGeoJsonQueryVariables = Exact<{ [key: string]: never; }>;
 
+
+export type CenotesGeoJsonQuery = { __typename?: 'Query', cenotes: Array<{ __typename?: 'Cenote', id: string, name: string, type: CenoteType, touristic: boolean, geojson: any }> };
+
+export const UpdateCenoteFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"UpdateCenoteFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Cenote"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"touristic"}},{"kind":"Field","name":{"kind":"Name","value":"issues"}},{"kind":"Field","name":{"kind":"Name","value":"alternativeNames"}}]}}]} as unknown as DocumentNode<UpdateCenoteFieldsFragment, unknown>;
 export const LayerDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Layer"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"layerId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"layer"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"layerId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"json"}}]}}]}}]} as unknown as DocumentNode<LayerQuery, LayerQueryVariables>;
 export const DownloadLayerQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"DownloadLayerQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"layerId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"layer"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"layerId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"layer"}}]}}]}}]} as unknown as DocumentNode<DownloadLayerQueryQuery, DownloadLayerQueryQueryVariables>;
+export const CreateCenoteDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateCenote"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"newCenote"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"NewCenoteInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createCenote"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"new_cenote"},"value":{"kind":"Variable","name":{"kind":"Name","value":"newCenote"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"location"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"coordinates"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"latitude"}},{"kind":"Field","name":{"kind":"Name","value":"longitude"}}]}}]}}]}}]}}]} as unknown as DocumentNode<CreateCenoteMutation, CreateCenoteMutationVariables>;
+export const CenoteByIdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CenoteById"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"cenoteId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cenoteById"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"cenoteId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"UpdateCenoteFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"UpdateCenoteFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Cenote"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"touristic"}},{"kind":"Field","name":{"kind":"Name","value":"issues"}},{"kind":"Field","name":{"kind":"Name","value":"alternativeNames"}}]}}]} as unknown as DocumentNode<CenoteByIdQuery, CenoteByIdQueryVariables>;
+export const UpdateCenoteDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateCenote"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"updatedCenote"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdatedCenoteInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateCenote"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"updated_cenote"},"value":{"kind":"Variable","name":{"kind":"Name","value":"updatedCenote"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"UpdateCenoteFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"UpdateCenoteFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Cenote"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"touristic"}},{"kind":"Field","name":{"kind":"Name","value":"issues"}},{"kind":"Field","name":{"kind":"Name","value":"alternativeNames"}}]}}]} as unknown as DocumentNode<UpdateCenoteMutation, UpdateCenoteMutationVariables>;
+export const CenotesTableQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CenotesTableQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cenotes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"location"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"state"}},{"kind":"Field","name":{"kind":"Name","value":"municipality"}}]}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"touristic"}},{"kind":"Field","name":{"kind":"Name","value":"issues"}}]}}]}}]} as unknown as DocumentNode<CenotesTableQueryQuery, CenotesTableQueryQueryVariables>;
 export const LayersTableQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"LayersTableQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"layers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"metadata"}}]}}]}}]} as unknown as DocumentNode<LayersTableQueryQuery, LayersTableQueryQueryVariables>;
 export const LayersJsonDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"LayersJson"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"layers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<LayersJsonQuery, LayersJsonQueryVariables>;
+export const CenotesGeoJsonDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CenotesGeoJson"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cenotes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"touristic"}},{"kind":"Field","name":{"kind":"Name","value":"geojson"}}]}}]}}]} as unknown as DocumentNode<CenotesGeoJsonQuery, CenotesGeoJsonQueryVariables>;

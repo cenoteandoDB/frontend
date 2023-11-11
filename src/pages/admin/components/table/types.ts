@@ -1,12 +1,22 @@
-import {
-  CenoteIssue,
-  CenoteModel, CenoteType
-} from '../../../../models/CenotesTypes';
+import { CenoteModel } from '../../../../models/CenotesTypes';
 import ReferenceModel from '../../../../models/ReferencesTypes';
 import { VariableModel } from '../../../../models/VariablesTypes';
+import { CenoteIssue, CenoteType } from '../../../../__generated__/graphql';
+
+export const adaptCenoteType: Record<CenoteType, string> = {
+  [CenoteType.Cenote]: 'Cenote',
+  [CenoteType.DryCave]: 'Cueva Seca',
+  [CenoteType.NoType]: 'Sin Tipo',
+  [CenoteType.Watery]: 'Acuático',
+  [CenoteType.WaterWell]: 'Pozo de Agua',
+};
+
+export const adaptCenoteIssue: Record<CenoteIssue, string> = {
+  [CenoteIssue.GeotagNotVerified]: 'Geo tag no verificada',
+};
 
 interface EditTableContent {
-  editar: JSX.Element;
+  editar?: JSX.Element;
 }
 
 export interface CenoteTableColumns extends EditTableContent {
@@ -14,8 +24,8 @@ export interface CenoteTableColumns extends EditTableContent {
   nombre: string;
   estado: string;
   municipalidad: string;
-  tipo: CenoteType;
-  problemas: CenoteIssue[];
+  tipo?: string;
+  problemas?: string[];
   creado: string;
   actualizado: string;
   turistico: boolean;
@@ -27,7 +37,7 @@ export interface VariablesTableColumns extends EditTableContent {
   descripcion: string;
   tema: string;
   nivel_de_acceso: string;
-  tipo_dato: string
+  tipo_dato: string;
   origen: string;
   series: boolean;
   multiplos: boolean;
