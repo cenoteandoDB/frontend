@@ -21,6 +21,7 @@ const documents = {
     "\n  fragment UpdateCenoteFields on Cenote {\n    id\n    name\n    type\n    touristic\n    issues\n    alternativeNames\n  }\n": types.UpdateCenoteFieldsFragmentDoc,
     "\n  query CenotesTableQuery {\n    cenotes {\n      id\n      name\n      location {\n        state\n        municipality\n      }\n      type\n      createdAt\n      updatedAt\n      touristic\n      issues\n    }\n  }\n": types.CenotesTableQueryDocument,
     "\n  query LayersTableQuery {\n    layers {\n      description\n      id\n      name\n      metadata\n    }\n  }\n": types.LayersTableQueryDocument,
+    "\n  query CenoteInformationById($cenoteByIdId: ID!) {\n    cenoteById(id: $cenoteByIdId) {\n      alternativeNames\n      createdAt\n      creator {\n        name\n        email\n        role\n      }\n      distances {\n        time\n        location\n        distance\n      }\n      id\n      issues\n      location {\n        state\n        municipality\n        country\n        coordinates {\n          latitude\n          longitude\n        }\n      }\n      name\n      photos\n      social {\n        comments {\n          review\n          commenter\n          comment\n        }\n      }\n      type\n      touristic\n      updatedAt\n      geojson\n    }\n  }\n": types.CenoteInformationByIdDocument,
     "\n  query LayersJson {\n    layers {\n      id\n      name\n    }\n  }\n": types.LayersJsonDocument,
     "\n  query CenotesGeoJson {\n    cenotes {\n      id\n      name\n      type\n      touristic\n      geojson\n    }\n  }\n": types.CenotesGeoJsonDocument,
 };
@@ -71,6 +72,10 @@ export function gql(source: "\n  query CenotesTableQuery {\n    cenotes {\n     
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query LayersTableQuery {\n    layers {\n      description\n      id\n      name\n      metadata\n    }\n  }\n"): (typeof documents)["\n  query LayersTableQuery {\n    layers {\n      description\n      id\n      name\n      metadata\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query CenoteInformationById($cenoteByIdId: ID!) {\n    cenoteById(id: $cenoteByIdId) {\n      alternativeNames\n      createdAt\n      creator {\n        name\n        email\n        role\n      }\n      distances {\n        time\n        location\n        distance\n      }\n      id\n      issues\n      location {\n        state\n        municipality\n        country\n        coordinates {\n          latitude\n          longitude\n        }\n      }\n      name\n      photos\n      social {\n        comments {\n          review\n          commenter\n          comment\n        }\n      }\n      type\n      touristic\n      updatedAt\n      geojson\n    }\n  }\n"): (typeof documents)["\n  query CenoteInformationById($cenoteByIdId: ID!) {\n    cenoteById(id: $cenoteByIdId) {\n      alternativeNames\n      createdAt\n      creator {\n        name\n        email\n        role\n      }\n      distances {\n        time\n        location\n        distance\n      }\n      id\n      issues\n      location {\n        state\n        municipality\n        country\n        coordinates {\n          latitude\n          longitude\n        }\n      }\n      name\n      photos\n      social {\n        comments {\n          review\n          commenter\n          comment\n        }\n      }\n      type\n      touristic\n      updatedAt\n      geojson\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
