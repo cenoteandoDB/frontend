@@ -32,23 +32,27 @@ class CenotesColumns implements TableColumnInterface {
   buildColumnHeaders(
     tableData: CenotesTableQueryQuery['cenotes']
   ): [string[], CenoteTableColumns[]] {
-    const columnHeaders = tableData
-      .map((data) => {
-        const filteredDataIssues = (data.issues && data.issues.filter((x): x is NonNullable<typeof x> => x !== null).map((y) => adaptCenoteIssue[y])) ?? [];
-        return {
-          id: data.id,
-          nombre: data.name,
-          estado: data.location.municipality,
-          municipalidad: data.location.state,
-          tipo: adaptCenoteType[data.type],
-          problemas: filteredDataIssues,
-          creado: formatDate(data.createdAt),
-          actualizado: formatDate(data.updatedAt),
-          turistico: data.touristic,
-          editar: <EditContent inputs={data} />,
-          ficha: <ViewButton link={data.id} />,
-        };
-      });
+    const columnHeaders = tableData.map((data) => {
+      const filteredDataIssues =
+        (data.issues &&
+          data.issues
+            .filter((x): x is NonNullable<typeof x> => x !== null)
+            .map((y) => adaptCenoteIssue[y])) ??
+        [];
+      return {
+        id: data.id,
+        nombre: data.name,
+        estado: data.location.municipality,
+        municipalidad: data.location.state,
+        tipo: adaptCenoteType[data.type],
+        problemas: filteredDataIssues,
+        creado: formatDate(data.createdAt),
+        actualizado: formatDate(data.updatedAt),
+        turistico: data.touristic,
+        editar: <EditContent inputs={data} url={`/admin/cenotes/form/${data.id}`} />,
+        ficha: <ViewButton link={data.id} />,
+      };
+    });
     return [Object.keys(columnHeaders[0]), columnHeaders];
   }
 }

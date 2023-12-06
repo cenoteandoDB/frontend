@@ -14,6 +14,11 @@ const CenoteandoTableWrapper = lazy(() =>
     default: CenoteandoTableWrapper,
   }))
 );
+const CenoteandoFormWrapper = lazy(() =>
+  import('./admin/components/forms').then(({ FormsWrapper }) => ({
+    default: FormsWrapper,
+  }))
+);
 const Home = lazy(() =>
   import('./home').then(({ Home }) => ({ default: Home }))
 );
@@ -33,16 +38,20 @@ const Signup = lazy(() =>
 
 const ADMIN_KEY = '/admin';
 const MAP_KEY = '/map';
-export const adminRoutes = ['cenotes', 'variables', 'references', 'layers'];
+export const adminRoutes = [
+  'cenotes',
+  'cenotes/form/:id',
+  'variables',
+  'references',
+  'layers',
+];
 
 // Builds children of admin page dynamically
 // Because admin route will have tables with different data it's easier to build this routes
 // with this functions instead of copy-paste the routes below.
 const routeBuilder = (
   parentRoute: string,
-  routesObj: string[],
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  Component: React.FC<any>
+  routesObj: string[]
 ): Array<{ path: string; element: JSX.Element }> => {
   const routes: Array<{ path: string; element: JSX.Element }> = [];
   routesObj.map((route) =>
@@ -50,7 +59,11 @@ const routeBuilder = (
       path: `${parentRoute}/${route}`,
       element: (
         <Suspense fallback={<LoadingSpinner />}>
-          <Component route={route} />
+          {route.includes('cenotes/form') ? (
+            <CenoteandoFormWrapper />
+          ) : (
+            <CenoteandoTableWrapper route={route} />
+          )}
         </Suspense>
       ),
     })
@@ -83,7 +96,7 @@ const router = createBrowserRouter([
             <Admin route={ADMIN_KEY} />
           </Suspense>
         ),
-        children: routeBuilder(ADMIN_KEY, adminRoutes, CenoteandoTableWrapper),
+        children: routeBuilder(ADMIN_KEY, adminRoutes),
       },
       {
         path: MAP_KEY,
