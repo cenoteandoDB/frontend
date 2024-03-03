@@ -10,7 +10,7 @@ import { gql } from '../../../../__generated__';
 const GET_LAYER_TO_DOWNLOAD = gql(/* GraphQL */ `
   query DownloadLayerQuery($layerId: ID!) {
     layer(id: $layerId) {
-      layer
+      name
     }
   }
 `);
@@ -25,8 +25,8 @@ export const DownloadLayer: React.FC<DownloadLayerProps> = (props) => {
     GET_LAYER_TO_DOWNLOAD
   );
 
-  if (data?.layer?.layer) {
-    const byteCharacters = atob(data.layer.layer);
+  if (data?.layer?.name) {
+    const byteCharacters = atob(data.layer.name);
     const byteArray = new Uint8Array(byteCharacters.length);
 
     for (let i = 0; i < byteCharacters.length; i++) {

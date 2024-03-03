@@ -14,6 +14,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  Coordinate: { input: any; output: any; }
   /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
   DateTime: { input: any; output: any; }
   /** A field whose value conforms to the standard internet email address format as specified in HTML Spec: https://html.spec.whatwg.org/multipage/input.html#valid-e-mail-address. */
@@ -43,6 +44,7 @@ export type AuditLog = {
 };
 
 export enum AuditLogType {
+  DeleteCenote = 'DELETE_CENOTE',
   NewCenote = 'NEW_CENOTE',
   NewReference = 'NEW_REFERENCE',
   NewVariable = 'NEW_VARIABLE',
@@ -53,22 +55,23 @@ export enum AuditLogType {
 
 export type Cenote = {
   __typename?: 'Cenote';
-  _key: Scalars['ID']['output'];
   alternativeNames?: Maybe<Array<Scalars['String']['output']>>;
   createdAt?: Maybe<Scalars['DateTime']['output']>;
   creator?: Maybe<User>;
   distances?: Maybe<Array<Maybe<CityDistances>>>;
-  geojson: Scalars['JSON']['output'];
   id: Scalars['ID']['output'];
   issues?: Maybe<Array<Maybe<CenoteIssue>>>;
   location: CenoteLocation;
   maps?: Maybe<Array<Scalars['URL']['output']>>;
   name: Scalars['String']['output'];
   photos?: Maybe<Array<Scalars['URL']['output']>>;
+  reference_count: Scalars['Int']['output'];
+  reviewed?: Maybe<Scalars['Boolean']['output']>;
   social?: Maybe<CenoteSocialData>;
   touristic: Scalars['Boolean']['output'];
   type: CenoteType;
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  variable_count: Scalars['Int']['output'];
 };
 
 /**
@@ -87,9 +90,10 @@ export enum CenoteIssue {
 
 export type CenoteLocation = {
   __typename?: 'CenoteLocation';
-  coordinates: Coordinates;
+  coordinates: Scalars['Coordinate']['output'];
   country: Scalars['String']['output'];
-  municipality: Scalars['String']['output'];
+  county: Scalars['String']['output'];
+  geojson: Scalars['JSON']['output'];
   state: Scalars['String']['output'];
 };
 
@@ -312,15 +316,24 @@ export enum GbifTaxonomicStatus {
   Synonym = 'SYNONYM'
 }
 
+export enum LayerCategory {
+  Antropogenica = 'ANTROPOGENICA',
+  Clima = 'CLIMA',
+  GeoEstatistica = 'GEO_ESTATISTICA',
+  Hidrologia = 'HIDROLOGIA',
+  Intrinseca = 'INTRINSECA'
+}
+
 export type MapLayer = {
   __typename?: 'MapLayer';
+  category?: Maybe<LayerCategory>;
   description?: Maybe<Scalars['String']['output']>;
+  geojson?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
-  json?: Maybe<Scalars['String']['output']>;
-  layer?: Maybe<Scalars['String']['output']>;
   metadata?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
   thumbnail?: Maybe<Scalars['String']['output']>;
+  zip?: Maybe<Scalars['String']['output']>;
 };
 
 export type MapLayerInput = {
@@ -342,6 +355,7 @@ export type Mutation = {
   createMof?: Maybe<VariableWithData>;
   createSpecies?: Maybe<Species>;
   createVariable?: Maybe<Variable>;
+  deleteCenote?: Maybe<Scalars['Boolean']['output']>;
   deleteMof?: Maybe<Scalars['Boolean']['output']>;
   register?: Maybe<User>;
   updateCenote?: Maybe<Cenote>;
@@ -375,6 +389,11 @@ export type MutationCreateSpeciesArgs = {
 
 export type MutationCreateVariableArgs = {
   new_variable: NewVariableInput;
+};
+
+
+export type MutationDeleteCenoteArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -468,6 +487,8 @@ export type Query = {
   iNaturalistSearch: INaturalistSearchTaxonResponse;
   layer?: Maybe<MapLayer>;
   layers?: Maybe<Array<Maybe<MapLayer>>>;
+  referenceById?: Maybe<Reference>;
+  references?: Maybe<Array<Reference>>;
   species?: Maybe<Array<Maybe<Species>>>;
   speciesByGBIFId?: Maybe<Species>;
   speciesByINaturalistId?: Maybe<Species>;
@@ -521,6 +542,11 @@ export type QueryLayerArgs = {
 };
 
 
+export type QueryReferenceByIdArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
 export type QuerySpeciesByGbifIdArgs = {
   gbifId: Scalars['ID']['input'];
 };
@@ -549,6 +575,44 @@ export type QueryVariableByIdArgs = {
 export type QueryVariablesByThemeArgs = {
   theme: VariableTheme;
 };
+
+export type Reference = {
+  __typename?: 'Reference';
+  authors: Array<Scalars['String']['output']>;
+  book?: Maybe<Scalars['String']['output']>;
+  cenoteando_id: Scalars['ID']['output'];
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  date_primary: Scalars['Int']['output'];
+  date_secondary?: Maybe<Scalars['Int']['output']>;
+  doi?: Maybe<Scalars['String']['output']>;
+  firestore_id: Scalars['ID']['output'];
+  institution?: Maybe<Scalars['String']['output']>;
+  issue?: Maybe<Scalars['String']['output']>;
+  journal_name?: Maybe<Scalars['String']['output']>;
+  keywords?: Maybe<Array<Scalars['String']['output']>>;
+  mendeley: Scalars['Boolean']['output'];
+  pages?: Maybe<Scalars['String']['output']>;
+  pdf: Scalars['Boolean']['output'];
+  pdf_name?: Maybe<Scalars['String']['output']>;
+  short_name: Scalars['String']['output'];
+  title: Scalars['String']['output'];
+  type: ReferenceType;
+  unique_code: Scalars['String']['output'];
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  uploaded_gc: Scalars['Boolean']['output'];
+  uploaded_mendeley: Scalars['Boolean']['output'];
+  url?: Maybe<Scalars['String']['output']>;
+  validated_mendeley: Scalars['Boolean']['output'];
+};
+
+export enum ReferenceType {
+  Book = 'BOOK',
+  ChapterOfBook = 'CHAPTER_OF_BOOK',
+  Journal = 'JOURNAL',
+  Other = 'OTHER',
+  Report = 'REPORT',
+  Thesis = 'THESIS'
+}
 
 export type RegisterInput = {
   email: Scalars['EmailAddress']['input'];
@@ -757,21 +821,21 @@ export type LayerQueryVariables = Exact<{
 }>;
 
 
-export type LayerQuery = { __typename?: 'Query', layer?: { __typename?: 'MapLayer', json?: string | null } | null };
+export type LayerQuery = { __typename?: 'Query', layer?: { __typename?: 'MapLayer', geojson?: string | null } | null };
 
 export type DownloadLayerQueryQueryVariables = Exact<{
   layerId: Scalars['ID']['input'];
 }>;
 
 
-export type DownloadLayerQueryQuery = { __typename?: 'Query', layer?: { __typename?: 'MapLayer', layer?: string | null } | null };
+export type DownloadLayerQueryQuery = { __typename?: 'Query', layer?: { __typename?: 'MapLayer', name: string } | null };
 
 export type CreateCenoteMutationVariables = Exact<{
   newCenote: NewCenoteInput;
 }>;
 
 
-export type CreateCenoteMutation = { __typename?: 'Mutation', createCenote?: { __typename?: 'Cenote', id: string, location: { __typename?: 'CenoteLocation', coordinates: { __typename?: 'Coordinates', latitude: any, longitude: any } } } | null };
+export type CreateCenoteMutation = { __typename?: 'Mutation', createCenote?: { __typename?: 'Cenote', id: string, location: { __typename?: 'CenoteLocation', coordinates: any } } | null };
 
 export type CenoteByIdQueryVariables = Exact<{
   cenoteId: Scalars['ID']['input'];
@@ -798,7 +862,7 @@ export type UpdateCenoteFieldsFragment = { __typename?: 'Cenote', id: string, na
 export type CenotesTableQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CenotesTableQueryQuery = { __typename?: 'Query', cenotes: Array<{ __typename?: 'Cenote', id: string, name: string, type: CenoteType, createdAt?: any | null, updatedAt?: any | null, touristic: boolean, issues?: Array<CenoteIssue | null> | null, location: { __typename?: 'CenoteLocation', state: string, municipality: string } }> };
+export type CenotesTableQueryQuery = { __typename?: 'Query', cenotes: Array<{ __typename?: 'Cenote', id: string, name: string, type: CenoteType, createdAt?: any | null, updatedAt?: any | null, touristic: boolean, issues?: Array<CenoteIssue | null> | null, variable_count: number, location: { __typename?: 'CenoteLocation', state: string, county: string } }> };
 
 export type LayersTableQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -810,7 +874,7 @@ export type CenoteInformationByIdQueryVariables = Exact<{
 }>;
 
 
-export type CenoteInformationByIdQuery = { __typename?: 'Query', cenoteById?: { __typename?: 'Cenote', alternativeNames?: Array<string> | null, createdAt?: any | null, id: string, issues?: Array<CenoteIssue | null> | null, name: string, photos?: Array<any> | null, type: CenoteType, touristic: boolean, updatedAt?: any | null, geojson: any, creator?: { __typename?: 'User', name: string, email: any, role: UserRole } | null, distances?: Array<{ __typename?: 'CityDistances', time?: number | null, location: string, distance?: number | null } | null> | null, location: { __typename?: 'CenoteLocation', state: string, municipality: string, country: string, coordinates: { __typename?: 'Coordinates', latitude: any, longitude: any } }, social?: { __typename?: 'CenoteSocialData', comments?: Array<{ __typename?: 'Comment', review?: number | null, commenter?: string | null, comment?: string | null } | null> | null } | null } | null };
+export type CenoteInformationByIdQuery = { __typename?: 'Query', cenoteById?: { __typename?: 'Cenote', alternativeNames?: Array<string> | null, createdAt?: any | null, id: string, issues?: Array<CenoteIssue | null> | null, name: string, photos?: Array<any> | null, type: CenoteType, touristic: boolean, updatedAt?: any | null, creator?: { __typename?: 'User', name: string, email: any, role: UserRole } | null, distances?: Array<{ __typename?: 'CityDistances', time?: number | null, location: string, distance?: number | null } | null> | null, location: { __typename?: 'CenoteLocation', state: string, county: string, country: string, coordinates: any, geojson: any }, social?: { __typename?: 'CenoteSocialData', comments?: Array<{ __typename?: 'Comment', review?: number | null, commenter?: string | null, comment?: string | null } | null> | null } | null } | null };
 
 export type LayersJsonQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -820,16 +884,16 @@ export type LayersJsonQuery = { __typename?: 'Query', layers?: Array<{ __typenam
 export type CenotesGeoJsonQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CenotesGeoJsonQuery = { __typename?: 'Query', cenotes: Array<{ __typename?: 'Cenote', id: string, name: string, type: CenoteType, touristic: boolean, geojson: any }> };
+export type CenotesGeoJsonQuery = { __typename?: 'Query', cenotes: Array<{ __typename?: 'Cenote', id: string, name: string, type: CenoteType, touristic: boolean, location: { __typename?: 'CenoteLocation', geojson: any } }> };
 
 export const UpdateCenoteFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"UpdateCenoteFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Cenote"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"touristic"}},{"kind":"Field","name":{"kind":"Name","value":"issues"}},{"kind":"Field","name":{"kind":"Name","value":"alternativeNames"}}]}}]} as unknown as DocumentNode<UpdateCenoteFieldsFragment, unknown>;
-export const LayerDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Layer"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"layerId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"layer"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"layerId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"json"}}]}}]}}]} as unknown as DocumentNode<LayerQuery, LayerQueryVariables>;
-export const DownloadLayerQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"DownloadLayerQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"layerId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"layer"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"layerId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"layer"}}]}}]}}]} as unknown as DocumentNode<DownloadLayerQueryQuery, DownloadLayerQueryQueryVariables>;
-export const CreateCenoteDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateCenote"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"newCenote"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"NewCenoteInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createCenote"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"new_cenote"},"value":{"kind":"Variable","name":{"kind":"Name","value":"newCenote"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"location"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"coordinates"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"latitude"}},{"kind":"Field","name":{"kind":"Name","value":"longitude"}}]}}]}}]}}]}}]} as unknown as DocumentNode<CreateCenoteMutation, CreateCenoteMutationVariables>;
+export const LayerDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Layer"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"layerId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"layer"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"layerId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"geojson"}}]}}]}}]} as unknown as DocumentNode<LayerQuery, LayerQueryVariables>;
+export const DownloadLayerQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"DownloadLayerQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"layerId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"layer"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"layerId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<DownloadLayerQueryQuery, DownloadLayerQueryQueryVariables>;
+export const CreateCenoteDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateCenote"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"newCenote"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"NewCenoteInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createCenote"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"new_cenote"},"value":{"kind":"Variable","name":{"kind":"Name","value":"newCenote"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"location"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"coordinates"}}]}}]}}]}}]} as unknown as DocumentNode<CreateCenoteMutation, CreateCenoteMutationVariables>;
 export const CenoteByIdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CenoteById"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"cenoteId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cenoteById"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"cenoteId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"UpdateCenoteFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"UpdateCenoteFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Cenote"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"touristic"}},{"kind":"Field","name":{"kind":"Name","value":"issues"}},{"kind":"Field","name":{"kind":"Name","value":"alternativeNames"}}]}}]} as unknown as DocumentNode<CenoteByIdQuery, CenoteByIdQueryVariables>;
 export const UpdateCenoteDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateCenote"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"updatedCenote"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdatedCenoteInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateCenote"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"updated_cenote"},"value":{"kind":"Variable","name":{"kind":"Name","value":"updatedCenote"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"UpdateCenoteFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"UpdateCenoteFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Cenote"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"touristic"}},{"kind":"Field","name":{"kind":"Name","value":"issues"}},{"kind":"Field","name":{"kind":"Name","value":"alternativeNames"}}]}}]} as unknown as DocumentNode<UpdateCenoteMutation, UpdateCenoteMutationVariables>;
-export const CenotesTableQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CenotesTableQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cenotes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"location"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"state"}},{"kind":"Field","name":{"kind":"Name","value":"municipality"}}]}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"touristic"}},{"kind":"Field","name":{"kind":"Name","value":"issues"}}]}}]}}]} as unknown as DocumentNode<CenotesTableQueryQuery, CenotesTableQueryQueryVariables>;
+export const CenotesTableQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CenotesTableQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cenotes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"location"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"state"}},{"kind":"Field","name":{"kind":"Name","value":"county"}}]}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"touristic"}},{"kind":"Field","name":{"kind":"Name","value":"issues"}},{"kind":"Field","name":{"kind":"Name","value":"variable_count"}}]}}]}}]} as unknown as DocumentNode<CenotesTableQueryQuery, CenotesTableQueryQueryVariables>;
 export const LayersTableQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"LayersTableQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"layers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"metadata"}}]}}]}}]} as unknown as DocumentNode<LayersTableQueryQuery, LayersTableQueryQueryVariables>;
-export const CenoteInformationByIdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CenoteInformationById"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"cenoteByIdId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cenoteById"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"cenoteByIdId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alternativeNames"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"creator"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"role"}}]}},{"kind":"Field","name":{"kind":"Name","value":"distances"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"time"}},{"kind":"Field","name":{"kind":"Name","value":"location"}},{"kind":"Field","name":{"kind":"Name","value":"distance"}}]}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"issues"}},{"kind":"Field","name":{"kind":"Name","value":"location"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"state"}},{"kind":"Field","name":{"kind":"Name","value":"municipality"}},{"kind":"Field","name":{"kind":"Name","value":"country"}},{"kind":"Field","name":{"kind":"Name","value":"coordinates"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"latitude"}},{"kind":"Field","name":{"kind":"Name","value":"longitude"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"photos"}},{"kind":"Field","name":{"kind":"Name","value":"social"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"comments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"review"}},{"kind":"Field","name":{"kind":"Name","value":"commenter"}},{"kind":"Field","name":{"kind":"Name","value":"comment"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"touristic"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"geojson"}}]}}]}}]} as unknown as DocumentNode<CenoteInformationByIdQuery, CenoteInformationByIdQueryVariables>;
+export const CenoteInformationByIdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CenoteInformationById"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"cenoteByIdId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cenoteById"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"cenoteByIdId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alternativeNames"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"creator"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"role"}}]}},{"kind":"Field","name":{"kind":"Name","value":"distances"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"time"}},{"kind":"Field","name":{"kind":"Name","value":"location"}},{"kind":"Field","name":{"kind":"Name","value":"distance"}}]}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"issues"}},{"kind":"Field","name":{"kind":"Name","value":"location"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"state"}},{"kind":"Field","name":{"kind":"Name","value":"county"}},{"kind":"Field","name":{"kind":"Name","value":"country"}},{"kind":"Field","name":{"kind":"Name","value":"coordinates"}},{"kind":"Field","name":{"kind":"Name","value":"geojson"}}]}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"photos"}},{"kind":"Field","name":{"kind":"Name","value":"social"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"comments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"review"}},{"kind":"Field","name":{"kind":"Name","value":"commenter"}},{"kind":"Field","name":{"kind":"Name","value":"comment"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"touristic"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<CenoteInformationByIdQuery, CenoteInformationByIdQueryVariables>;
 export const LayersJsonDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"LayersJson"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"layers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<LayersJsonQuery, LayersJsonQueryVariables>;
-export const CenotesGeoJsonDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CenotesGeoJson"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cenotes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"touristic"}},{"kind":"Field","name":{"kind":"Name","value":"geojson"}}]}}]}}]} as unknown as DocumentNode<CenotesGeoJsonQuery, CenotesGeoJsonQueryVariables>;
+export const CenotesGeoJsonDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CenotesGeoJson"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cenotes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"touristic"}},{"kind":"Field","name":{"kind":"Name","value":"location"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"geojson"}}]}}]}}]}}]} as unknown as DocumentNode<CenotesGeoJsonQuery, CenotesGeoJsonQueryVariables>;

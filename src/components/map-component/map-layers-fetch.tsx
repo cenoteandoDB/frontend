@@ -30,7 +30,7 @@ interface geoJsonType {
 const GET_GEOJSON_LAYER = gql(/* GraphQL */ `
   query Layer($layerId: ID!) {
     layer(id: $layerId) {
-      json
+      geojson
     }
   }
 `);
@@ -52,7 +52,7 @@ export const MapLayersFetch: React.FC<MapLayersFetchProps> = ({
     },
   });
 
-  const geoJsonFromQuery = data?.layer?.json;
+  const geoJsonFromQuery = data?.layer?.geojson;
 
   if (geoJsonFromQuery) {
     parsedGeoJson = JSON.parse(geoJsonFromQuery);
