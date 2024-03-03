@@ -35,9 +35,9 @@ export const MapComponent: React.FC<MapComponentI> = (props) => {
   const isSingleCenote = cenotes?.length === 1;
   const geoJson = cenotes?.map((cenote) => ({
     id: cenote.id,
-    geometry: cenote.geojson.geometry,
-    properties: cenote.geojson.properties,
-    type: cenote.geojson.type,
+    geometry: cenote.location.geojson.geometry,
+    properties: cenote.location.geojson.properties,
+    type: cenote.location.geojson.type,
   }));
   const defaultCenter = [-88.79325, 20.882081];
   const centerPoint = isSingleCenote
