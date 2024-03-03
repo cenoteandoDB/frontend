@@ -27,7 +27,9 @@ const GET_CENOTES_LIST = gql(/* GraphQL */ `
 `);
 
 export const CenotesTableWrapper = () => {
-  const { data, error, loading } = useQuery(GET_CENOTES_LIST);
+  const { data, error, loading } = useQuery(GET_CENOTES_LIST, {
+    fetchPolicy: 'cache-first'
+  });
 
   if (loading) {
     return <LoadingSpinner />;

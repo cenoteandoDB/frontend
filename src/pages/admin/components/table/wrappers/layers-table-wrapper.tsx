@@ -17,7 +17,9 @@ const GET_LAYERS_LISTS = gql(/* GraphQL */ `
 `);
 
 export const LayersTableWrapper = () => {
-  const { loading, error, data } = useQuery(GET_LAYERS_LISTS);
+  const { loading, error, data } = useQuery(GET_LAYERS_LISTS, {
+    fetchPolicy: 'cache-first'
+  });
 
   if (loading) {
     return <LoadingSpinner />;
