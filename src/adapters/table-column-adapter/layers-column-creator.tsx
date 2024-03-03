@@ -14,7 +14,7 @@ export class LayersColumnCreator extends ColumnCreator {
   constructor(tableData: LayersTableQueryQuery['layers']) {
     super();
     this.tableData = tableData;
-    this.enableFilter = ['metadatos', 'indice', 'descargar'];
+    this.enableFilter = ['metadatos', 'indice', 'descargar', 'preview'];
   }
 
   public factoryMethod(): TableColumnInterface {
