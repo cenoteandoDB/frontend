@@ -14,13 +14,14 @@ const GET_CENOTES_LIST = gql(/* GraphQL */ `
       name
       location {
         state
-        municipality
+        county
       }
       type
       createdAt
       updatedAt
       touristic
       issues
+      variable_count
     }
   }
 `);

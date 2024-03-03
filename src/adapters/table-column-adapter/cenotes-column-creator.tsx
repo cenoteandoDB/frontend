@@ -42,13 +42,14 @@ class CenotesColumns implements TableColumnInterface {
       return {
         id: data.id,
         nombre: data.name,
-        estado: data.location.municipality,
+        estado: data.location.county,
         municipalidad: data.location.state,
         tipo: adaptCenoteType[data.type],
         problemas: filteredDataIssues,
         creado: formatDate(data.createdAt),
         actualizado: formatDate(data.updatedAt),
         turistico: data.touristic,
+        variables: data.variable_count,
         editar: <EditContent inputs={data} url={`/admin/cenotes/form/${data.id}`} />,
         ficha: <ViewButton link={data.id} />,
       };

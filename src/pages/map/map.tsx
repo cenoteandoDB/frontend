@@ -12,7 +12,9 @@ const GET_CENOTES_FOR_MAP = gql`
       name
       type
       touristic
-      geojson
+      location {
+        geojson
+      }
     }
   }
 `;

@@ -13,13 +13,11 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  useToast,
+  useToast
 } from '@chakra-ui/react';
 import {
-  Coordinates,
   CoordinatesInput,
-  CreateCenoteMutation,
-  NewCenoteInput,
+  CreateCenoteMutation
 } from '../../../../../../__generated__/graphql';
 
 const ADD_CENOTE_MUTATION = gql`
@@ -27,10 +25,7 @@ const ADD_CENOTE_MUTATION = gql`
     createCenote(new_cenote: $newCenote) {
       id
       location {
-        coordinates {
-          latitude
-          longitude
-        }
+        coordinates
       }
     }
   }

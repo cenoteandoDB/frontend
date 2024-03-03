@@ -29,12 +29,10 @@ const GET_CENOTE_INFORMATION_BY_ID = gql`
       issues
       location {
         state
-        municipality
+        county
         country
-        coordinates {
-          latitude
-          longitude
-        }
+        coordinates
+        geojson
       }
       name
       photos
@@ -48,7 +46,6 @@ const GET_CENOTE_INFORMATION_BY_ID = gql`
       type
       touristic
       updatedAt
-      geojson
     }
   }
 `;

@@ -21,14 +21,11 @@ import {
   Th,
   Thead,
   Tr,
-  VStack,
+  VStack
 } from '@chakra-ui/react';
-import { rankItem } from '@tanstack/match-sorter-utils';
 import {
   ColumnDef,
-  ColumnFiltersState,
-  FilterFn,
-  flexRender,
+  ColumnFiltersState, flexRender,
   getCoreRowModel,
   getFacetedMinMaxValues,
   getFacetedRowModel,
@@ -36,24 +33,12 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  useReactTable,
+  useReactTable
 } from '@tanstack/react-table';
 import { Filter } from '../../../../components/filter';
 import { AddButton } from '../add-button.tsx';
 import { TableTypes } from './types';
-
-const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
-  // Rank the item
-  const itemRank = rankItem(row.getValue(columnId), value);
-
-  // Store the itemRank info
-  addMeta({
-    itemRank,
-  });
-
-  // Return if the item should be filtered in/out
-  return itemRank.passed;
-};
+import { fuzzyFilter } from './utils/filters';
 
 interface TableProps {
   columns: ColumnDef<TableTypes, string>[];
@@ -63,9 +48,7 @@ interface TableProps {
 export const CenoteandoTable: React.FC<TableProps> = (props) => {
   const { data, columns } = props;
   const [tableData, setTableData] = React.useState(data);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = React.useState<string>('');
   const table = useReactTable({
     data: tableData,

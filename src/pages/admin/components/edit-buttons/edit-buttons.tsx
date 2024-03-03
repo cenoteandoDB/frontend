@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
 
 export interface EditContentProps {
   inputs?: TableTypes | CenotesTableQueryQuery['cenotes'][0];
-  url: string
+  url?: string;
 }
 
 // const FORM_DICTIONARY: Record<string, React.FC<CenoteFormWrapperProps>> = {
@@ -29,25 +29,20 @@ export const EditContent: React.FC<EditContentProps> = (props) => {
     // const CenoteandoFormWrapper = FORM_DICTIONARY[inputs.__typename];
     return (
       <>
-        <Flex gap={2} justifyContent='center'>
-          <Link to={url} target='_blank'>
-            <IconButton
-              aria-label=''
-              onClick={onOpen}
-              size='sm'
-              variant='ghost'
-            >
-              <EditIcon />
-            </IconButton>
-          </Link>
-        </Flex>
-        {/* {isOpen && (
-          <CenoteandoFormWrapper
-            isOpen={isOpen}
-            cenoteId={inputs.id}
-            onClose={onClose}
-          />
-        )} */}
+        {url && (
+          <Flex gap={2} justifyContent='center'>
+            <Link to={url} target='_blank'>
+              <IconButton
+                aria-label=''
+                onClick={onOpen}
+                size='sm'
+                variant='ghost'
+              >
+                <EditIcon />
+              </IconButton>
+            </Link>
+          </Flex>
+        )}
       </>
     );
   }
