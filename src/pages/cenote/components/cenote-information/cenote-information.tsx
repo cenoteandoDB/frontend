@@ -32,7 +32,7 @@ export const CenoteInformation: React.FC<CenoteInformationProps> = (props) => {
     return null;
   }
 
-  const { location: {municipality,state} } = cenote;
+  const { location: {county, state} } = cenote;
 
   return (
     <Card p='8' bg='white' variant='outline'>
@@ -43,7 +43,7 @@ export const CenoteInformation: React.FC<CenoteInformationProps> = (props) => {
         </Box>
       </Box>
       <Box display='flex' flexDirection='column' gap='22px' mt='22px'>
-        <IconText icon={MdLocationOn} text={`${municipality}, ${state}`} />
+        <IconText icon={MdLocationOn} text={`${county}, ${state}`} />
         <Divider />
         <IconText
           icon={MdPhone}

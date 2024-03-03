@@ -16,6 +16,7 @@ export const Popup: React.FC<PopupI> = (props) => {
   }
 
   const [cenoteData] = data;
+  const cenoteGeometry = cenoteData.location.geojson.geometry;
 
   //TODO add link to cenote card
   //TODO Ask to want else to add to this popup card
@@ -26,8 +27,8 @@ export const Popup: React.FC<PopupI> = (props) => {
       </Heading>
       {cenoteData.touristic ? <Text fontSize='md'>Turistico</Text> : null}
       <Text>
-        Coordinates {cenoteData.geojson.geometry.coordinates[0]},{' '}
-        {cenoteData.geojson.geometry.coordinates[1]}
+        Coordinates {cenoteGeometry.coordinates[0]},{' '}
+        {cenoteGeometry.coordinates[1]}
       </Text>
     </Flex>
   );
