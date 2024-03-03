@@ -1,6 +1,7 @@
 import React from 'react';
 import { DownloadButton } from '../../pages/admin/components/download-button';
 import { DownloadLayer } from '../../pages/admin/components/download-layer';
+import { PreviewLayer } from '../../pages/admin/components/preview-layer';
 import { TableColumns } from '../../pages/admin/components/table/types';
 import { LayersTableQueryQuery } from '../../__generated__/graphql';
 import { ColumnCreator } from './table-column-creator';
@@ -33,6 +34,7 @@ class LayersColumns implements TableColumnInterface {
         descripcion: data?.description,
         metadatos: <DownloadButton link={data?.metadata} />,
         descargar: <DownloadLayer layerId={data?.id ?? ''} />,
+        preview: data?.thumbnail ? <PreviewLayer url={data.thumbnail}/> : null
       };
     });
 

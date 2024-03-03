@@ -12,6 +12,7 @@ const GET_LAYERS_LISTS = gql(/* GraphQL */ `
       id
       name
       metadata
+      thumbnail
     }
   }
 `);

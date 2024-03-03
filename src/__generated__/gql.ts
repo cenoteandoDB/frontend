@@ -20,7 +20,7 @@ const documents = {
     "\n  \n  mutation UpdateCenote($updatedCenote: UpdatedCenoteInput!) {\n    updateCenote(updated_cenote: $updatedCenote) {\n      ...UpdateCenoteFields\n    }\n  }\n": types.UpdateCenoteDocument,
     "\n  fragment UpdateCenoteFields on Cenote {\n    id\n    name\n    type\n    touristic\n    issues\n    alternativeNames\n  }\n": types.UpdateCenoteFieldsFragmentDoc,
     "\n  query CenotesTableQuery {\n    cenotes {\n      id\n      name\n      location {\n        state\n        county\n      }\n      type\n      createdAt\n      updatedAt\n      touristic\n      issues\n      variable_count\n    }\n  }\n": types.CenotesTableQueryDocument,
-    "\n  query LayersTableQuery {\n    layers {\n      description\n      id\n      name\n      metadata\n    }\n  }\n": types.LayersTableQueryDocument,
+    "\n  query LayersTableQuery {\n    layers {\n      description\n      id\n      name\n      metadata\n      thumbnail\n    }\n  }\n": types.LayersTableQueryDocument,
     "\n  query CenoteInformationById($cenoteByIdId: ID!) {\n    cenoteById(id: $cenoteByIdId) {\n      alternativeNames\n      createdAt\n      creator {\n        name\n        email\n        role\n      }\n      distances {\n        time\n        location\n        distance\n      }\n      id\n      issues\n      location {\n        state\n        county\n        country\n        coordinates\n        geojson\n      }\n      name\n      photos\n      social {\n        comments {\n          review\n          commenter\n          comment\n        }\n      }\n      type\n      touristic\n      updatedAt\n    }\n  }\n": types.CenoteInformationByIdDocument,
     "\n  query LayersJson {\n    layers {\n      id\n      name\n    }\n  }\n": types.LayersJsonDocument,
     "\n  query CenotesGeoJson {\n    cenotes {\n      id\n      name\n      type\n      touristic\n      location {\n        geojson\n      }\n    }\n  }\n": types.CenotesGeoJsonDocument,
@@ -71,7 +71,7 @@ export function gql(source: "\n  query CenotesTableQuery {\n    cenotes {\n     
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query LayersTableQuery {\n    layers {\n      description\n      id\n      name\n      metadata\n    }\n  }\n"): (typeof documents)["\n  query LayersTableQuery {\n    layers {\n      description\n      id\n      name\n      metadata\n    }\n  }\n"];
+export function gql(source: "\n  query LayersTableQuery {\n    layers {\n      description\n      id\n      name\n      metadata\n      thumbnail\n    }\n  }\n"): (typeof documents)["\n  query LayersTableQuery {\n    layers {\n      description\n      id\n      name\n      metadata\n      thumbnail\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
