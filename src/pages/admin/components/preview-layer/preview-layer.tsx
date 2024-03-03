@@ -15,7 +15,7 @@ export const PreviewLayer: React.FC<PreviewLayerProps> = (props) => {
   const { url } = props;
 
   return (
-    <Popover>
+    <Popover isLazy>
       <PopoverTrigger>
         <IconButton aria-label='' size='sm' variant='ghost'>
           <ViewIcon />
