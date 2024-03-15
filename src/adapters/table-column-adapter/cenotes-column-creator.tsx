@@ -20,7 +20,7 @@ export class CenotesColumnCreator extends ColumnCreator {
   constructor(tableData: CenoteModel[]) {
     super();
     this.tableData = tableData;
-    this.enableFilter = ['editar', 'ficha'];
+    this.enableFilter = ['editar', 'ficha', 'variables'];
   }
 
   public factoryMethod(): TableColumnInterface {
