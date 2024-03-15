@@ -23,50 +23,48 @@ interface TableProps {
 // react router. E.g. "cenoteando.org/table/cenote", we extract "cenote" and
 // we extract from a dictionary the route to fetch
 export const CenoteandoTableWrapper: React.FC<TableProps> = ({ route }) => {
-  const [tableData, setTableData] = useState<TableTypes[] | null>(null);
-  const { data, loading, error, fetch } = useApi(`api/${route}`, 'get', {
-    size: 3000,
-  });
+  // const [tableData, setTableData] = useState<TableTypes[] | null>(null);
+  // const { data, loading, error, fetch } = useApi(`api/${route}`, 'get', {
+  //   size: 3000,
+  // });
 
-  useEffect(() => {
-    if (data) {
-      setTableData(dataAdapter(route, data));
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data) {
+  //     setTableData(dataAdapter(route, data));
+  //   }
+  // }, [data]);
 
-  useEffect(() => {
-    fetch();
-  }, [route]);
+  // useEffect(() => {
+  //   fetch();
+  // }, [route]);
 
-  if (route === 'layers' || route === 'cenotes') {
-    const CenoteandoTableWrapper = getTableComponent(route);
-    return <CenoteandoTableWrapper />;
-  }
+  const CenoteandoTableWrapper = getTableComponent(route);
+  return <CenoteandoTableWrapper />;
 
   //TODO implement error handling
-  if (error) {
-    return null;
-  }
+  // if (error) {
+  //   return null;
+  // }
 
-  if (loading) {
-    return <LoadingSpinner />;
-  }
+  // if (loading) {
+  //   return <LoadingSpinner />;
+  // }
 
-  const columns = columnFactory(tableData)?.buildColumnHeaders() || undefined;
+  // const columns = columnFactory(tableData)?.buildColumnHeaders() || undefined;
 
-  if (!columns?.[0] || !columns?.[1]) {
-    return null;
-  }
+  // if (!columns?.[0] || !columns?.[1]) {
+  //   return null;
+  // }
 
-  return (
-    <AdminTablesContext.Provider
-      value={{
-        route: route,
-        tableData,
-        setTableData,
-      }}
-    >
-      <CenoteandoTable data={columns[1]} columns={columns[0]} />
-    </AdminTablesContext.Provider>
-  );
+  // return (
+  //   <AdminTablesContext.Provider
+  //     value={{
+  //       route: route,
+  //       tableData,
+  //       setTableData,
+  //     }}
+  //   >
+  //     <CenoteandoTable data={columns[1]} columns={columns[0]} />
+  //   </AdminTablesContext.Provider>
+  // );
 };

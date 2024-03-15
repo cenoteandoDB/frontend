@@ -1,12 +1,9 @@
-import React from 'react';
-
 import ReferenceModel from '../../models/ReferencesTypes';
-import { EditContent } from '../../pages/admin/components/edit-buttons';
 import {
-  ReferenceTableColumns,
   TableColumns,
-  TableTypes,
+  TableTypes
 } from '../../pages/admin/components/table/types';
+import { ReferencesTableQueryQuery } from '../../__generated__/graphql';
 import { ColumnCreator } from './table-column-creator';
 import { TableColumnInterface } from './table-column-interface';
 
@@ -26,19 +23,21 @@ export class ReferenceColumnCreator extends ColumnCreator {
 }
 
 class ReferenceColumns implements TableColumnInterface {
-  buildColumnHeaders(tableData: ReferenceModel[]): [string[], TableColumns[]] {
-    const columnHeaders = tableData.map(
-      (data) =>
-        ({
-          id: data.id,
-          autores: data.authors,
-          nombre_corto: data.shortName,
-          referencia: data.reference,
-          tipo: data.type,
-          año: data.year,
-          editar: <EditContent inputs={data} />,
-        } as ReferenceTableColumns)
-    );
+  buildColumnHeaders(
+    tableData: ReferencesTableQueryQuery['references']
+  ): [string[], TableColumns[]] {
+    const columnHeaders =
+      tableData?.map((data) => ({
+        unique_code: data.unique_code,
+        short_name: data.short_name,
+        type: data.type,
+        year: data.date_primary,
+        autores: data.authors,
+        doi: data.doi,
+        pdf: data.has_pdf,
+        // editar: <EditContent inputs={data} />,
+      })) ?? [];
+
     return [Object.keys(columnHeaders[0]), columnHeaders];
   }
 }

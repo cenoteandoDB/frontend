@@ -1,7 +1,7 @@
 import { CenoteModel } from '../../../../models/CenotesTypes';
 import ReferenceModel from '../../../../models/ReferencesTypes';
 import { VariableModel } from '../../../../models/VariablesTypes';
-import { CenoteIssue, CenoteType } from '../../../../__generated__/graphql';
+import { CenoteIssue, CenotesTableQueryQuery, CenoteType, LayersTableQueryQuery, ReferencesTableQueryQuery } from '../../../../__generated__/graphql';
 
 export const adaptCenoteType: Record<CenoteType, string> = {
   [CenoteType.Cenote]: 'Cenote',
@@ -58,3 +58,5 @@ export interface ReferenceTableColumns extends EditTableContent {
 export type TableColumns = CenoteTableColumns | VariableModel | object;
 
 export type TableTypes = CenoteModel | VariableModel | ReferenceModel;
+
+export type GraphqlTableTypes = CenotesTableQueryQuery['cenotes'] | LayersTableQueryQuery['layers'] | ReferencesTableQueryQuery['references']

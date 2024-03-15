@@ -581,25 +581,28 @@ export type Reference = {
   authors: Array<Scalars['String']['output']>;
   book?: Maybe<Scalars['String']['output']>;
   cenoteando_id: Scalars['ID']['output'];
+  cenotes_count: Scalars['Int']['output'];
   createdAt?: Maybe<Scalars['DateTime']['output']>;
-  date_primary: Scalars['Int']['output'];
+  date_primary?: Maybe<Scalars['Int']['output']>;
   date_secondary?: Maybe<Scalars['Int']['output']>;
   doi?: Maybe<Scalars['String']['output']>;
   firestore_id: Scalars['ID']['output'];
+  has_pdf: Scalars['Boolean']['output'];
   institution?: Maybe<Scalars['String']['output']>;
   issue?: Maybe<Scalars['String']['output']>;
   journal_name?: Maybe<Scalars['String']['output']>;
   keywords?: Maybe<Array<Scalars['String']['output']>>;
-  mendeley: Scalars['Boolean']['output'];
+  mendeley_ref: Scalars['Boolean']['output'];
   pages?: Maybe<Scalars['String']['output']>;
-  pdf: Scalars['Boolean']['output'];
   pdf_name?: Maybe<Scalars['String']['output']>;
-  short_name: Scalars['String']['output'];
+  short_name?: Maybe<Scalars['String']['output']>;
+  species_count: Scalars['Int']['output'];
   title: Scalars['String']['output'];
   type: ReferenceType;
   unique_code: Scalars['String']['output'];
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
-  uploaded_gc: Scalars['Boolean']['output'];
+  uploaded_dropbox: Scalars['Boolean']['output'];
+  uploaded_gcp: Scalars['Boolean']['output'];
   uploaded_mendeley: Scalars['Boolean']['output'];
   url?: Maybe<Scalars['String']['output']>;
   validated_mendeley: Scalars['Boolean']['output'];
@@ -607,11 +610,12 @@ export type Reference = {
 
 export enum ReferenceType {
   Book = 'BOOK',
-  ChapterOfBook = 'CHAPTER_OF_BOOK',
+  BookChapter = 'BOOK_CHAPTER',
   Journal = 'JOURNAL',
   Other = 'OTHER',
   Report = 'REPORT',
-  Thesis = 'THESIS'
+  Thesis = 'THESIS',
+  WebPage = 'WEB_PAGE'
 }
 
 export type RegisterInput = {
@@ -869,6 +873,11 @@ export type LayersTableQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type LayersTableQueryQuery = { __typename?: 'Query', layers?: Array<{ __typename?: 'MapLayer', description?: string | null, id: string, name: string, metadata?: string | null, thumbnail?: string | null } | null> | null };
 
+export type ReferencesTableQueryQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ReferencesTableQueryQuery = { __typename?: 'Query', references?: Array<{ __typename?: 'Reference', cenoteando_id: string, type: ReferenceType, unique_code: string, title: string, short_name?: string | null, date_primary?: number | null, authors: Array<string>, journal_name?: string | null, issue?: string | null, institution?: string | null, date_secondary?: number | null, book?: string | null, pages?: string | null, doi?: string | null, url?: string | null, keywords?: Array<string> | null, has_pdf: boolean, pdf_name?: string | null, mendeley_ref: boolean, uploaded_mendeley: boolean, validated_mendeley: boolean, uploaded_dropbox: boolean, uploaded_gcp: boolean, cenotes_count: number, species_count: number, createdAt?: any | null, updatedAt?: any | null }> | null };
+
 export type CenoteInformationByIdQueryVariables = Exact<{
   cenoteByIdId: Scalars['ID']['input'];
 }>;
@@ -894,6 +903,7 @@ export const CenoteByIdDocument = {"kind":"Document","definitions":[{"kind":"Ope
 export const UpdateCenoteDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateCenote"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"updatedCenote"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdatedCenoteInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateCenote"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"updated_cenote"},"value":{"kind":"Variable","name":{"kind":"Name","value":"updatedCenote"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"UpdateCenoteFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"UpdateCenoteFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Cenote"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"touristic"}},{"kind":"Field","name":{"kind":"Name","value":"issues"}},{"kind":"Field","name":{"kind":"Name","value":"alternativeNames"}}]}}]} as unknown as DocumentNode<UpdateCenoteMutation, UpdateCenoteMutationVariables>;
 export const CenotesTableQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CenotesTableQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cenotes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"location"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"state"}},{"kind":"Field","name":{"kind":"Name","value":"county"}}]}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"touristic"}},{"kind":"Field","name":{"kind":"Name","value":"issues"}},{"kind":"Field","name":{"kind":"Name","value":"variable_count"}}]}}]}}]} as unknown as DocumentNode<CenotesTableQueryQuery, CenotesTableQueryQueryVariables>;
 export const LayersTableQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"LayersTableQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"layers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"metadata"}},{"kind":"Field","name":{"kind":"Name","value":"thumbnail"}}]}}]}}]} as unknown as DocumentNode<LayersTableQueryQuery, LayersTableQueryQueryVariables>;
+export const ReferencesTableQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ReferencesTableQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"references"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cenoteando_id"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"unique_code"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"short_name"}},{"kind":"Field","name":{"kind":"Name","value":"date_primary"}},{"kind":"Field","name":{"kind":"Name","value":"authors"}},{"kind":"Field","name":{"kind":"Name","value":"journal_name"}},{"kind":"Field","name":{"kind":"Name","value":"issue"}},{"kind":"Field","name":{"kind":"Name","value":"institution"}},{"kind":"Field","name":{"kind":"Name","value":"date_secondary"}},{"kind":"Field","name":{"kind":"Name","value":"book"}},{"kind":"Field","name":{"kind":"Name","value":"pages"}},{"kind":"Field","name":{"kind":"Name","value":"doi"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"keywords"}},{"kind":"Field","name":{"kind":"Name","value":"has_pdf"}},{"kind":"Field","name":{"kind":"Name","value":"pdf_name"}},{"kind":"Field","name":{"kind":"Name","value":"mendeley_ref"}},{"kind":"Field","name":{"kind":"Name","value":"uploaded_mendeley"}},{"kind":"Field","name":{"kind":"Name","value":"validated_mendeley"}},{"kind":"Field","name":{"kind":"Name","value":"uploaded_dropbox"}},{"kind":"Field","name":{"kind":"Name","value":"uploaded_gcp"}},{"kind":"Field","name":{"kind":"Name","value":"cenotes_count"}},{"kind":"Field","name":{"kind":"Name","value":"species_count"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<ReferencesTableQueryQuery, ReferencesTableQueryQueryVariables>;
 export const CenoteInformationByIdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CenoteInformationById"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"cenoteByIdId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cenoteById"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"cenoteByIdId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alternativeNames"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"creator"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"role"}}]}},{"kind":"Field","name":{"kind":"Name","value":"distances"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"time"}},{"kind":"Field","name":{"kind":"Name","value":"location"}},{"kind":"Field","name":{"kind":"Name","value":"distance"}}]}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"issues"}},{"kind":"Field","name":{"kind":"Name","value":"location"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"state"}},{"kind":"Field","name":{"kind":"Name","value":"county"}},{"kind":"Field","name":{"kind":"Name","value":"country"}},{"kind":"Field","name":{"kind":"Name","value":"coordinates"}},{"kind":"Field","name":{"kind":"Name","value":"geojson"}}]}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"photos"}},{"kind":"Field","name":{"kind":"Name","value":"social"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"comments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"review"}},{"kind":"Field","name":{"kind":"Name","value":"commenter"}},{"kind":"Field","name":{"kind":"Name","value":"comment"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"touristic"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<CenoteInformationByIdQuery, CenoteInformationByIdQueryVariables>;
 export const LayersJsonDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"LayersJson"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"layers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<LayersJsonQuery, LayersJsonQueryVariables>;
 export const CenotesGeoJsonDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CenotesGeoJson"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cenotes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"touristic"}},{"kind":"Field","name":{"kind":"Name","value":"location"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"geojson"}}]}}]}}]}}]} as unknown as DocumentNode<CenotesGeoJsonQuery, CenotesGeoJsonQueryVariables>;
