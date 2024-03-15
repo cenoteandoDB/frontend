@@ -20,12 +20,15 @@ import {
   Text,
   Th,
   Thead,
+  Tooltip,
   Tr,
-  VStack
+  useToast,
+  VStack,
 } from '@chakra-ui/react';
 import {
   ColumnDef,
-  ColumnFiltersState, flexRender,
+  ColumnFiltersState,
+  flexRender,
   getCoreRowModel,
   getFacetedMinMaxValues,
   getFacetedRowModel,
@@ -33,12 +36,13 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  useReactTable
+  useReactTable,
 } from '@tanstack/react-table';
 import { Filter } from '../../../../components/filter';
 import { AddButton } from '../add-button.tsx';
 import { TableTypes } from './types';
 import { fuzzyFilter } from './utils/filters';
+import { LoadingSpinner } from '../../../../components/loading-spinner';
 
 interface TableProps {
   columns: ColumnDef<TableTypes, string>[];
@@ -48,7 +52,10 @@ interface TableProps {
 export const CenoteandoTable: React.FC<TableProps> = (props) => {
   const { data, columns } = props;
   const [tableData, setTableData] = React.useState(data);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
+  const toast = useToast();
   const [globalFilter, setGlobalFilter] = React.useState<string>('');
   const table = useReactTable({
     data: tableData,
@@ -108,8 +115,13 @@ export const CenoteandoTable: React.FC<TableProps> = (props) => {
             <AddButton />
           </Box>
         </Flex>
-        <VStack spacing={4} width='100%' justifyContent='center' direction='column'>
-          <Card>
+        <VStack
+          spacing={4}
+          width='100%'
+          justifyContent='center'
+          direction='column'
+        >
+          <Card width='95%'>
             <Box>
               <TableContainer
                 maxH='container.sm'
@@ -164,13 +176,25 @@ export const CenoteandoTable: React.FC<TableProps> = (props) => {
                               <Td
                                 key={`td-${cell.id}-${index}`}
                                 whiteSpace='break-spaces'
+                                maxW='80'
+                                minW='40'
                               >
-                                <Text>
-                                  {flexRender(
-                                    cell.column.columnDef.cell,
-                                    cell.getContext()
-                                  )}
-                                </Text>
+                                <Tooltip label={cell.getValue() as string}>
+                                  <Text noOfLines={[2, 2, 1]} onClick={() => {
+                                    navigator.clipboard.writeText(cell.getValue() as string);
+                                    toast({
+                                      title: 'Texto copiado!',
+                                      status: 'success',
+                                      duration: 3000,
+                                      isClosable: true,
+                                    });
+                                  }} >
+                                    {flexRender(
+                                      cell.column.columnDef.cell,
+                                      cell.getContext()
+                                    )}
+                                  </Text>
+                                </Tooltip>
                               </Td>
                             );
                           })}
@@ -182,6 +206,8 @@ export const CenoteandoTable: React.FC<TableProps> = (props) => {
               </TableContainer>
             </Box>
           </Card>
+        </VStack>
+        <VStack width='100%' justifyContent='center' direction='column'>
           <Flex width='100%' justify='space-evenly'>
             <Flex width='33%' justify='flex-start' gap={4}>
               <Box>
