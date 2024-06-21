@@ -1,1 +1,0 @@
-export { MapComponentWrapper } from './map-component-wrapper';

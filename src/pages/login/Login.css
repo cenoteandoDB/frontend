@@ -1,0 +1,44 @@
+.login-bg {
+  background: linear-gradient(
+      0deg,
+      rgba(218, 228, 252, 0.9),
+      rgba(218, 228, 252, 0.9)
+    ),
+    url("../../assets/Images/login_bg.jpg");
+  background-size: contain;
+}
+
+.margin-top-50 {
+  margin-top: 5px !important;
+}
+
+.login-title-font-card {
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 32px;
+  text-align: left;
+  color: #3d708f;
+  align-items: center;
+}
+
+.login-title {
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 48px;
+  color: #3d708f;
+}
+
+.login-text {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 28px;
+  color: #3d708f;
+}
+
+.login-box-cnt {
+  width: 100%;
+  height: auto;
+  padding: 52px 64px;
+  border-radius: 5px;
+  border: 1px;
+}

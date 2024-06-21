@@ -1,0 +1,161 @@
+/*Buttons*/
+.btn-white {
+  background-color: white;
+  outline: none;
+}
+
+.btn-white-border {
+  background-color: white;
+  outline: none;
+  border: 1px solid #88a7bb;
+}
+
+.btn-bg-blue {
+  padding: 8px 24px 8px 24px;
+  gap: 4px;
+  border-radius: 4px;
+  opacity: 0px;
+  background: #3d708f;
+  color: #ffff;
+}
+
+.btn-bg-blue-round {
+  padding: 8px 24px 8px 24px;
+  border-radius: 30px;
+  opacity: 0px;
+  background: #6292ca;
+  color: #ffff;
+}
+
+.btn_approve {
+  padding: 8px;
+  gap: 4px;
+  border-radius: 8px;
+  opacity: 0px;
+  background-color: #e2fff2;
+}
+
+.btn_detach {
+  padding: 8px;
+  gap: 4px;
+  border-radius: 8px;
+  opacity: 0px;
+  background-color: #ffd3d5;
+}
+
+/*Inputs*/
+.form-control-c {
+  border: none !important;
+
+  &:focus {
+    border: none;
+  }
+
+  &:active {
+    border: none;
+  }
+}
+
+/*Tables*/
+.bg-header-footer {
+  background-color: #f8fafc;
+}
+
+/*Tags*/
+.bg-tag-success {
+  padding: 3px 6px;
+  background-color: #f8fafc;
+}
+
+.tag-red-round {
+  padding: 1px 8px 1px 8px;
+  gap: 4px;
+  border-radius: 14px;
+  opacity: 0px;
+  background-color: #fedad9;
+  color: #ad070d;
+}
+
+.tag-yellow-round {
+  padding: 1px 8px 1px 8px;
+  gap: 4px;
+  border-radius: 14px;
+  opacity: 0px;
+  background-color: #fff3b9;
+  color: #71600e;
+}
+
+.tag-blue-round {
+  padding: 1px 8px 1px 8px;
+  gap: 4px;
+  border-radius: 14px;
+  opacity: 0px;
+  background-color: #c8e2ff;
+  color: #104887;
+}
+
+.tag-green-round {
+  padding: 1px 8px 1px 8px;
+  gap: 4px;
+  border-radius: 14px;
+  opacity: 0px;
+  background-color: #e2fff2;
+  color: #244c3a;
+}
+
+.tag-gray-round {
+  padding: 1px 8px 1px 8px;
+  gap: 4px;
+  border-radius: 14px;
+  opacity: 0px;
+  background-color: #f1f1f1;
+  color: #525252;
+}
+
+.tag-bluesky-round {
+  padding: 1px 8px 1px 8px;
+  gap: 4px;
+  border-radius: 14px;
+  opacity: 0px;
+  background-color: #f8fafc;
+  color: #104887;
+}
+
+/*Modals*/
+.modal-title-c {
+  margin-bottom: 0;
+  line-height: 0.5;
+  font-weight: 900;
+  letter-spacing: -1px;
+}
+
+.modal-label-c {
+  font-size: 14px;
+  font-weight: 100;
+  line-height: 20px;
+  text-align: left;
+}
+
+/*Labels*/
+.lbl-bread-subtitle {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 28px;
+}
+
+.lbl-bread-title {
+  font-size: 48px;
+  font-weight: 900;
+  line-height: 48px;
+}
+
+/*##SECTIONS*/
+/*Home*/
+.header-section-text-cnt {
+  font-size: large;
+  font-weight: 700;
+}
+
+.react-photo-album--photo {
+  border-radius: 10px;
+}

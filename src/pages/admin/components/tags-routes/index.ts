@@ -1,1 +1,0 @@
-export { TagsRoutes } from './tags-routes';

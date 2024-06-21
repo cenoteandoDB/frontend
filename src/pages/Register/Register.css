@@ -1,0 +1,18 @@
+.profile-item {
+    padding: 8px 24px;
+    border-radius: 16px;
+    opacity: 0px;
+    margin: 5px;
+    border: 1px solid #CDCDCD;
+    background-color: transparent;
+}
+
+.profile-item-selected {
+    padding: 8px 24px;
+    border-radius: 16px;
+    opacity: 0px;
+    margin: 5px;
+    color: white;
+    border: 1px solid #CDCDCD;
+    background-color: #6292CA;
+}

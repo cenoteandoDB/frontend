@@ -1,1 +1,0 @@
-export {CenotesCard } from './Card';

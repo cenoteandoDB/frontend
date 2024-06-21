@@ -1,0 +1,16 @@
+.avatar-dropdown{
+padding: 4px 8px 4px 6px;
+border-radius: 12px;
+background-color: #F8FAFC;
+color: #525252;
+height: inherit;
+font-weight: 700;
+}
+
+.nav-item > a {
+    padding-top: 5px !important; 
+}
+
+.img-height{
+    height: inherit;
+}

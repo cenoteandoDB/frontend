@@ -1,0 +1,19 @@
+.img-fluid {
+  border-radius: 8px;
+  width: 100%;
+  height: auto;
+}
+
+.position-icon {
+  top: 3px;
+  right: 10px;
+}
+
+.tag-icon-cnt {
+  color: #104887;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  text-align: left;
+  font-variation-settings: "slnt" 0;
+}

@@ -1,0 +1,43 @@
+.card-primary.card-outline-tabs > .card-header a.active {
+  border-top: none !important;
+  border-bottom: 1.5px solid #3d708f !important;
+  color: #3d708f;
+}
+
+.nav-item > a {
+  padding: 20px 20px;
+  color: #3d708f;
+  font-weight: 600;
+}
+
+.image-center {
+  margin-left: 40%;
+}
+
+.mapa {
+  border-radius: 5px;
+}
+/*Texts*/
+.title-color {
+  color: #3d708f;
+}
+
+.title-weight {
+  font-weight: 800;
+}
+
+/*Box*/
+.container-blue {
+  background: #f8fafc;
+  padding: 16px 32px;
+  border-radius: 4px;
+}
+
+.left {
+  float: left;
+  width: 50%;
+}
+
+.right {
+  margin-left: 50%;
+}
