@@ -100,7 +100,10 @@ export const Users = () => {
   const handleActionDeleteConfirm = () => {
     setShowDeleteModal(false);
     setItemIdSelected('');
-    handleDelete(ItemIdSelected)
+    if(ItemIdSelected){
+      handleDelete(ItemIdSelected)
+    }
+  
   };
 
   const handleActionDeleteCancel = () => {
@@ -139,7 +142,7 @@ export const Users = () => {
               <div className="col-sm-6 col-md-7">
                 <div className="row">
                   <div className="col-md-6">
-                    <form onSubmit={handleSearch}>
+                    <form onSubmit={() => handleSearch}>
                       <div className="input-group input-group-sm">
                         <div className="input-group-append">
                           <span

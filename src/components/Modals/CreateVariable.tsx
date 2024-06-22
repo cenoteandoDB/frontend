@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import { EnumsInterface } from "../../Types/UserTypes";
 import { useCreateVariable, useCategories, useAcessLevel, useVariableType, useThemes, useSpheres, useOrigin } from "../../graphql/Variables/VariablesCustomHooks";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { SingleModalPropsInterface } from '../../Types/UtilsTypes'
 import { VariableInterface } from "../../Types/VariablesTypes";

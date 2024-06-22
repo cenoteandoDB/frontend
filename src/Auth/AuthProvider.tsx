@@ -18,7 +18,7 @@ const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
   const [email, setEmail] = useState<string | null>(localStorage.getItem('email'));
-  const { user: fetchedUser, loading, error: fetchError } = useUserByEmail(email || '');
+  const { user: fetchedUser, error: fetchError } = useUserByEmail(email || '');
   const [user, setUser] = useState<UserInterface | undefined>();
   const [error, setError] = useState<string | null>(null);
 
