@@ -3,6 +3,7 @@ import { DashboardData } from "../Dashboard/DashboardData";
 import { InviteUser } from "../../Components/Modals/InviteUser";
 import { useCenotes } from "../../graphql/Cenotes/CenotesCustomHooks";
 import { CenoteInterface } from "../../Types/CenotesTypes";
+import { PaginationInterface, SortInterface } from "../../Types/UserTypes";
 
 export const List_cenotes = () => {
   const initialPagination: PaginationInterface = { limit: 50, offset: 0 };
