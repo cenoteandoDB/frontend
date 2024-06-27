@@ -72,12 +72,15 @@ query GetUserById($getUserByIdId: ID!) {
 export const ALL_USERS_BY_SORT = `
   query GetUsers($pagination: PaginationInput, $sort: SortField, $name: String) {
     getUsers(pagination: $pagination, sort: $sort, name: $name) {
-      id
-      name
-      surname
-      email
-      createdAt
-      profile
+    totalCount
+      users {
+        id
+        name
+        surname
+        email
+        createdAt
+        profile
+      }
     }
 }`;
 

@@ -4,13 +4,21 @@ import { useCreateVariable, useCategories, useAcessLevel, useVariableType, useTh
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { SingleModalPropsInterface } from '../../Types/UtilsTypes'
-import { VariableInterface } from "../../Types/VariablesTypes";
+import { CreateVariableInterface } from "../../Types/VariablesTypes";
 
-export const CreateVariable:React.FC<SingleModalPropsInterface> = ({showModal, handleToggleModal}) => {
-    const initialVariablesForm: VariableInterface = {
-        id: "", category: "", accessLevel: "", cenote_count: "0", createdAt: "",description: "", firestore_id: "",
-        methodology: "", name: "", origin: "", sphere: "", theme: "", timeseries: "true", type: "", units: "", updatedAt: "",
-    }
+export const CreateVariable:React.FC<SingleModalPropsInterface> = ({showModal, handleToggleModal, refetch}) => {
+    const initialVariablesForm: CreateVariableInterface = {
+      name: "",
+      description: "",
+      category: "",
+      accessLevel: "",
+      type: "",
+      theme: "",
+      sphere: "",
+      origin: "",
+      units: "",
+      methodology: "",
+      timeseries: true }
 
     const { categoryData, categoryLoading } = useCategories();
     const { acessLevelData, acessLevelLoading} = useAcessLevel();
@@ -21,8 +29,44 @@ export const CreateVariable:React.FC<SingleModalPropsInterface> = ({showModal, h
     const { createVariable, loading, error, success } = useCreateVariable();
    
     const loading_ = loading || categoryLoading || acessLevelLoading || variableTypeLoading || themesLoading || spheresLoading || originLoading;
-    const [variableFormData, setVariableFormData] = useState<VariableInterface>(initialVariablesForm);
+    const [variableFormData, setVariableFormData] = useState<CreateVariableInterface>(initialVariablesForm);
+      
+    useEffect(() => {
+      if (!categoryLoading && categoryData && categoryData.length > 0) {
+        setVariableFormData(prev => ({ ...prev, category: categoryData[0].name }));
+      }
+    }, [categoryLoading, categoryData]);
   
+    useEffect(() => {
+      if (!acessLevelLoading && acessLevelData && acessLevelData.length > 0) {
+        setVariableFormData(prev => ({ ...prev, accessLevel: acessLevelData[0].name }));
+      }
+    }, [acessLevelLoading, acessLevelData]);
+  
+    useEffect(() => {
+      if (!variableTypeLoading && variableTypeData && variableTypeData.length > 0) {
+        setVariableFormData(prev => ({ ...prev, type: variableTypeData[0].name }));
+      }
+    }, [variableTypeLoading, variableTypeData]);
+  
+    useEffect(() => {
+      if (!themesLoading && themesData && themesData.length > 0) {
+        setVariableFormData(prev => ({ ...prev, theme: themesData[0].name }));
+      }
+    }, [themesLoading, themesData]);
+  
+    useEffect(() => {
+      if (!spheresLoading && spheresData && spheresData.length > 0) {
+        setVariableFormData(prev => ({ ...prev, sphere: spheresData[0].name }));
+      }
+    }, [spheresLoading, spheresData]);
+  
+    useEffect(() => {
+      if (!originLoading && originData && originData.length > 0) {
+        setVariableFormData(prev => ({ ...prev, origin: originData[0].name }));
+      }
+    }, [originLoading, originData]);
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setVariableFormData((prevState) => ({
@@ -33,25 +77,27 @@ export const CreateVariable:React.FC<SingleModalPropsInterface> = ({showModal, h
   
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        console.log(variableFormData)
-       // createVariable(variableFormData);
+        createVariable(variableFormData);
     };
   
     useEffect(() => {
       if (error) {
-        toast.error(`Error inviting user: ${error.message}`);
+        toast.error('La operación no se pudo completar, inténtelo nuevamente.')
         if (handleToggleModal) {
           handleToggleModal();
         }
       }
       if (success) {
         toast.success("Operación exitosa");
+        if(refetch){
+          refetch()
+        }
         if (handleToggleModal) {
           handleToggleModal();
         }
+        setVariableFormData(initialVariablesForm);
       }
-      setVariableFormData(initialVariablesForm);
-  }, [error, success]);
+    }, [error, success]);
   
     return (
       <div>
@@ -218,7 +264,7 @@ export const CreateVariable:React.FC<SingleModalPropsInterface> = ({showModal, h
                       data-dismiss="modal"
                       onClick={handleToggleModal}
                     >
-                      Close
+                      Cerrar
                     </button>
                     <button  type="submit"  className="btn btn-primary">
                       Guardar

@@ -9,6 +9,7 @@ export interface ConfirmActionPropsInterface {
 export interface SingleModalPropsInterface {
   showModal: boolean;
   handleToggleModal?: () => void;
+  refetch?: () => void;
 }
 
 export interface UpdateUserPropsInterface {

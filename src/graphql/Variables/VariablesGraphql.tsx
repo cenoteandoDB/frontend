@@ -2,21 +2,24 @@
 export const GET_VARIABLES = `
 query GetVariables($sort: SortField, $pagination: PaginationInput, $name: String) {
     getVariables(sort: $sort, pagination: $pagination, name: $name) {
-      category
-      accessLevel
-      cenote_count
-      createdAt
-      description
-      firestore_id
-      methodology
-      name
-      origin
-      sphere
-      theme
-      timeseries
-      type
-      units
-      updatedAt
+      totalCount
+      variables {
+        category
+        accessLevel
+        cenote_count
+        createdAt
+        description
+        firestore_id
+        methodology
+        name
+        origin
+        sphere
+        theme
+        timeseries
+        type
+        units
+        updatedAt
+      }
     }
 }`;
 
@@ -28,7 +31,7 @@ mutation DeleteVariable($deleteVariableId: ID!) {
 export const CREATE_VARIABLE = `
 mutation CreateVariable($newVariable: NewVariableInput!) {
   createVariable(new_variable: $newVariable) {
-    name
+    id
   }
 }`;
 

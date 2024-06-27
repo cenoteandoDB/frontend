@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { DashboardData } from "../Dashboard/DashboardData";
 import { InviteUser } from "../../Components/Modals/InviteUser";
+import { useCenotes } from "../../graphql/Cenotes/CenotesCustomHooks";
+import { CenoteInterface } from "../../Types/CenotesTypes";
 
 export const List_cenotes = () => {
-  const [showModal, setShowModal] = useState(false);
+  const initialPagination: PaginationInterface = { limit: 50, offset: 0 };
+  const initialSort: SortInterface = { sortOrder: "ASC", field: "name" };
+  //const initialName: string | null = null;
 
-  const handleToggleModal = () => {
-    setShowModal(!showModal);
-  };
+  const { cenotesData, cenotesError, cenotesLoading, refetchCenotes, updatePagination, updateSort, searchCenoteByName, currentSortOrder, totalItems} = useCenotes(initialPagination, initialSort);
 
   return (
     <>
@@ -47,21 +49,7 @@ export const List_cenotes = () => {
                       Nuevo cenote
                     </button>
                   </div>
-                  <div className="col-md-1">
-                    <a className="btn btn-block btn-white  btn-sm">
-                      <img src="/src/assets/Icons/edit.svg" alt="" />
-                    </a>
-                  </div>
-                  <div className="col-md-1">
-                    <a className="btn btn-block btn-white  btn-sm">
-                      <img src="/src/assets/Icons/heart.svg" alt="" />
-                    </a>
-                  </div>
-                  <div className="col-md-1">
-                    <a className="btn btn-block btn-white  btn-sm">
-                      <img src="/src/assets/Icons/upload.svg" alt="" />
-                    </a>
-                  </div>
+                
                 </div>
               </div>
             </div>
@@ -76,23 +64,8 @@ export const List_cenotes = () => {
                     <table className="table table-hover text-nowrap">
                       <thead className="bg-header-footer">
                         <tr>
-                          <th>
-                            <div>
-                              <input
-                                type="checkbox"
-                                id="myCheckbox"
-                                name="myCheckbox"
-                              />
-                            </div>
-                          </th>
+                        
                           <th></th>
-                          <th>
-                            ID{" "}
-                            <img
-                              src="/src/assets/Icons/arrow-down.svg"
-                              alt=""
-                            />
-                          </th>
                           <th>
                             Nombre de cenote{" "}
                             <img
@@ -153,272 +126,47 @@ export const List_cenotes = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <th>
-                            <input type="checkbox" />
-                          </th>
-                          <td>
-                            {" "}
-                            <a>
-                              <img src="/src/assets/Icons/heart.svg" alt="" />
-                            </a>
-                          </td>
-                          <td>1234567 </td>
-                          <td>Chen kin</td>
-                          <td>Yucatán</td>
-                          <td>Tizimin</td>
-                          <td>Sin Tipo</td>
-                          <td>11-7-2014</td>
-                          <td>2-7-2014</td>
-                          <td>
-                            <span className="tag tag-blue-round">
-                              {" "}
-                              <img
-                                src="/src/assets/Icons/beach.svg"
-                                alt=""
-                              />{" "}
-                              Turismo
-                            </span>
-                          </td>
-                          <td>8</td>
-                          <td>
-                            {" "}
-                            <a>
-                              <img src="/src/assets/Icons/eye.svg" alt="" />
-                            </a>
-                            <a>
-                              <img src="/src/assets/Icons/trash.svg" alt="" />
-                            </a>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th>
-                            <input type="checkbox" />
-                          </th>
-                          <td>
-                            {" "}
-                            <a>
-                              <img src="/src/assets/Icons/heart.svg" alt="" />
-                            </a>
-                          </td>
-                          <td>1234567 </td>
-                          <td>Chen kin</td>
-                          <td>Yucatán</td>
-                          <td>Tizimin</td>
-                          <td>Sin Tipo</td>
-                          <td>11-7-2014</td>
-                          <td>2-7-2014</td>
-                          <td>
-                            <span className="tag tag-blue-round">
-                              {" "}
-                              <img
-                                src="/src/assets/Icons/beach.svg"
-                                alt=""
-                              />{" "}
-                              Turismo
-                            </span>
-                          </td>
-                          <td>8</td>
-                          <td>
-                            {" "}
-                            <a>
-                              <img src="/src/assets/Icons/eye.svg" alt="" />
-                            </a>
-                            <a>
-                              <img src="/src/assets/Icons/trash.svg" alt="" />
-                            </a>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th>
-                            <input type="checkbox" />
-                          </th>
-                          <td>
-                            {" "}
-                            <a>
-                              <img src="/src/assets/Icons/heart.svg" alt="" />
-                            </a>
-                          </td>
-                          <td>1234567 </td>
-                          <td>Chen kin</td>
-                          <td>Yucatán</td>
-                          <td>Tizimin</td>
-                          <td>Sin Tipo</td>
-                          <td>11-7-2014</td>
-                          <td>2-7-2014</td>
-                          <td>
-                            <span className="tag tag-blue-round">
-                              {" "}
-                              <img
-                                src="/src/assets/Icons/beach.svg"
-                                alt=""
-                              />{" "}
-                              Turismo
-                            </span>
-                          </td>
-                          <td>8</td>
-                          <td>
-                            {" "}
-                            <a>
-                              <img src="/src/assets/Icons/eye.svg" alt="" />
-                            </a>
-                            <a>
-                              <img src="/src/assets/Icons/trash.svg" alt="" />
-                            </a>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <input type="checkbox" />
-                          </td>
-                          <td>
-                            {" "}
-                            <a>
-                              <img src="/src/assets/Icons/heart.svg" alt="" />
-                            </a>
-                          </td>
-                          <td>1234567 </td>
-                          <td>Chen kin</td>
-                          <td>Yucatán</td>
-                          <td>Tizimin</td>
-                          <td>Sin Tipo</td>
-                          <td>11-7-2014</td>
-                          <td>2-7-2014</td>
-                          <td>
-                            <span className="tag tag-blue-round">
-                              {" "}
-                              <img
-                                src="/src/assets/Icons/beach.svg"
-                                alt=""
-                              />{" "}
-                              Turismo
-                            </span>
-                          </td>
-                          <td>8</td>
-                          <td>
-                            {" "}
-                            <a>
-                              <img src="/src/assets/Icons/eye.svg" alt="" />
-                            </a>
-                            <a>
-                              <img src="/src/assets/Icons/trash.svg" alt="" />
-                            </a>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <input type="checkbox" />
-                          </td>
-                          <td>
-                            {" "}
-                            <a>
-                              <img src="/src/assets/Icons/heart.svg" alt="" />
-                            </a>
-                          </td>
-                          <td>1234567 </td>
-                          <td>Chen kin</td>
-                          <td>Yucatán</td>
-                          <td>Tizimin</td>
-                          <td>Sin Tipo</td>
-                          <td>11-7-2014</td>
-                          <td>2-7-2014</td>
-                          <td>
-                            <span className="tag tag-blue-round">
-                              {" "}
-                              <img
-                                src="/src/assets/Icons/beach.svg"
-                                alt=""
-                              />{" "}
-                              Turismo
-                            </span>
-                          </td>
-                          <td>8</td>
-                          <td>
-                            {" "}
-                            <a>
-                              <img src="/src/assets/Icons/eye.svg" alt="" />
-                            </a>
-                            <a>
-                              <img src="/src/assets/Icons/trash.svg" alt="" />
-                            </a>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th>
-                            <input type="checkbox" />
-                          </th>
-                          <td>
-                            {" "}
-                            <a>
-                              <img src="/src/assets/Icons/heart.svg" alt="" />
-                            </a>
-                          </td>
-                          <td>1234567 </td>
-                          <td>Chen kin</td>
-                          <td>Yucatán</td>
-                          <td>Tizimin</td>
-                          <td>Sin Tipo</td>
-                          <td>11-7-2014</td>
-                          <td>2-7-2014</td>
-                          <td>
-                            <span className="tag tag-blue-round">
-                              {" "}
-                              <img
-                                src="/src/assets/Icons/beach.svg"
-                                alt=""
-                              />{" "}
-                              Turismo
-                            </span>
-                          </td>
-                          <td>8</td>
-                          <td>
-                            {" "}
-                            <a>
-                              <img src="/src/assets/Icons/eye.svg" alt="" />
-                            </a>
-                            <a>
-                              <img src="/src/assets/Icons/trash.svg" alt="" />
-                            </a>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th>
-                            <input type="checkbox" />
-                          </th>
-                          <td>
-                            {" "}
-                            <a>
-                              <img src="/src/assets/Icons/heart.svg" alt="" />
-                            </a>
-                          </td>
-                          <td>1234567 </td>
-                          <td>Chen kin</td>
-                          <td>Yucatán</td>
-                          <td>Tizimin</td>
-                          <td>Sin Tipo</td>
-                          <td>11-7-2014</td>
-                          <td>2-7-2014</td>
-                          <td>
-                            <span className="tag tag-blue-round">
-                              {" "}
-                              <img
-                                src="/src/assets/Icons/beach.svg"
-                                alt=""
-                              />{" "}
-                              Turismo
-                            </span>
-                          </td>
-                          <td>8</td>
-                          <td>
-                            {" "}
-                            <a>
-                              <img src="/src/assets/Icons/eye.svg" alt="" />
-                            </a>
-                            <a>
-                              <img src="/src/assets/Icons/trash.svg" alt="" />
-                            </a>
-                          </td>
-                        </tr>
+                      {cenotesData && cenotesData.map((item: CenoteInterface) => (
+                          <tr key={item.firestore_id}>
+                            <td>
+                              <a>
+                                <img src="/src/assets/Icons/heart.svg" alt="" />
+                              </a>
+                            </td>
+                            <td>{item.name}</td>
+                            <td>{item.state}</td>
+                            <td>{item.municipality}</td>
+                            <td>{item.type ? item.type : 'SIN TIPO'}</td>
+                            <td>{item.createdAt}</td>
+                            <td>{item.updatedAt}</td>
+                            <td>
+                              {item.touristic && (
+                                <span className="tag tag-blue-round">
+                                {" "}
+                                <img
+                                  src="/src/assets/Icons/beach.svg"
+                                  alt=""
+                                />{" "}
+                                Turismo
+                              </span>
+                              )}
+                          
+                            </td>
+                            <td>{item.variable_count}</td>
+                            <td>
+                            
+                              <a>
+                                <img src="/src/assets/Icons/eye.svg" alt="" />
+                              </a>
+                              <a>
+                                <img src="/src/assets/Icons/trash.svg" alt="" />
+                              </a>
+                            </td>
+                          </tr>
+                          )
+                      )}
+                       
+                     
                       </tbody>
                     </table>
                   </div>
@@ -455,10 +203,7 @@ export const List_cenotes = () => {
               </div>
             </div>
           </div>
-          <InviteUser
-            showModal={showModal}
-            handleToggleModal={handleToggleModal}
-          ></InviteUser>
+         
         </section>
       </DashboardData>
     </>

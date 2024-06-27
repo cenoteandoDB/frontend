@@ -1,7 +1,7 @@
 import React,  { useState, useEffect, useCallback } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client"; 
 import { GET_VARIABLES, DELETE_VARIABLE, CREATE_VARIABLE, GET_ENUM_CATEGORY_VALUES, GET_ENUM_ACCESS_LEVEL_VALUES, GET_ENUM_VARIABLE_TYPE_VALUES, GET_ENUM_SPHERE_VALUES, GET_ENUM_ORIGIN_VALUES} from "./VariablesGraphql";
-import { VariableInterface } from "../../Types/VariablesTypes";
+import { CreateVariableInterface, VariableInterface } from "../../Types/VariablesTypes";
 import { PaginationInterface, SortInterface } from "../../Types/UserTypes";
 import { GET_ENUM_THEME_VALUES } from "../Users/UsersGraphql";
 
@@ -39,23 +39,24 @@ export const useVariables = (initialPagination: PaginationInterface, initialSort
     }, [pagination, sort, name, refetch]);
 
     return {
-        variableData: data ? data.getVariables : [],
+        variableData: data ? data.getVariables.variables : [],
         variableError: error,
         variableLoading: loading,
         refetchVariables: refetch,
         updatePagination,
         updateSort,
         searchVariableByName,
-        currentSortOrder: sort.sortOrder 
+        currentSortOrder: sort.sortOrder,
+        totalItems: data ? data.getVariables.totalCount : 0,
     };
 };
 
 export const useCreateVariable = () => {
     const [ createVariableMutation, {data, error, loading,} ] = useMutation(gql`${CREATE_VARIABLE}`);
     const [success, setSuccess] = useState<boolean>(false);
-    const createVariable = async (variables: VariableInterface) => {
+    const createVariable = async (variable_data: CreateVariableInterface) => {
         try {
-            await createVariableMutation({ variables });
+            await createVariableMutation({ variables:{newVariable: variable_data} });
             setSuccess(true);
         } catch (err) {
             setSuccess(false);

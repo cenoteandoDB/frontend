@@ -12,11 +12,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import _, { set } from 'lodash';
 
 export const Users = () => {
-  const initialPagination: PaginationInterface = { limit: 10, offset: 0 };
+  const initialPagination: PaginationInterface = { limit: 50, offset: 0 };
   const initialSort: SortInterface = { sortOrder: "ASC", field: "name" };
   //const initialName: string | null = null;
 
-  const { usersData, usersError, usersLoading, refetchUsers, updatePagination, updateSort, searchUserByName, currentSortOrder} = useUsers(initialPagination, initialSort);
+  const { usersData, usersError, usersLoading, refetchUsers, updatePagination, updateSort, searchUserByName, currentSortOrder, totalItems} = useUsers(initialPagination, initialSort);
   const { handleDeleteUser, deleteUserLoading, deleteUserError, deleteUserData } = useDeleteUser();
 
   const loading = usersLoading || deleteUserLoading;
@@ -35,26 +35,22 @@ export const Users = () => {
     setSort({ field: field, sortOrder: newSortOrder})
     updateSort({ field: field, sortOrder: newSortOrder});
   };
-
+  
   const handleNextPage = () => {
-    console.log((initialPagination.offset || 0) + usersData.length < initialPagination.limit ? 0 : 1  )
-    setCurrentPage((initialPagination.offset || 0) + initialPagination.limit);
-    updatePagination({ offset: (initialPagination.offset || 0) + initialPagination.limit });
-    //updatePagination({ offset: (initialPagination.offset || 0) + usersData.length < initialPagination.limit ? 1 : 0   });
+    const nextPage = currentPage + 1;
+    setCurrentPage(nextPage);
+    updatePagination({ ...initialPagination, offset: nextPage * initialPagination.limit });
   };
 
   const handlePreviousPage = () => {
-    console.log(Math.max((initialPagination.offset || 0) - initialPagination.limit, 0))
-    setCurrentPage(Math.max((initialPagination.offset || 0) - initialPagination.limit, 0));
-    updatePagination({ offset: Math.max((initialPagination.offset || 0) - initialPagination.limit, 0) });
+    const prevPage = currentPage - 1;
+    setCurrentPage(prevPage);
+    updatePagination({ ...initialPagination, offset: (prevPage - 1) * initialPagination.limit });
   };
 
-  const handlePage = (page: string) => {
-    if(Number(page) >= Math.max((initialPagination.offset || 0) - initialPagination.limit, 0)){
-      updatePagination({ offset:  Math.max((initialPagination.offset || 0) - initialPagination.limit, 0) });
-    } else {
-      updatePagination({ offset: Number(page) });
-    }
+  const handlePage = (page: number) => {
+    setCurrentPage(page);
+    updatePagination({ ...initialPagination, offset: (page - 1) * initialPagination.limit });
   };
 
   const handleSearch = useCallback(
@@ -80,8 +76,6 @@ export const Users = () => {
     setShowUpdatModal(!showUpdateModal);
     if(!showUpdateModal){
       setItemIdSelected(null);
-      console.log("setItemIdSelected")
-      console.log(setItemIdSelected)
     }
    
   };
@@ -277,23 +271,34 @@ export const Users = () => {
                       </tbody>
                     </table>
                     ) }
-                   
-                    
                   </div>
                   <div className="card-footer clearfix bg-header-footer">
                     <ul className="pagination pagination-sm m-0 float-right">
-                      <li className="page-item">
-                        <a className="page-link" onClick={() => handlePreviousPage()}>
-                          «
+                      <li className="page-item mr-3">
+                        <a className="">
+                          Total: {totalItems}
                         </a>
                       </li>
-                      {/*<li className="page-item">
-                        <input type="number" onChange={evt => handlePage(evt.target.value)} />
-                      </li>*/}
                       <li className="page-item">
-                        <a className="page-link" onClick={() => handleNextPage()}>
+                        <button className="page-link" disabled={currentPage == 1} onClick={handlePreviousPage}>
+                          «
+                        </button>
+                      </li>
+                      {Array.from({ length: Math.ceil(totalItems / initialPagination.limit) }, (_, index) => (
+                        <li className="page-item" key={index}>
+                          <a
+                            className={currentPage === index + 1 ? "page-link text-white bg-primary" : "page-link"}
+                            onClick={() => handlePage(index + 1)}
+                          >
+                             {index + 1}
+                  
+                          </a>
+                        </li>
+                      ))}
+                      <li className="page-item" >
+                        <button className="page-link" disabled={currentPage  == Math.ceil(totalItems / initialPagination.limit)} onClick={handleNextPage}>
                           »
-                        </a>
+                        </button>
                       </li>
                     </ul>
                   </div>

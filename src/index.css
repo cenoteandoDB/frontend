@@ -56,6 +56,10 @@
   }
 }
 
+.cursor-pointer{
+  cursor: pointer;
+}
+
 /*Tables*/
 .bg-header-footer {
   background-color: #f8fafc;

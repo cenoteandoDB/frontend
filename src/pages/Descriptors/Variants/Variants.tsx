@@ -11,11 +11,11 @@ import { ConfirmAction } from "../../../Components/Modals/ConfirmAction";
 import { CreateVariable } from "../../../Components/Modals/CreateVariable";
 
 export const Variants = () => {
-  const initialPagination: PaginationInterface = { limit: 10, offset: 0 };
+  const initialPagination: PaginationInterface = { limit: 50, offset: 0 };
   const initialSort: SortInterface = { sortOrder: "ASC", field: "name" };
   const initialName: string | null = null;
 
-  const { variableData,  variableError,  variableLoading, refetchVariables, updatePagination, updateSort, searchVariableByName, currentSortOrder} = useVariables(initialPagination, initialSort);
+  const { variableData,  variableError,  variableLoading, refetchVariables, updatePagination, updateSort, searchVariableByName, currentSortOrder, totalItems} = useVariables(initialPagination, initialSort);
   const { handleDeleteVariable, deleteVariableLoading, deleteVariableError, deleteVariableData } = useDeleteVariable();
   const loading =  variableLoading || deleteVariableLoading;
   const noData = !variableLoading && (!variableData || variableData.length === 0);
@@ -31,28 +31,26 @@ export const Variants = () => {
   };
 
   const handleNextPage = () => {
-    console.log((initialPagination.offset || 0) + variableData.length < initialPagination.limit ? 0 : 1  )
-    setCurrentPage((initialPagination.offset || 0) + initialPagination.limit);
-    updatePagination({ offset: (initialPagination.offset || 0) + initialPagination.limit });
-    //updatePagination({ offset: (initialPagination.offset || 0) + usersData.length < initialPagination.limit ? 1 : 0   });
+    const nextPage = currentPage + 1;
+    setCurrentPage(nextPage);
+    updatePagination({ ...initialPagination, offset: nextPage * initialPagination.limit });
   };
 
   const handlePreviousPage = () => {
-    console.log(Math.max((initialPagination.offset || 0) - initialPagination.limit, 0))
-    setCurrentPage(Math.max((initialPagination.offset || 0) - initialPagination.limit, 0));
-    updatePagination({ offset: Math.max((initialPagination.offset || 0) - initialPagination.limit, 0) });
+    const prevPage = currentPage - 1;
+    setCurrentPage(prevPage);
+    updatePagination({ ...initialPagination, offset: (prevPage - 1) * initialPagination.limit });
   };
 
-  const handlePage = (page: string) => {
-    if(Number(page) >= Math.max((initialPagination.offset || 0) - initialPagination.limit, 0)){
-      updatePagination({ offset:  Math.max((initialPagination.offset || 0) - initialPagination.limit, 0) });
-    } else {
-      updatePagination({ offset: Number(page) });
-    }
+  const handlePage = (page: number) => {
+    setCurrentPage(page);
+    updatePagination({ ...initialPagination, offset: (page - 1) * initialPagination.limit });
   };
 
   const handleSearch = useCallback(
     _.debounce((name: string) => {
+      setCurrentPage(0);
+      updatePagination({ ...initialPagination, offset: 0 });
       searchVariableByName(name);
     }, 1000),
     []
@@ -86,6 +84,10 @@ export const Variants = () => {
     setItemIdSelected('');
   };
 
+  const handleDisplayDescription = (id: string) => {
+    setItemIdSelected(prevId => (prevId === id ? null : id));
+  };
+
    //USE EFECTS
    useEffect(() => {
       handleSearch(searchName);
@@ -93,7 +95,7 @@ export const Variants = () => {
 
   useEffect(() => {
     if (deleteVariableData) {
-      toast.success("Usuario eliminado exitosamente");
+      toast.success("Registro eliminado exitosamente");
       refetchVariables();
     }
   }, [deleteVariableData, refetchVariables]);
@@ -112,7 +114,7 @@ export const Variants = () => {
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6 col-md-5">
-                <h1>Variantes</h1>
+                <h1>Variables</h1>
                 <ToastContainer />
               </div>
               <div className="col-sm-6 col-md-7">
@@ -265,7 +267,20 @@ export const Variants = () => {
                           </td>
                           <td>{item.name}</td>
                           <td>
-                            {item.description}
+                            {item.description.length > 70 && ItemIdSelected === item.firestore_id
+                              ? item.description
+                              : item.description.substring(0, 70)}
+
+                            {item.description.length > 70 && (
+                              <a className="cursor-pointer" onClick={() => handleDisplayDescription(item.firestore_id)}>
+                                <img 
+                                  src={ItemIdSelected === item.firestore_id 
+                                        ? "/src/assets/Icons/slash-eye.svg" 
+                                        : "/src/assets/Icons/eye.svg"} 
+                                  alt="" 
+                                />
+                              </a>
+                            )}
                           </td>
                           <td>{item.accessLevel}</td>
                           <td>
@@ -294,26 +309,37 @@ export const Variants = () => {
                           </td>
                         </tr>
                       ))}
-                    
-                     
                       </tbody>
                     </table>
                   ) }
                   </div>
                   <div className="card-footer clearfix bg-header-footer">
                     <ul className="pagination pagination-sm m-0 float-right">
-                      <li className="page-item">
-                        <a className="page-link" onClick={() => handlePreviousPage()}>
-                          «
+                      <li className="page-item mr-3">
+                        <a className="">
+                          Total: {totalItems}
                         </a>
                       </li>
-                      {/*<li className="page-item">
-                        <input type="number" onChange={evt => handlePage(evt.target.value)} />
-                      </li>*/}
                       <li className="page-item">
-                        <a className="page-link" onClick={() => handleNextPage()}>
+                        <button className="page-link" disabled={currentPage == 1} onClick={handlePreviousPage}>
+                          «
+                        </button>
+                      </li>
+                      {Array.from({ length: Math.ceil(totalItems / initialPagination.limit) }, (_, index) => (
+                        <li className="page-item" key={index}>
+                          <a
+                            className={currentPage === index + 1 ? "page-link text-white bg-primary" : "page-link"}
+                            onClick={() => handlePage(index + 1)}
+                          >
+                             {index + 1}
+                  
+                          </a>
+                        </li>
+                      ))}
+                      <li className="page-item" >
+                        <button className="page-link" disabled={currentPage  == Math.ceil(totalItems / initialPagination.limit)} onClick={handleNextPage}>
                           »
-                        </a>
+                        </button>
                       </li>
                     </ul>
                   </div>
@@ -324,6 +350,7 @@ export const Variants = () => {
           <CreateVariable
             showModal={showCreateVariableModal}
             handleToggleModal={handleCreateVariableToggleModal}
+            refetch={refetchVariables}
           ></CreateVariable>
           <ConfirmAction
             show={showDeleteModal}

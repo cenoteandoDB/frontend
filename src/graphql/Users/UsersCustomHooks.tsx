@@ -1,9 +1,9 @@
 import React,  { useState, useEffect, useCallback, useMemo  } from "react";
 import { gql, useQuery, useMutation, useLazyQuery } from "@apollo/client"; 
 import { ALL_USERS, ALL_USERS_BY_SORT, USER_BY_ID, GET_ENUM_USER_ROLE_VALUES, INVITE_USER, DELETE_USER, 
-      PROFILE_DATA_FIELDS, VERIFY_USER, UPDATE_USER_INFO, LOGIN, GET_USER_BY_EMAIL, GET_ENUM_USER_PROFILE_VALUES,
+      VERIFY_USER, UPDATE_USER_INFO, LOGIN, GET_USER_BY_EMAIL, GET_ENUM_USER_PROFILE_VALUES,
       REGISTER_TOURIST, REGISTER_TEACHER, REGISTER_STUDENT, REGISTER_INVESTIGATOR, REGISTER_GOVERN,
-    GET_ENUM_GOVERN_TYPE_VALUES} from "./UsersGraphql";
+      GET_ENUM_GOVERN_TYPE_VALUES} from "./UsersGraphql";
 import { InviteUserInterface, PaginationInterface, SortInterface, UserInterface, LoginInterface, ProfileDataInterface } from "../../Types/UserTypes";
 import { removeEmptyFields } from "../../Services/UtilsService";
 
@@ -17,6 +17,8 @@ export const useUsers = (initialPagination: PaginationInterface, initialSort: So
         variables: { pagination, sort, name  },
         fetchPolicy: 'cache-and-network'
     });
+    console.log(data)
+    console.log(error)
     const updatePagination = useCallback((newPagination: Partial<PaginationInterface>) => {
         setPagination((prevPagination) => ({
             ...prevPagination,
@@ -45,14 +47,15 @@ export const useUsers = (initialPagination: PaginationInterface, initialSort: So
 
 
     return {
-        usersData: data ? data.getUsers : [],
+        usersData: data ? data.getUsers.users : [],
         usersError: error,
         usersLoading: loading,
         refetchUsers: refetch,
         updatePagination,
         updateSort,
         searchUserByName,
-        currentSortOrder: sort.sortOrder 
+        currentSortOrder: sort.sortOrder,
+        totalItems: data ? data.getUsers.totalCount : 0,
     };
 };
 

@@ -1,18 +1,32 @@
 export interface VariableInterface {
     id?: string;
-    category: string;
-    accessLevel: string;
-    cenote_count: string;
-    createdAt: string;
-    description: string;
     firestore_id: string;
-    methodology: string;
     name: string;
+    category: string;
+    description: string;
+    accessLevel: string;
+    type: string;
+    theme: string;
     origin: string;
     sphere: string;
-    theme: string;
-    timeseries: string;
-    type: string;
     units: string;
+    methodology: string;
+    timeseries: string;
+    cenote_count: string;
+    createdAt: string;
     updatedAt: string;
+}
+
+export interface CreateVariableInterface {
+    name: string;
+    category: string;
+    description: string;
+    accessLevel: string;
+    type: string;
+    theme: string;
+    origin: string;
+    sphere: string;
+    units: string;
+    methodology: string;
+    timeseries: boolean;
 }
