@@ -77,7 +77,6 @@ export const Users = () => {
     if(!showUpdateModal){
       setItemIdSelected(null);
     }
-   
   };
 
   const handleInviteUserToggleModal = () => {
@@ -209,34 +208,43 @@ export const Users = () => {
                         <tr>
                           <th>
                           <a onClick={() => handleSortChange("name")}>  Nombre{" "}
-                            <img
-                              src={Sort.sortOrder =='ASC' && Sort.field == 'name'  ? "/src/assets/Icons/arrow-down.svg": "/src/assets/Icons/arrow-up.svg" }
-                            /></a>
+                            {Sort.field == 'name'? 
+                            (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
+                              <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                            )}
+                          </a>
                           </th>
                           <th>
                           <a onClick={() => handleSortChange("surname")}> Apellidos{" "}
-                            <img
-                              src={Sort.sortOrder =='ASC' && Sort.field == 'surname'  ? "/src/assets/Icons/arrow-down.svg": "/src/assets/Icons/arrow-up.svg" }
-                            /></a>
+                            {Sort.field == 'surname'? 
+                            (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
+                              <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                            )}
+                           </a>
                           </th>
                           <th>
                           <a onClick={() => handleSortChange("email")}>Correo electrónico{" "}
-                            <img
-                                src={Sort.sortOrder =='ASC' && Sort.field == 'email'  ? "/src/assets/Icons/arrow-down.svg": "/src/assets/Icons/arrow-up.svg" }
-                            /></a>
+                            {Sort.field == 'email'? 
+                            (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
+                              <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                            )}
+                          </a>
                           </th>
                           <th>
-                            Tipo de usuario{" "}
-                            <img
-                              src="/src/assets/Icons/arrow-down.svg"
-                              alt=""
-                            />
+                            <a onClick={() => handleSortChange("profile")}>Tipo de usuario{" "}
+                              {Sort.field == 'profile'? 
+                              (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
+                                <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                              )}
+                            </a>
                           </th>
                           <th>
-                          <a onClick={() => handleSortChange("createdAt")}>Fecha de creación{" "}
-                            <img
-                               src={Sort.sortOrder =='ASC' && Sort.field == 'createdAt'  ? "/src/assets/Icons/arrow-down.svg": "/src/assets/Icons/arrow-up.svg" }
-                            /></a>
+                            <a onClick={() => handleSortChange("createdAt")}>Fecha de creación{" "}
+                              {Sort.field == 'profile'? 
+                               (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
+                                <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                              )}
+                            </a>
                           </th>
                           <th></th>
                         </tr>
@@ -274,11 +282,11 @@ export const Users = () => {
                   </div>
                   <div className="card-footer clearfix bg-header-footer">
                     <ul className="pagination pagination-sm m-0 float-right">
-                      <li className="page-item mr-3">
-                        <a className="">
-                          Total: {totalItems}
-                        </a>
-                      </li>
+                     
+                      <a className="mr-3">
+                        Total: {totalItems}
+                      </a>
+                   
                       <li className="page-item">
                         <button className="page-link" disabled={currentPage == 1} onClick={handlePreviousPage}>
                           «
@@ -322,7 +330,7 @@ export const Users = () => {
             id={ItemIdSelected}
             showModal={showUpdateModal}
             handleToggleModal={handleUpdateUserToggleModal}
-            refetchUsers={refetchUsers}
+            refetch={refetchUsers}
           ></UpdateUser>
         </section>
       </DashboardData>

@@ -1,136 +1,135 @@
-import React, {useState, useEffect} from "react";
-import { EnumsInterface } from "../../Types/UserTypes";
-import { useCreateVariable, useCategories, useAcessLevel, useVariableType, useThemes, useSpheres, useOrigin } from "../../graphql/Variables/VariablesCustomHooks";
-import { toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
-import { SingleModalPropsInterface } from '../../Types/UtilsTypes'
-import { CreateVariableInterface } from "../../Types/VariablesTypes";
+import React, { useEffect, useState } from 'react'
+import { UpdateVariableInterface } from '../../Types/VariablesTypes';
+import { UpdatePropsInterface } from '../../Types/UtilsTypes';
+import { useAcessLevel, useCategories, useGetVariableById, useOrigin, useSpheres, useThemes, useUpdateVariable, useVariableType } from '../../graphql/Variables/VariablesCustomHooks';
+import { toast } from 'react-toastify';
+import { EnumsInterface } from '../../Types/UserTypes';
 
-export const CreateVariable:React.FC<SingleModalPropsInterface> = ({showModal, handleToggleModal, refetch}) => {
-    const initialVariablesForm: CreateVariableInterface = {
-      name: "",
-      description: "",
-      category: "",
-      accessLevel: "",
-      type: "",
-      theme: "",
-      sphere: "",
-      origin: "",
-      units: "",
-      methodology: "",
-      timeseries: true 
-    }
-
+export const UpdateVariable: React.FC<UpdatePropsInterface> = ({id, showModal, handleToggleModal, refetch }) => {
+    const initialVariablesForm: UpdateVariableInterface = {
+        id: id,
+        name: "",
+        description: "",
+        category: "",
+        accessLevel: "",
+        type: "",
+        theme: "",
+        sphere: "",
+        origin: "",
+        units: "",
+        methodology: "",
+        timeseries: true };
+    const { data, loading, error, updateVariable } = useUpdateVariable();
+    const { variableData, loadingData, errorData } = useGetVariableById(id);
+    const [ variableInfo, setVariableInfo] = useState<UpdateVariableInterface>(initialVariablesForm);
+    const [ isFormValid, setIsFormValid] = useState(false);
     const { categoryData, categoryLoading } = useCategories();
     const { acessLevelData, acessLevelLoading} = useAcessLevel();
     const { variableTypeData, variableTypeLoading}= useVariableType();
     const { themesData, themesLoading} = useThemes()
     const { spheresData, spheresLoading} = useSpheres()
     const { originData, originLoading} = useOrigin();
-    const { createVariable, loading, error, success } = useCreateVariable();
-   
-    const loading_ = loading || categoryLoading || acessLevelLoading || variableTypeLoading || themesLoading || spheresLoading || originLoading;
-    const [variableFormData, setVariableFormData] = useState<CreateVariableInterface>(initialVariablesForm);
-      
-    useEffect(() => {
-      if (!categoryLoading && categoryData && categoryData.length > 0) {
-        setVariableFormData(prev => ({ ...prev, category: categoryData[0].name }));
-      }
-    }, [categoryLoading, categoryData]);
-  
-    useEffect(() => {
-      if (!acessLevelLoading && acessLevelData && acessLevelData.length > 0) {
-        setVariableFormData(prev => ({ ...prev, accessLevel: acessLevelData[0].name }));
-      }
-    }, [acessLevelLoading, acessLevelData]);
-  
-    useEffect(() => {
-      if (!variableTypeLoading && variableTypeData && variableTypeData.length > 0) {
-        setVariableFormData(prev => ({ ...prev, type: variableTypeData[0].name }));
-      }
-    }, [variableTypeLoading, variableTypeData]);
-  
-    useEffect(() => {
-      if (!themesLoading && themesData && themesData.length > 0) {
-        setVariableFormData(prev => ({ ...prev, theme: themesData[0].name }));
-      }
-    }, [themesLoading, themesData]);
-  
-    useEffect(() => {
-      if (!spheresLoading && spheresData && spheresData.length > 0) {
-        setVariableFormData(prev => ({ ...prev, sphere: spheresData[0].name }));
-      }
-    }, [spheresLoading, spheresData]);
-  
-    useEffect(() => {
-      if (!originLoading && originData && originData.length > 0) {
-        setVariableFormData(prev => ({ ...prev, origin: originData[0].name }));
-      }
-    }, [originLoading, originData]);
+    const loading_ = loading || categoryLoading || acessLevelLoading || variableTypeLoading 
+    || variableTypeLoading || themesLoading || spheresLoading || originLoading;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        setVariableFormData((prevState) => ({
-            ...prevState,
+        setVariableInfo(prev => ({
+            ...prev,
             [name]: value
         }));
     };
-  
-    const handleSubmit = async (event: React.FormEvent) => {
-        event.preventDefault();
-        console.log(variableFormData)
-        createVariable(variableFormData);
-    };
-  
-    useEffect(() => {
-      if (error) {
-        toast.error('La operación no se pudo completar, inténtelo nuevamente.')
-        if (handleToggleModal) {
-          handleToggleModal();
-        }
-      }
-      if (success) {
-        toast.success("Operación exitosa");
-        if(refetch){
-          refetch()
-        }
-        if (handleToggleModal) {
-          handleToggleModal();
-        }
-        setVariableFormData(initialVariablesForm);
-      }
-    }, [error, success]);
-  
-    return (
-      <div>
-        {showModal && (
-          <div
-            className={`modal fade ${showModal ? "show" : ""}`}
-            id="modal-invite-user"
-            style={{ paddingRight: 22, display: "block" }}
-            aria-modal="true"
-            role="dialog"
-            data-backdrop="static"
-          >
-            <div className="modal-dialog modal-lg">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h4 className="modal-title-c">Crear Variable</h4>
-                  <button
-                    type="button"
-                    className="close"
-                    data-dismiss="modal"
-                    aria-label="Close"
-                    onClick={handleToggleModal}
-                  >
-                    <span aria-hidden="true">×</span>
-                  </button>
-                </div>
-                <form onSubmit={evt => handleSubmit(evt)}>
-                  <div className="modal-body">
-                    <div className="row">
 
-                    
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if(id) {
+            console.log(variableInfo)
+            await updateVariable(id, variableInfo);
+        }
+    };
+
+    useEffect(() => {
+        if (variableData && !loadingData) {
+            setVariableInfo({
+                id: id,
+                name: variableData.name,
+                description: variableData.description,
+                category: variableData.category,
+                accessLevel: variableData.accessLevel,
+                type: variableData.type,
+                theme: variableData.theme,
+                sphere: variableData.sphere,
+                origin: variableData.origin,
+                units: variableData.units,
+                methodology: variableData.methodology,
+                timeseries: true 
+            });
+        } else {
+            setVariableInfo(initialVariablesForm);
+        }
+        if(errorData){
+            toast.error('El registro no existe o no tiene un identificador')
+        }
+    }, [variableData, errorData]);
+
+    useEffect(() => {
+        if (error) {
+          toast.error('La operación no se pudo completar, inténtelo nuevamente.')
+          if (handleToggleModal) {
+            handleToggleModal();
+          }
+        }
+        if(data && !error){
+          toast.success('Registro Actualizado Exitosamente');
+          if (handleToggleModal) {
+            handleToggleModal();
+            if (refetch) refetch();
+          }
+        } 
+    }, [data, error])
+
+    useEffect(() => {
+        if (id) {
+            const nonRequiredFields = ['methodology', 'units', 'description']; // List of non-required fields
+            const isFormFilled = Object.entries(variableInfo).every(([key, value]) => 
+                nonRequiredFields.includes(key) || value
+            );
+            setIsFormValid(isFormFilled);
+        } else {
+            setIsFormValid(false);
+        }
+    }, [id, variableInfo]);
+
+
+    return (
+        <div>
+          {showModal && (
+            <div
+              className={`modal fade ${showModal ? "show" : ""}`}
+              id="modal-invite-user"
+              style={{ paddingRight: 22, display: "block" }}
+              aria-modal="true"
+              role="dialog"
+              data-backdrop="static"
+            >
+              <div className="modal-dialog modal-lg">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h4 className="modal-title-c">Actualizar Variable</h4>
+                    <button
+                      type="button"
+                      className="close"
+                      data-dismiss="modal"
+                      aria-label="Close"
+                      onClick={handleToggleModal}
+                    >
+                      <span aria-hidden="true">×</span>
+                    </button>
+                  </div>
+                  <form onSubmit={evt => handleSubmit(evt)}>
+                    <div className="modal-body">
+               
+                    <div className="row">
                         <div className="form-group col-md-6">
                             <label className="modal-label-c" htmlFor="exampleInputPassword1">
                             Nombre
@@ -139,7 +138,7 @@ export const CreateVariable:React.FC<SingleModalPropsInterface> = ({showModal, h
                             type="text"
                             name="name"
                             className="form-control"
-                            value={variableFormData.name}
+                            value={variableInfo.name}
                             onChange={handleChange}
                             required
                             />
@@ -152,9 +151,8 @@ export const CreateVariable:React.FC<SingleModalPropsInterface> = ({showModal, h
                             type="text"
                             name="description"
                             className="form-control"
-                            value={variableFormData.description}
+                            value={variableInfo.description}
                             onChange={handleChange}
-                            required
                             />
                         </div>
                         <div className="form-group col-md-4">
@@ -162,7 +160,7 @@ export const CreateVariable:React.FC<SingleModalPropsInterface> = ({showModal, h
                             <select 
                             name="category"
                             className="form-control"
-                            value={variableFormData.category}
+                            value={variableInfo.category}
                             onChange={handleChange}>
                             {categoryData && categoryData.map((item: EnumsInterface) => (
                                 <option key={item.name}  value={item.name}>{item.name}</option>
@@ -174,7 +172,7 @@ export const CreateVariable:React.FC<SingleModalPropsInterface> = ({showModal, h
                             <select 
                             name="accessLevel"
                             className="form-control"
-                            value={variableFormData.accessLevel}
+                            value={variableInfo.accessLevel}
                             onChange={handleChange}>
                             {acessLevelData && acessLevelData.map((item: EnumsInterface) => (
                                 <option key={item.name}  value={item.name}>{item.name}</option>
@@ -186,7 +184,7 @@ export const CreateVariable:React.FC<SingleModalPropsInterface> = ({showModal, h
                             <select 
                             name="type"
                             className="form-control"
-                            value={variableFormData.type}
+                            value={variableInfo.type}
                             onChange={handleChange}>
                             {variableTypeData && variableTypeData.map((item: EnumsInterface) => (
                                 <option key={item.name}  value={item.name}>{item.name}</option>
@@ -198,7 +196,7 @@ export const CreateVariable:React.FC<SingleModalPropsInterface> = ({showModal, h
                             <select 
                             name="theme"
                             className="form-control"
-                            value={variableFormData.theme}
+                            value={variableInfo.theme}
                             onChange={handleChange}>
                             {themesData && themesData.map((item: EnumsInterface) => (
                                 <option key={item.name}  value={item.name}>{item.name}</option>
@@ -210,7 +208,7 @@ export const CreateVariable:React.FC<SingleModalPropsInterface> = ({showModal, h
                             <select 
                             name="sphere"
                             className="form-control"
-                            value={variableFormData.sphere}
+                            value={variableInfo.sphere}
                             onChange={handleChange}>
                             {spheresData && spheresData.map((item: EnumsInterface) => (
                                 <option key={item.name}  value={item.name}>{item.name}</option>
@@ -222,7 +220,7 @@ export const CreateVariable:React.FC<SingleModalPropsInterface> = ({showModal, h
                             <select 
                             name="origin"
                             className="form-control"
-                            value={variableFormData.origin}
+                            value={variableInfo.origin}
                             onChange={handleChange}>
                             {originData && originData.map((item: EnumsInterface) => (
                                 <option key={item.name}  value={item.name}>{item.name}</option>
@@ -237,9 +235,8 @@ export const CreateVariable:React.FC<SingleModalPropsInterface> = ({showModal, h
                             type="text"
                             name="units"
                             className="form-control"
-                            value={variableFormData.units}
+                            value={variableInfo.units}
                             onChange={handleChange}
-                            required
                             />
                         </div>
                         <div className="form-group col-md-4">
@@ -250,33 +247,33 @@ export const CreateVariable:React.FC<SingleModalPropsInterface> = ({showModal, h
                             type="text"
                             name="methodology"
                             className="form-control"
-                            value={variableFormData.methodology}
+                            value={variableInfo.methodology}
                             onChange={handleChange}
-                            required
                             />
                         </div>
                         
         
                     </div>
-                  </div>
-                  <div className="modal-footer justify-content-between">
-                    <button
-                      type="button"
-                      className="btn btn-default"
-                      data-dismiss="modal"
-                      onClick={handleToggleModal}
-                    >
-                      Cerrar
-                    </button>
-                    <button  type="submit"  className="btn btn-primary">
-                      Guardar
-                    </button>
-                  </div>
-                </form>
+                 
+                    </div>
+                    <div className="modal-footer justify-content-between">
+                      <button
+                        type="button"
+                        className="btn btn-default"
+                        data-dismiss="modal"
+                        onClick={handleToggleModal}
+                      >
+                        Cerrar
+                      </button>
+                      <button  type="submit" disabled={!isFormValid || loading} className="btn btn-primary">
+                        Guardar
+                      </button>
+                    </div>
+                  </form>
+                </div>
               </div>
             </div>
-          </div>
-        )}
-      </div>
-    );
+          )}
+        </div>
+      );
 }

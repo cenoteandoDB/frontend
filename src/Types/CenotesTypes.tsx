@@ -15,6 +15,7 @@ export interface CenoteInterface {
     variable_count: number;
     reference_count: number;
     species_count: number;
+    isFavorite: boolean;
   
     photos: string[];
     maps: string[];
@@ -22,4 +23,35 @@ export interface CenoteInterface {
     createdAt: string;
     updatedAt: string;
   }
+
+  export interface CreateCenoteInterface{
+    name: string;
+    municipality: string;
+    state: string;
+    touristic: boolean;
+    type: string;
+    longitude?: string;
+    latitude?: string; 
+  }
+
+  export interface UpdateCenoteInterface{
+    name: string;
+    municipality: string;
+    state: string;
+    touristic: boolean;
+    type: string;
+    longitude?: string;
+    latitude?: string; 
+  }
   
+  export interface FavoriteCenote {
+    firestore_id: string;
+    userId: string;
+    cenoteId: string;
+    cenoteName: string;
+  }
+
+  export interface AddFavoriteCenote {
+    userId: string;
+    cenoteId: string;
+  }

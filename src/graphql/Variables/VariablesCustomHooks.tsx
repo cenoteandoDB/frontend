@@ -1,7 +1,7 @@
 import React,  { useState, useEffect, useCallback } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client"; 
-import { GET_VARIABLES, DELETE_VARIABLE, CREATE_VARIABLE, GET_ENUM_CATEGORY_VALUES, GET_ENUM_ACCESS_LEVEL_VALUES, GET_ENUM_VARIABLE_TYPE_VALUES, GET_ENUM_SPHERE_VALUES, GET_ENUM_ORIGIN_VALUES} from "./VariablesGraphql";
-import { CreateVariableInterface, VariableInterface } from "../../Types/VariablesTypes";
+import { GET_VARIABLES, DELETE_VARIABLE, CREATE_VARIABLE, GET_ENUM_CATEGORY_VALUES, GET_ENUM_ACCESS_LEVEL_VALUES, GET_ENUM_VARIABLE_TYPE_VALUES, GET_ENUM_SPHERE_VALUES, GET_ENUM_ORIGIN_VALUES, UPDATE_VARIABLE, GET_VARIABLE_BY_ID} from "./VariablesGraphql";
+import { CreateVariableInterface, UpdateVariableInterface, VariableInterface } from "../../Types/VariablesTypes";
 import { PaginationInterface, SortInterface } from "../../Types/UserTypes";
 import { GET_ENUM_THEME_VALUES } from "../Users/UsersGraphql";
 
@@ -51,6 +51,16 @@ export const useVariables = (initialPagination: PaginationInterface, initialSort
     };
 };
 
+export const useGetVariableById = (id: string | null) => {
+    const { data, loading, error } = useQuery(gql`${GET_VARIABLE_BY_ID}`, {
+      variables: { getVariableByIdId: id },
+      skip: !id, // Skip query if no id is provided
+    });
+  
+    return { variableData: data?.getVariableById, loadingData:loading, errorData: error };
+};
+
+//MUTATIONS
 export const useCreateVariable = () => {
     const [ createVariableMutation, {data, error, loading,} ] = useMutation(gql`${CREATE_VARIABLE}`);
     const [success, setSuccess] = useState<boolean>(false);
@@ -83,6 +93,22 @@ export const useDeleteVariable = () => {
       deleteVariableError: error,
     };
 };
+
+export const useUpdateVariable = () => {
+    const [updateUser, { data, loading, error }] = useMutation(gql`${UPDATE_VARIABLE}`);
+
+    const updateVariable = async(id: string, variableInfo: UpdateVariableInterface) => {
+        try {
+            await updateUser({ variables: {
+                updatedVariable: variableInfo,
+                variableId: id
+              } });
+          } catch (e) {
+            console.error(e);
+          }
+    }
+    return {data, loading, error, updateVariable };
+}
 
 //ENUM
 export const useCategories = ()=> {

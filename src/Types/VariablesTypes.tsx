@@ -30,3 +30,18 @@ export interface CreateVariableInterface {
     methodology: string;
     timeseries: boolean;
 }
+
+export interface UpdateVariableInterface {
+    id: string | null;
+    name: string;
+    category: string;
+    description: string;
+    accessLevel: string;
+    type: string;
+    theme: string;
+    origin: string;
+    sphere: string;
+    units: string;
+    methodology: string;
+    timeseries: boolean;
+}

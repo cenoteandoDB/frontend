@@ -9,6 +9,7 @@ import _ from 'lodash';
 import { VariableInterface } from "../../../Types/VariablesTypes";
 import { ConfirmAction } from "../../../Components/Modals/ConfirmAction";
 import { CreateVariable } from "../../../Components/Modals/CreateVariable";
+import { UpdateVariable } from "../../../Components/Modals/UpdateVariable";
 
 export const Variants = () => {
   const initialPagination: PaginationInterface = { limit: 50, offset: 0 };
@@ -20,13 +21,16 @@ export const Variants = () => {
   const loading =  variableLoading || deleteVariableLoading;
   const noData = !variableLoading && (!variableData || variableData.length === 0);
   const [showCreateVariableModal, setShowCreateVariableModal] = useState<boolean>(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showUpdateModal, setShowUpdatModal] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [searchName, setSearchName] = useState<string>("");
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [ItemIdSelected, setItemIdSelected] = useState<string | null>(null)
+  const [Sort, setSort] = useState<SortInterface>(initialSort);
 
   const handleSortChange = ( field: string) => {
     const newSortOrder = currentSortOrder === "ASC" ? "DESC" : "ASC";
+    setSort({ field: field, sortOrder: newSortOrder})
     updateSort({ field: field, sortOrder: newSortOrder});
   };
 
@@ -68,6 +72,21 @@ export const Variants = () => {
     setShowDeleteModal(true);
     if(UserId){
       setItemIdSelected(UserId);
+    }
+  };
+
+  const handleUpdateVariable = (UserId?:  string) =>{
+  
+    if(UserId){
+      setItemIdSelected(UserId)
+      setShowUpdatModal(true);
+    }
+  };
+
+  const handleUpdateVariableToggleModal = () => {
+    setShowUpdatModal(!showUpdateModal);
+    if(!showUpdateModal){
+      setItemIdSelected(null);
     }
   };
 
@@ -120,35 +139,27 @@ export const Variants = () => {
               <div className="col-sm-6 col-md-7">
                 <div className="row">
                   <div className="col-md-6">
-                  <form onSubmit={() => handleSearch}>
-                      <div className="input-group input-group-sm">
-                        <div className="input-group-append">
-                          <span
-                            className=" btn-white btn-sm form-control-c"
-                          >
-                            <img src="/src/assets/Icons/search.svg" alt="" />
-                          </span>
+                    <form onSubmit={() => handleSearch}>
+                        <div className="input-group input-group-sm">
+                          <div className="input-group-append">
+                            <span
+                              className=" btn-white btn-sm form-control-c"
+                            >
+                              <img src="/src/assets/Icons/search.svg" alt="" />
+                            </span>
+                          </div>
+                          <input
+                            type="text"
+                            name="table_search"
+                            className="form-control form-control-c float-left btn-white btn-sm"
+                            value={searchName}
+                            onChange={(e) => setSearchName(e.target.value)}
+                            placeholder="Buscar por nombre"
+                          />
                         </div>
-                        <input
-                          type="text"
-                          name="table_search"
-                          className="form-control form-control-c float-left btn-white btn-sm"
-                          value={searchName}
-                          onChange={(e) => setSearchName(e.target.value)}
-                          placeholder="Buscar por nombre"
-                        />
-                      </div>
                     </form>
                   </div>
-                  <div className="col-md-2 d-none">
-                    <button
-                      type="button"
-                      className="btn btn-block btn-white  btn-sm"
-                    >
-                      <img src="/src/assets/Icons/filter.svg" alt="" />
-                      Filtrar
-                    </button>
-                  </div>
+                
                   <div className="col-md-2">
                     <button
                       type="button"
@@ -192,67 +203,76 @@ export const Variants = () => {
                         <tr>
                           
                           <th>
-                            Categoria{" "}
-                            <img
-                              src="/src/assets/Icons/arrow-down.svg"
-                              alt=""
-                            />
+                          <a onClick={() => handleSortChange("category")}>Categoria{" "}
+                            {Sort.field == 'category'? 
+                            (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
+                              <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                            )}
+                          </a>
                           </th>
                           <th>
-                            Nombre{" "}
-                            <img
-                              src="/src/assets/Icons/arrow-down.svg"
-                              alt=""
-                            />
+                            <a onClick={() => handleSortChange("name")}>Nombre{" "}
+                              {Sort.field == 'name'? 
+                            (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
+                                <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                              )}
+                            </a>
                           </th>
                           <th>
-                            Descripción{" "}
-                            <img
-                              src="/src/assets/Icons/arrow-down.svg"
-                              alt=""
-                            />
+                            <a onClick={() => handleSortChange("description")}>Descripción{" "}
+                            {Sort.field == 'description'? 
+                            (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
+                              <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                            )}
+                          </a>
                           </th>
                           <th>
-                            Nivel de acceso{" "}
-                            <img
-                              src="/src/assets/Icons/arrow-down.svg"
-                              alt=""
-                            />
+                            <a onClick={() => handleSortChange("accessLevel")}>Nivel de acceso{" "}
+                              {Sort.field == 'accessLevel'? 
+                              (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
+                                <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                              )}
+                            </a>
                           </th>
                           <th>
-                            Tipo de dato{" "}
-                            <img
-                              src="/src/assets/Icons/arrow-down.svg"
-                              alt=""
-                            />
+                            <a onClick={() => handleSortChange("type")}>Tipo de dato{" "}
+                              {Sort.field == 'type'? 
+                              (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
+                                <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                              )}
+                            </a>
                           </th>
                           <th>
-                            Etiquetas{" "}
-                            <img
-                              src="/src/assets/Icons/arrow-down.svg"
-                              alt=""
-                            />
+                            <a onClick={() => handleSortChange("theme")}>Etiquetas{" "}
+                            {Sort.field == 'theme'? 
+                            (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
+                              <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                            )}
+                          </a>
+                          </th>
+                          <th> 
+                            <a onClick={() => handleSortChange("sphere")}>Esferea{" "}
+                            {Sort.field == 'sphere'? 
+                            (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
+                              <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                            )}
+                          </a>
                           </th>
                           <th>
-                            Esferea{" "}
-                            <img
-                              src="/src/assets/Icons/arrow-down.svg"
-                              alt=""
-                            />
+                            <a onClick={() => handleSortChange("units")}>Unidades{" "}
+                            {Sort.field == 'units'? 
+                            (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
+                              <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                            )}
+                          </a>
                           </th>
                           <th>
-                            Unidades{" "}
-                            <img
-                              src="/src/assets/Icons/arrow-down.svg"
-                              alt=""
-                            />
-                          </th>
-                          <th>
-                            Campo o Calculadas
-                            <img
-                              src="/src/assets/Icons/arrow-down.svg"
-                              alt=""
-                            />
+                            <a onClick={() => handleSortChange("origin")}>Campo o Calculadas{" "}
+                            {Sort.field == 'origin'? 
+                            (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
+                              <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                            )}
+                          </a>
                           </th>
                           <th></th>
                         </tr>
@@ -297,12 +317,12 @@ export const Variants = () => {
                           <td>  {item.origin}</td>
                           <td>
                             {" "}
-                            <a className="d-none">
+                            {/*<a className="d-none">
                               <img src="/src/assets/Icons/eye.svg" alt="" />
-                            </a>
-                            {/*<a onClick={() => handleUpdateUser(item.id)}>
-                              <img src="/src/assets/Icons/edit.svg" alt="" />
                             </a>*/}
+                            <a onClick={() => handleUpdateVariable(item.firestore_id)}>
+                              <img src="/src/assets/Icons/edit.svg" alt="" />
+                            </a>
                             <a onClick={() => handleOpenDeleteModal(item.firestore_id)}>
                               <img src="/src/assets/Icons/trash.svg" alt="" />
                             </a>
@@ -315,11 +335,11 @@ export const Variants = () => {
                   </div>
                   <div className="card-footer clearfix bg-header-footer">
                     <ul className="pagination pagination-sm m-0 float-right">
-                      <li className="page-item mr-3">
-                        <a className="">
-                          Total: {totalItems}
-                        </a>
-                      </li>
+                  
+                      <a className="mr-3">
+                        Total: {totalItems}
+                      </a>
+                   
                       <li className="page-item">
                         <button className="page-link" disabled={currentPage == 1} onClick={handlePreviousPage}>
                           «
@@ -359,6 +379,12 @@ export const Variants = () => {
             onConfirm={handleActionDeleteConfirm}
             onCancel={handleActionDeleteCancel}
           ></ConfirmAction>
+          <UpdateVariable
+            id={ItemIdSelected}
+            showModal={showUpdateModal}
+            handleToggleModal={handleUpdateVariableToggleModal}
+            refetch={refetchVariables}
+          ></UpdateVariable>
         </section>
       </DashboardData>
     </>

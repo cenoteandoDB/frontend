@@ -12,9 +12,9 @@ export interface SingleModalPropsInterface {
   refetch?: () => void;
 }
 
-export interface UpdateUserPropsInterface {
+export interface UpdatePropsInterface {
   id: string | null;
   showModal: boolean;
   handleToggleModal?: () => void;
-  refetchUsers?: () => void
+  refetch?: () => void
 }

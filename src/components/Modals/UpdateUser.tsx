@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { UpdateUserPropsInterface } from '../../Types/UtilsTypes'
+import { UpdatePropsInterface } from '../../Types/UtilsTypes'
 import {useGetUserById, useUserRoles, useUpdateUserInfo } from '../../graphql/Users/UsersCustomHooks';
 import { ClipLoader } from "react-spinners";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { EnumsInterface, UserInterface } from '../../Types/UserTypes';
 
-export const UpdateUser: React.FC<UpdateUserPropsInterface> = ({id, showModal, handleToggleModal, refetchUsers }) => {
+export const UpdateUser: React.FC<UpdatePropsInterface> = ({id, showModal, handleToggleModal, refetch }) => {
     const { rolesData } = useUserRoles()
     const initialuserInfo: UserInterface = {email: '',name: '', surname: '',role: '' };
     const {data, loading, error, updateUserInfo } = useUpdateUserInfo();
@@ -23,6 +23,7 @@ export const UpdateUser: React.FC<UpdateUserPropsInterface> = ({id, showModal, h
     };
     
     const handleSubmit = async (e: React.FormEvent) => {
+
         e.preventDefault();
         if(id) {
             await updateUserInfo(id, userInfo);
@@ -32,10 +33,13 @@ export const UpdateUser: React.FC<UpdateUserPropsInterface> = ({id, showModal, h
     useEffect(() => {
         if (userData && !loadingData) {
             setUserInfo({email: userData.email ,name: userData.name, surname: userData.surname, role: userData.role});
-        }else {
+        } else {
             setUserInfo(initialuserInfo);
-          }
-    }, [userData]);
+        }
+        if(errorData){
+            toast.error('El registro no existe o no tiene un identificador')
+        }
+    }, [userData, errorData]);
 
     useEffect(() => {
         if (error) {
@@ -48,7 +52,7 @@ export const UpdateUser: React.FC<UpdateUserPropsInterface> = ({id, showModal, h
           toast.success('Usuario Actualizado Exitosamente');
           if (handleToggleModal) {
             handleToggleModal();
-            if (refetchUsers) refetchUsers();
+            if (refetch) refetch();
           }
         } 
     }, [data, error])
@@ -76,7 +80,7 @@ export const UpdateUser: React.FC<UpdateUserPropsInterface> = ({id, showModal, h
                 <div className="modal-dialog">
                 <div className="modal-content">
                     <div className="modal-header">
-                    <h4 className="modal-title-c">Invitar Usuario</h4>
+                    <h4 className="modal-title-c">Actualizar Usuario</h4>
                     <button
                         type="button"
                         className="close"
@@ -168,7 +172,7 @@ export const UpdateUser: React.FC<UpdateUserPropsInterface> = ({id, showModal, h
                                 >
                                 Cerrar
                                 </button>
-                                <button  type="submit" disabled={!isFormValid || loading}   className="btn btn-primary">
+                                <button  type="submit" disabled={!isFormValid || loading} className="btn btn-primary">
                                 Guardar
                                 </button>
                             </div>

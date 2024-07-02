@@ -23,6 +23,23 @@ query GetVariables($sort: SortField, $pagination: PaginationInput, $name: String
     }
 }`;
 
+export const GET_VARIABLE_BY_ID = `
+query GetVariableById($getVariableByIdId: ID!) {
+  getVariableById(id: $getVariableByIdId) {
+    name
+	  description
+    category
+    accessLevel
+	  type
+    theme
+    sphere
+    origin
+	  units
+    methodology
+    timeseries
+  }
+}`;
+
 export const DELETE_VARIABLE =`
 mutation DeleteVariable($deleteVariableId: ID!) {
   deleteVariable(id: $deleteVariableId)
@@ -32,6 +49,13 @@ export const CREATE_VARIABLE = `
 mutation CreateVariable($newVariable: NewVariableInput!) {
   createVariable(new_variable: $newVariable) {
     id
+  }
+}`;
+
+export const UPDATE_VARIABLE = `
+mutation Mutation($updatedVariable: UpdateVariableInput!, $variableId: String!) {
+  updateVariable(updated_variable: $updatedVariable, variableId: $variableId) {
+    firestore_id
   }
 }`;
 
@@ -90,3 +114,6 @@ export const GET_ENUM_ORIGIN_VALUES = `
     }
   }
 `;
+
+
+
