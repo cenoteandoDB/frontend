@@ -15,6 +15,7 @@ export interface UserInterface {
   phone?: string;
   profile?: string;
   profileData?: ProfileDataInterface;
+  favouriteCenotesIds?: string[]
 }
 
 export interface EnumsInterface{

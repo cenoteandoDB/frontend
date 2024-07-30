@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from "react";
 import { EnumsInterface } from "../../Types/UserTypes";
-import { useCreateVariable, useCategories, useAcessLevel, useVariableType, useThemes, useSpheres, useOrigin } from "../../graphql/Variables/VariablesCustomHooks";
+import { useCreateVariable, useCategories, useAcessLevel, useVariableType, useThemes, useSpheres, useOrigin, useVariablesRepresentation } from "../../graphql/Variables/VariablesCustomHooks";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { SingleModalPropsInterface } from '../../Types/UtilsTypes'
 import { CreateVariableInterface } from "../../Types/VariablesTypes";
+import { IconSelector } from "../Utils/IconSelector";
 
 export const CreateVariable:React.FC<SingleModalPropsInterface> = ({showModal, handleToggleModal, refetch}) => {
     const initialVariablesForm: CreateVariableInterface = {
@@ -18,7 +19,9 @@ export const CreateVariable:React.FC<SingleModalPropsInterface> = ({showModal, h
       origin: "",
       units: "",
       methodology: "",
-      timeseries: true 
+      timeseries: true ,
+      variableRepresentation: "string",
+      icon: ""
     }
 
     const { categoryData, categoryLoading } = useCategories();
@@ -27,6 +30,7 @@ export const CreateVariable:React.FC<SingleModalPropsInterface> = ({showModal, h
     const { themesData, themesLoading} = useThemes()
     const { spheresData, spheresLoading} = useSpheres()
     const { originData, originLoading} = useOrigin();
+    const { variablesRepresentationData, variablesRepresentationLoading } = useVariablesRepresentation();
     const { createVariable, loading, error, success } = useCreateVariable();
    
     const loading_ = loading || categoryLoading || acessLevelLoading || variableTypeLoading || themesLoading || spheresLoading || originLoading;
@@ -68,6 +72,12 @@ export const CreateVariable:React.FC<SingleModalPropsInterface> = ({showModal, h
       }
     }, [originLoading, originData]);
 
+    useEffect(() => {
+      if (!variablesRepresentationLoading && variablesRepresentationData && variablesRepresentationData.length > 0) {
+        setVariableFormData(prev => ({ ...prev, variableRepresentation: variablesRepresentationData[0].name }));
+      }
+    }, [variablesRepresentationLoading, variablesRepresentationData]);
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setVariableFormData((prevState) => ({
@@ -80,6 +90,10 @@ export const CreateVariable:React.FC<SingleModalPropsInterface> = ({showModal, h
         event.preventDefault();
         console.log(variableFormData)
         createVariable(variableFormData);
+    };
+
+    const handleIconSelect = (icon: string) => {
+      setVariableFormData(prev => ({ ...prev, icon: icon }));
     };
   
     useEffect(() => {
@@ -239,7 +253,7 @@ export const CreateVariable:React.FC<SingleModalPropsInterface> = ({showModal, h
                             className="form-control"
                             value={variableFormData.units}
                             onChange={handleChange}
-                            required
+                            
                             />
                         </div>
                         <div className="form-group col-md-4">
@@ -252,7 +266,36 @@ export const CreateVariable:React.FC<SingleModalPropsInterface> = ({showModal, h
                             className="form-control"
                             value={variableFormData.methodology}
                             onChange={handleChange}
-                            required
+                            
+                            />
+                        </div>
+                        <div className="form-group col-md-2">
+                            <label className="modal-label-c">Representación</label>
+                            <select 
+                            name="variableRepresentation"
+                            className="form-control"
+                            value={variableFormData.variableRepresentation}
+                            onChange={handleChange}>
+                            {variablesRepresentationData && variablesRepresentationData.map((item: EnumsInterface, index: number) => (
+                                <option key={index}  value={item.name}>{item.name}</option>
+                            ))}
+                            </select>
+                        </div>
+                        <div className="form-group col-md-10">
+                            <label className="modal-label-c">Icono</label>
+                            <div>
+                                
+                                {variableFormData.icon && (
+                                    <>
+                                        <h6>Vista previa del icono seleccionado:</h6>
+                                        <img src={"/src/assets/cenoteando-icons/" + variableFormData.icon} alt="selected-icon" width="50" height="50" />
+                                        <a onClick={() => handleIconSelect("")} className='text-danger cursor-pointer'>Remove</a>
+                                    </>
+                                )}
+                            </div>
+                            <IconSelector
+                                selectedIcon={variableFormData.icon}
+                                onSelectIcon={handleIconSelect}
                             />
                         </div>
                         

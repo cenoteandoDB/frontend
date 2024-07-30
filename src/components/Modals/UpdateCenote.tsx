@@ -3,6 +3,7 @@ import { UpdateCenoteInterface } from '../../Types/CenotesTypes'
 import { useCenoteTypes, useGetCenoteById, useUpdateCenote } from '../../graphql/Cenotes/CenotesCustomHooks';
 import { toast } from 'react-toastify';
 import { EnumsInterface } from '../../Types/UserTypes';
+import { UpdatePropsInterface } from '../../Types/UtilsTypes';
 
 export const UpdateCenote: React.FC<UpdatePropsInterface> = ({id, showModal, handleToggleModal, refetch }) => {
     const initialCenotesForm: UpdateCenoteInterface = {

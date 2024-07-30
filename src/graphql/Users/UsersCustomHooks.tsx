@@ -3,9 +3,11 @@ import { gql, useQuery, useMutation, useLazyQuery } from "@apollo/client";
 import { ALL_USERS, ALL_USERS_BY_SORT, USER_BY_ID, GET_ENUM_USER_ROLE_VALUES, INVITE_USER, DELETE_USER, 
       VERIFY_USER, UPDATE_USER_INFO, LOGIN, GET_USER_BY_EMAIL, GET_ENUM_USER_PROFILE_VALUES,
       REGISTER_TOURIST, REGISTER_TEACHER, REGISTER_STUDENT, REGISTER_INVESTIGATOR, REGISTER_GOVERN,
-      GET_ENUM_GOVERN_TYPE_VALUES} from "./UsersGraphql";
+      GET_ENUM_GOVERN_TYPE_VALUES,
+      GET_ENUM_DEGREE} from "./UsersGraphql";
 import { InviteUserInterface, PaginationInterface, SortInterface, UserInterface, LoginInterface, ProfileDataInterface } from "../../Types/UserTypes";
 import { removeEmptyFields } from "../../Services/UtilsService";
+import { GET_FAVORITE_CENOTES } from "../Cenotes/CenotesGraphql";
 
 //QUERYS
 export const useUsers = (initialPagination: PaginationInterface, initialSort: SortInterface,  initialName: string | null = null) => {
@@ -17,8 +19,7 @@ export const useUsers = (initialPagination: PaginationInterface, initialSort: So
         variables: { pagination, sort, name  },
         fetchPolicy: 'cache-and-network'
     });
-    console.log(data)
-    console.log(error)
+
     const updatePagination = useCallback((newPagination: Partial<PaginationInterface>) => {
         setPagination((prevPagination) => ({
             ...prevPagination,
@@ -108,13 +109,48 @@ export const useUserByEmail = (email: string) => {
   return { user, loading, error };
 };
 
-export const useGetUserById = (id: string | null) => {
-  const { data, loading, error } = useQuery(gql`${USER_BY_ID}`, {
+export const useGetUserById = (id: string | null | undefined) => {
+  const { data, loading, error, refetch } = useQuery(gql`${USER_BY_ID}`, {
     variables: { getUserByIdId: id },
     skip: !id, // Skip query if no id is provided
   });
 
-  return { userData: data?.getUserById, loadingData:loading, errorData: error };
+  const refetchUserById = async () => {
+    try {
+      if (id) {
+        await refetch({ getUserByIdId: id });
+      } else {
+        console.error('ID is null or undefined. Cannot refetch.');
+      }
+    } catch (err) {
+      console.error('Error refetching favorite cenotes:', err);
+    }
+  };
+  return { userData: data?.getUserById, loadingData:loading, errorData: error, refetchUserById: refetchUserById };
+};
+
+export const useGetFavoriteCenotesById = (id: string | null | undefined) => {
+  const { data, loading, error, refetch } = useQuery(gql`${GET_FAVORITE_CENOTES}`, {
+    variables: { getFavouriteCenotesId: id },
+    skip: !id, // Skip query if no id is provided
+  });
+
+  const refetchFavListCenote = async () => {
+    try {
+      if (id) {
+        await refetch({ getFavouriteCenotesId: id });
+      } else {
+        console.error('ID is null or undefined. Cannot refetch.');
+      }
+    } catch (err) {
+      console.error('Error refetching favorite cenotes:', err);
+    }
+  };
+  return { 
+    FavCenoteListData: data?.getFavouriteCenotes, 
+    FavCenoteListLoading:loading, 
+    FavCenoteListError: error, 
+    refetchFavListCenote};
 };
 
 //MUTATIONS
@@ -225,7 +261,6 @@ export const useRegister = (userProfile: string) => {
 };
 
 //ENUMS
-
 export const useUserRoles = ()=> {
   const { data, error, loading } = useQuery(gql`${GET_ENUM_USER_ROLE_VALUES}`);
 
@@ -253,5 +288,15 @@ export const useGovernType = () => {
     governData: data ? data.__type.enumValues : null,
     governError: error,
     governLoading: loading
+};
+}
+
+export const useDegree = () => {
+  const {data, loading, error} = useQuery(gql`${GET_ENUM_DEGREE}`);
+
+  return {
+    degreeData: data ? data.__type.enumValues : null,
+    degreeError: error,
+    degreeLoading: loading
 };
 }

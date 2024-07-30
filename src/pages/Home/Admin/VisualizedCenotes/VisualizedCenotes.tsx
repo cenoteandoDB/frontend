@@ -1,6 +1,6 @@
 import React from "react";
 import "./VisualizedCenotes.css";
-import CardHome from "../../../../Components/CardHome/CardHome";
+import CardHome from "../../../../Components/Card/CardHome";
 
 export const VisualizedCenotes = () => {
   const renderComponents = () => {

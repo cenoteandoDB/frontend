@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { DashboardData } from "../Dashboard/DashboardData";
-import { InviteUser } from "../../Components/Modals/InviteUser";
-import { useAddFavoriteCenote, useCenotes, useDeleteCenote } from "../../graphql/Cenotes/CenotesCustomHooks";
+import { useAddFavoriteCenote, useCenotes, useDeleteCenote, useRemoveFavoriteCenote } from "../../graphql/Cenotes/CenotesCustomHooks";
 import { CenoteInterface } from "../../Types/CenotesTypes";
 import { PaginationInterface, SortInterface } from "../../Types/UserTypes";
 import _ from "lodash";
@@ -11,18 +10,24 @@ import { ConfirmAction } from "../../Components/Modals/ConfirmAction";
 import { CreateCenote } from "../../Components/Modals/CreateCenote";
 import { UpdateCenote } from "../../Components/Modals/UpdateCenote";
 import { useAuthContext } from "../../Auth/AuthProvider";
+import { useNavigate } from "react-router-dom";
+import { useGetUserById } from "../../graphql/Users/UsersCustomHooks";
+
 
 export const List_cenotes = () => {
   const initialPagination: PaginationInterface = { limit: 50, offset: 0 };
   const initialSort: SortInterface = { sortOrder: "ASC", field: "name" };
-  //const initialName: string | null = null;
+  const navigate = useNavigate();
+  const testCenoteId = "00YaFC8pXUrx7ib4wx8Z";
 
-  const {user } = useAuthContext()
-  const { cenotesData, cenotesError, cenotesLoading, refetchCenotes, updatePagination, updateSort, searchCenoteByName, currentSortOrder, totalItems} = useCenotes(initialPagination, initialSort, null, user?.id);
+  const { user } = useAuthContext()
+  const { cenotesData, cenotesError, cenotesLoading, refetchCenotes, updatePagination, updateSort, searchCenoteByName, currentSortOrder, totalItems} = useCenotes(initialPagination, initialSort);
   const { handleDeleteCenote, deleteCenoteLoading, deleteCenoteError, deleteCenoteData } = useDeleteCenote();
   const { addCenote, favCenoteData, favCenoteLoading, favCenoteError } = useAddFavoriteCenote();
+  const { removeCenote, delFavCenoteData, delFavCenoteLoading, delFavCenoteError } = useRemoveFavoriteCenote();
+  const { userData, errorData, refetchUserById} = useGetUserById(user?.id);
   const [favoriteCenote, setFavoriteCenote] = useState({userId: '', cenoteId: ''});
-  const loading =  cenotesLoading || favCenoteLoading ;
+  const loading =  cenotesLoading || favCenoteLoading || deleteCenoteLoading || delFavCenoteLoading;
   const noData = !cenotesLoading && (!cenotesData || cenotesData.length === 0);
   const [searchName, setSearchName] = useState<string>("");
   const [showCreateCenoteModal, setShowCreateCenoteModal] = useState<boolean>(false);
@@ -30,6 +35,7 @@ export const List_cenotes = () => {
   const [showUpdateModal, setShowUpdatModal] = useState<boolean>(false);
   const [ItemIdSelected, setItemIdSelected] = useState<string | null>(null)
   const [Sort, setSort] = useState<SortInterface>(initialSort);
+  const [isFavoriteAdded, setIsFavoriteAdded] = useState(false);
 
   const [currentPage, setCurrentPage] = useState<number>(0);
   const totalPages = Math.ceil(totalItems / initialPagination.limit);
@@ -98,7 +104,6 @@ export const List_cenotes = () => {
   };
 
   const handleUpdateCenote = (UserId?:  string) =>{
-  
     if(UserId){
       setItemIdSelected(UserId)
       setShowUpdatModal(true);
@@ -115,7 +120,25 @@ export const List_cenotes = () => {
   const handleAddFavoriteCenote = (cenoteId: string | undefined) => {
     if( user?.id && cenoteId){
       setFavoriteCenote({ ...favoriteCenote, cenoteId, userId: user.id });
-      addCenote({ cenoteId, userId: user.id });
+      addCenote({ cenoteId: cenoteId, userId: user.id });
+      setIsFavoriteAdded(true);
+    }
+  };
+
+  const handleIsFavoriteCenote = (cenoteId: string | undefined | null) => {
+    if(userData.favouriteCenotesIds && cenoteId){
+      if(userData.favouriteCenotesIds?.includes(cenoteId)){
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const handleRemoveFavoriteCenote = (cenoteId: string | undefined) => {
+    if( user?.id && cenoteId){
+      setFavoriteCenote({ ...favoriteCenote, cenoteId, userId: user.id });
+      removeCenote({ cenoteId: cenoteId, userId: user.id });
+      setIsFavoriteAdded(true);
     }
   };
 
@@ -151,17 +174,44 @@ export const List_cenotes = () => {
     }
   }, [cenotesError, deleteCenoteError]);
 
-  useEffect(() => {
-    if (favCenoteError ) {
-      console.log(favCenoteError)
+useEffect(() => {
+    if (favCenoteError) {
       const errorMessage = favCenoteError.graphQLErrors?.[0]?.message || 'La operación no se pudo completar, inténtelo nuevamente.';
       toast.error(errorMessage);
     }
-    if(favCenoteData && !favCenoteError){
-      toast.success("Cenote agregado a sus favoritos");
-      refetchCenotes();
+
+    if (favCenoteData && !favCenoteError && isFavoriteAdded && user) {
+      toast.success("Cenote agregado a sus favoritos", {
+        toastId: 'favoritos',
+      });
+  
+      refetchUserById();       // Wait for getUser to complete
     }
-  }, [favCenoteData, favCenoteError]);
+
+  }, [favCenoteData, favCenoteError, refetchUserById, isFavoriteAdded]);
+
+  useEffect(() => {
+    if (delFavCenoteError) {
+      const errorMessage = delFavCenoteError.graphQLErrors?.[0]?.message || 'La operación no se pudo completar, inténtelo nuevamente.';
+      toast.error(errorMessage);
+    }
+
+    if (delFavCenoteData && !delFavCenoteError && isFavoriteAdded) {
+      toast.success("OK", {
+        toastId: 'favoritos',
+      });
+      refetchUserById();       // Wait for getUser to complete
+    }
+
+  }, [delFavCenoteData, delFavCenoteError, refetchUserById, isFavoriteAdded]);
+  
+  useEffect(() => {
+    if(userData && !errorData){
+      refetchCenotes();
+      setIsFavoriteAdded(false);
+    }
+  }, [userData, errorData]);
+
 
   return (
     <>
@@ -302,12 +352,12 @@ export const List_cenotes = () => {
                       {cenotesData && cenotesData.map((item: CenoteInterface) => (
                           <tr key={item.firestore_id}>
                             <td>
-                              {item.isFavorite ?
-                              (  <a onClick={() => handleAddFavoriteCenote(item.firestore_id)}>
+                              {handleIsFavoriteCenote(item?.firestore_id) ?
+                              ( <a className="cursor-pointer" onClick={() => handleRemoveFavoriteCenote(item.firestore_id)}>
                               <img src="/src/assets/Icons/heart-red.svg" alt="" />
                             </a>)
                               : (
-                                <a onClick={() => handleAddFavoriteCenote(item.firestore_id)}>
+                                <a className="cursor-pointer" onClick={() => handleAddFavoriteCenote(item.firestore_id)}>
                                 <img src="/src/assets/Icons/heart.svg" alt="" />
                               </a>
                               )}
@@ -332,16 +382,16 @@ export const List_cenotes = () => {
                               )}
                           
                             </td>
-                            <td>{item.variable_count ? item.variable_count : 0}</td>
+                            <td>0</td>
                             <td>
                             
-                              <a>
+                              <a className="cursor-pointer" onClick={() => {navigate(`/cenote/${testCenoteId}`);} }>
                                 <img src="/src/assets/Icons/eye.svg" alt="" />
                               </a>
-                              <a onClick={() => handleUpdateCenote(item.firestore_id)}>
+                              <a className="cursor-pointer" onClick={() => handleUpdateCenote(item.firestore_id)}>
                                 <img src="/src/assets/Icons/edit.svg" alt="" />
                               </a>
-                              <a onClick={() => handleOpenDeleteModal(item.firestore_id)}>
+                              <a className="cursor-pointer" onClick={() => handleOpenDeleteModal(item.firestore_id)}>
                                 <img src="/src/assets/Icons/trash.svg" alt="" />
                               </a>
                             </td>

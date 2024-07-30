@@ -18,3 +18,11 @@ export interface UpdatePropsInterface {
   handleToggleModal?: () => void;
   refetch?: () => void
 }
+
+export interface UpdateMofPropsInterface {
+  cenoteId: string | undefined | null;
+  theme: string | null;
+  showModal: boolean;
+  handleToggleModal?: () => void;
+  refetch?: () => void
+}

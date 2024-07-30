@@ -20,12 +20,6 @@ export const CreateCenote: React.FC<SingleModalPropsInterface> = ({showModal, ha
     const [ isFormValid, setIsFormValid] = useState(false);
     const [ cenoteFormData, setCenoteFormData] = useState<CreateCenoteInterface>(initialCenotesForm);
 
-    useEffect(() => {
-        if (!cenoteTypesLoading && cenoteTypesData && cenoteTypesData.length > 0) {
-          setCenoteFormData(prev => ({ ...prev, type: cenoteTypesData[0].name }));
-        }
-    }, [cenoteTypesLoading, cenoteTypesData]);
-
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
 
@@ -49,6 +43,12 @@ export const CreateCenote: React.FC<SingleModalPropsInterface> = ({showModal, ha
         event.preventDefault();
         createCenote(cenoteFormData);
     };
+
+    useEffect(() => {
+      if (!cenoteTypesLoading && cenoteTypesData && cenoteTypesData.length > 0) {
+        setCenoteFormData(prev => ({ ...prev, type: cenoteTypesData[0].name }));
+      }
+    }, [cenoteTypesLoading, cenoteTypesData]);
   
     useEffect(() => {
       if (error) {

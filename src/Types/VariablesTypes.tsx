@@ -15,6 +15,8 @@ export interface VariableInterface {
     cenote_count: string;
     createdAt: string;
     updatedAt: string;
+    icon: string;
+    variableRepresentation: string;
 }
 
 export interface CreateVariableInterface {
@@ -29,10 +31,12 @@ export interface CreateVariableInterface {
     units: string;
     methodology: string;
     timeseries: boolean;
+    variableRepresentation: string;
+    icon: string;
 }
 
 export interface UpdateVariableInterface {
-    id: string | null;
+    firestore_id: string | null;
     name: string;
     category: string;
     description: string;
@@ -44,4 +48,6 @@ export interface UpdateVariableInterface {
     units: string;
     methodology: string;
     timeseries: boolean;
+    variableRepresentation: string;
+    icon: string;
 }

@@ -66,6 +66,7 @@ query GetUserById($getUserByIdId: ID!) {
     name
     role
     surname
+    favouriteCenotesIds
   }
 }`;
 
@@ -99,6 +100,7 @@ export const GET_USER_BY_EMAIL = `
       surname
       role
       email
+      favouriteCenotesIds
     }
 }`;
 
@@ -194,6 +196,17 @@ export const GET_ENUM_GOVERN_TYPE_VALUES = `
 export const GET_ENUM_THEME_VALUES = `
   query GetEnumValues {
     __type(name: "VariableTheme") {
+      name
+      enumValues {
+        name
+      }
+    }
+  }
+`;
+
+export const GET_ENUM_DEGREE = `
+  query GetEnumValues {
+    __type(name: "Degree") {
       name
       enumValues {
         name

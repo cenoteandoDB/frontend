@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { UpdateVariableInterface } from '../../Types/VariablesTypes';
 import { UpdatePropsInterface } from '../../Types/UtilsTypes';
-import { useAcessLevel, useCategories, useGetVariableById, useOrigin, useSpheres, useThemes, useUpdateVariable, useVariableType } from '../../graphql/Variables/VariablesCustomHooks';
+import { useAcessLevel, useCategories, useGetVariableById, useOrigin, useSpheres, useThemes, useUpdateVariable, useVariablesRepresentation, useVariableType } from '../../graphql/Variables/VariablesCustomHooks';
 import { toast } from 'react-toastify';
 import { EnumsInterface } from '../../Types/UserTypes';
+import { IconSelector } from '../Utils/IconSelector';
 
 export const UpdateVariable: React.FC<UpdatePropsInterface> = ({id, showModal, handleToggleModal, refetch }) => {
     const initialVariablesForm: UpdateVariableInterface = {
-        id: id,
+        firestore_id: id,
         name: "",
         description: "",
         category: "",
@@ -18,9 +19,12 @@ export const UpdateVariable: React.FC<UpdatePropsInterface> = ({id, showModal, h
         origin: "",
         units: "",
         methodology: "",
-        timeseries: true };
+        timeseries: true,
+        icon:"",
+        variableRepresentation: "" };
     const { data, loading, error, updateVariable } = useUpdateVariable();
-    const { variableData, loadingData, errorData } = useGetVariableById(id);
+    const { variableData, loadingData, errorData, refetchVariableById} = useGetVariableById(id);
+    
     const [ variableInfo, setVariableInfo] = useState<UpdateVariableInterface>(initialVariablesForm);
     const [ isFormValid, setIsFormValid] = useState(false);
     const { categoryData, categoryLoading } = useCategories();
@@ -29,6 +33,7 @@ export const UpdateVariable: React.FC<UpdatePropsInterface> = ({id, showModal, h
     const { themesData, themesLoading} = useThemes()
     const { spheresData, spheresLoading} = useSpheres()
     const { originData, originLoading} = useOrigin();
+    const { variablesRepresentationData } = useVariablesRepresentation();
     const loading_ = loading || categoryLoading || acessLevelLoading || variableTypeLoading 
     || variableTypeLoading || themesLoading || spheresLoading || originLoading;
 
@@ -47,11 +52,16 @@ export const UpdateVariable: React.FC<UpdatePropsInterface> = ({id, showModal, h
             await updateVariable(id, variableInfo);
         }
     };
+    
+    const handleIconSelect = (icon: string) => {
+        setVariableInfo(prev => ({ ...prev, icon: icon }));
+    };
 
     useEffect(() => {
         if (variableData && !loadingData) {
+            console.log(variableData)
             setVariableInfo({
-                id: id,
+                firestore_id: id,
                 name: variableData.name,
                 description: variableData.description,
                 category: variableData.category,
@@ -62,7 +72,9 @@ export const UpdateVariable: React.FC<UpdatePropsInterface> = ({id, showModal, h
                 origin: variableData.origin,
                 units: variableData.units,
                 methodology: variableData.methodology,
-                timeseries: true 
+                timeseries: true,
+                icon: variableData.icon,
+                variableRepresentation: variableData.variableRepresentation
             });
         } else {
             setVariableInfo(initialVariablesForm);
@@ -81,10 +93,10 @@ export const UpdateVariable: React.FC<UpdatePropsInterface> = ({id, showModal, h
         }
         if(data && !error){
           toast.success('Registro Actualizado Exitosamente');
-          if (handleToggleModal) {
-            handleToggleModal();
-            if (refetch) refetch();
-          }
+          if (handleToggleModal) handleToggleModal();
+          if (refetch) refetch();
+          if (refetchVariableById) refetchVariableById;
+          
         } 
     }, [data, error])
 
@@ -249,6 +261,35 @@ export const UpdateVariable: React.FC<UpdatePropsInterface> = ({id, showModal, h
                             className="form-control"
                             value={variableInfo.methodology}
                             onChange={handleChange}
+                            />
+                        </div>
+                        <div className="form-group col-md-2">
+                            <label className="modal-label-c">Representación</label>
+                            <select 
+                            name="variableRepresentation"
+                            className="form-control"
+                            value={variableInfo.variableRepresentation}
+                            onChange={handleChange}>
+                            {variablesRepresentationData && variablesRepresentationData.map((item: EnumsInterface, index: number) => (
+                                <option key={index}  value={item.name}>{item.name}</option>
+                            ))}
+                            </select>
+                        </div>
+                        <div className="form-group col-md-10">
+                            <label className="modal-label-c">Icono</label>
+                            <div>
+                                
+                                {variableInfo.icon && (
+                                    <>
+                                        <h6>Vista previa del icono seleccionado:</h6>
+                                        <img src={"/src/assets/cenoteando-icons/" + variableInfo.icon} alt="selected-icon" width="50" height="50" />
+                                        <a onClick={() => handleIconSelect("")} className='text-danger cursor-pointer'>Remove</a>
+                                    </>
+                                )}
+                            </div>
+                            <IconSelector
+                                selectedIcon={variableInfo.icon}
+                                onSelectIcon={handleIconSelect}
                             />
                         </div>
                         

@@ -6,7 +6,6 @@ query GetVariables($sort: SortField, $pagination: PaginationInput, $name: String
       variables {
         category
         accessLevel
-        cenote_count
         createdAt
         description
         firestore_id
@@ -37,6 +36,63 @@ query GetVariableById($getVariableByIdId: ID!) {
 	  units
     methodology
     timeseries
+    variableRepresentation
+    icon
+  }
+}`;
+
+export const GET_CATEGORY_BY_THEME = `
+query Query($theme: VariableTheme!) {
+  getCategoriesByTheme(theme: $theme)
+}`;
+
+export const GET_VARIABLES_BY_CATEGORY = `
+query GetVariablesByCategory($category: VariableCategory!) {
+  getVariablesByCategory(category: $category) {
+    firestore_id
+    name
+    description
+    category
+    accessLevel
+    origin
+    units
+    sphere
+    theme
+    type
+    timeseries
+    variableRepresentation
+    icon
+  }
+}`;
+
+export const GET_VARIABLES_BY_THEME = `
+query GetVariablesByTheme($theme: VariableTheme!) {
+  getVariablesByTheme(theme: $theme) {
+    firestore_id
+    name
+    description
+    category
+    icon
+    variableRepresentation
+  }
+}`;
+
+export const GET_MOF_BY_CENOTE_AND_VARIABLE = 
+`query Query($cenoteId: ID!, $variableId: ID!) {
+  getCenoteDataByVariable(cenoteId: $cenoteId, variableId: $variableId) {
+    cenoteId
+    firstTimestamp
+    id
+    lastTimestamp
+    measurements {
+      timestamp
+      value
+    }
+    variableIcon
+    variableId
+    variableName
+    variableRepresentation
+    variableUnits
   }
 }`;
 
@@ -48,16 +104,24 @@ mutation DeleteVariable($deleteVariableId: ID!) {
 export const CREATE_VARIABLE = `
 mutation CreateVariable($newVariable: NewVariableInput!) {
   createVariable(new_variable: $newVariable) {
-    id
+    firestore_id
   }
 }`;
 
 export const UPDATE_VARIABLE = `
-mutation Mutation($updatedVariable: UpdateVariableInput!, $variableId: String!) {
+mutation UpdateVariable($firestoreId: String!, $updatedVariable: UpdateVariableInput!) {
+  updateVariable(firestore_id: $firestoreId, updated_variable: $updatedVariable) {
+  firestore_id 
+  }
+}`;
+
+/*mutation Mutation($updatedVariable: UpdateVariableInput!, $variableId: String!) {
   updateVariable(updated_variable: $updatedVariable, variableId: $variableId) {
     firestore_id
   }
-}`;
+}
+
+*/
 
 //ENUMS
 export const GET_ENUM_CATEGORY_VALUES = `
@@ -107,6 +171,17 @@ export const GET_ENUM_SPHERE_VALUES = `
 export const GET_ENUM_ORIGIN_VALUES = `
   query GetEnumValues {
     __type(name: "VariableOrigin") {
+      name
+      enumValues {
+        name
+      }
+    }
+  }
+`;
+
+export const GET_ENUM_VARIABLE_REPRESENTATION = `
+  query GetEnumValues {
+    __type(name: "VariableRepresentation") {
       name
       enumValues {
         name

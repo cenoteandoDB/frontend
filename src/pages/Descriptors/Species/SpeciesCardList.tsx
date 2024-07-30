@@ -1,5 +1,5 @@
 import React from "react";
 
-export const SpeciesCard = () => {
+export const SpeciesCardList = () => {
   return <div>SpeciesCard</div>;
 };

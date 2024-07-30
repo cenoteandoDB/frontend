@@ -8,7 +8,6 @@ function Header() {
   const [showUserDropdown, setShowUserDropdown] = useState(false);
 
   const handleUserToggleDropdown = () => {
-    console.log(user)
     setShowUserDropdown(!showUserDropdown);
   };
 

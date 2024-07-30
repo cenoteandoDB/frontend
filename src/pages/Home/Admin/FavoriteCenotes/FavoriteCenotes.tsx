@@ -1,5 +1,5 @@
 import React from "react";
-import CardHome from "../../../../Components/CardHome/CardHome";
+import CardHome from "../../../../Components/Card/CardHome";
 
 export default function FavoriteCenotes() {
   const renderComponents = () => {

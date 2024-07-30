@@ -14,7 +14,6 @@ import { UpdateVariable } from "../../../Components/Modals/UpdateVariable";
 export const Variants = () => {
   const initialPagination: PaginationInterface = { limit: 50, offset: 0 };
   const initialSort: SortInterface = { sortOrder: "ASC", field: "name" };
-  const initialName: string | null = null;
 
   const { variableData,  variableError,  variableLoading, refetchVariables, updatePagination, updateSort, searchVariableByName, currentSortOrder, totalItems} = useVariables(initialPagination, initialSort);
   const { handleDeleteVariable, deleteVariableLoading, deleteVariableError, deleteVariableData } = useDeleteVariable();
@@ -201,7 +200,22 @@ export const Variants = () => {
                     <table className="table table-hover ">
                       <thead className="bg-header-footer">
                         <tr>
-                          
+                          <th> 
+                            <a onClick={() => handleSortChange("sphere")}>Esferea{" "}
+                            {Sort.field == 'sphere'? 
+                            (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
+                              <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                            )}
+                          </a>
+                          </th>
+                          <th>
+                            <a onClick={() => handleSortChange("theme")}>Tema{" "}
+                            {Sort.field == 'theme'? 
+                            (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
+                              <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                            )}
+                          </a>
+                          </th>
                           <th>
                           <a onClick={() => handleSortChange("category")}>Categoria{" "}
                             {Sort.field == 'category'? 
@@ -242,22 +256,8 @@ export const Variants = () => {
                               )}
                             </a>
                           </th>
-                          <th>
-                            <a onClick={() => handleSortChange("theme")}>Etiquetas{" "}
-                            {Sort.field == 'theme'? 
-                            (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
-                              <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
-                            )}
-                          </a>
-                          </th>
-                          <th> 
-                            <a onClick={() => handleSortChange("sphere")}>Esferea{" "}
-                            {Sort.field == 'sphere'? 
-                            (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
-                              <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
-                            )}
-                          </a>
-                          </th>
+                         
+                   
                           <th>
                             <a onClick={() => handleSortChange("units")}>Unidades{" "}
                             {Sort.field == 'units'? 
@@ -280,12 +280,18 @@ export const Variants = () => {
                       <tbody>
                       {variableData && variableData.map((item: VariableInterface) => (
                         <tr  key={item.name}>
-                          <td>
+                           <td>{item.sphere}</td>
+                           <td>
                             <span className="tag tag-blue-round">
-                            {item.category}
+                              {item.theme}
                             </span>
                           </td>
-                          <td>{item.name}</td>
+                          <td>
+                            <span className="tag tag-blue-round">
+                            {item.category} 
+                            </span>
+                          </td>
+                          <td>{item.name} {item.firestore_id}</td>
                           <td>
                             {item.description.length > 70 && ItemIdSelected === item.firestore_id
                               ? item.description
@@ -306,13 +312,7 @@ export const Variants = () => {
                           <td>
                             <span className="tag tag-gray-round">{item.type}</span>
                           </td>
-                          <td>
-                            <span className="tag tag-blue-round">
-                              {item.theme}
-                            </span>
-              
-                          </td>
-                          <td>{item.sphere}</td>
+                         
                           <td>  {item.units}</td>
                           <td>  {item.origin}</td>
                           <td>

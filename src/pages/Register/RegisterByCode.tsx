@@ -21,7 +21,7 @@ export const RegisterByCode = () => {
     surname: '',
   });
   const {data, loading, error, updateUserInfo } = useUpdateUserInfo();
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setUserInfo({
         ...userInfo,

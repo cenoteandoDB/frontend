@@ -140,6 +140,15 @@
   text-align: left;
 }
 
+  /* Important part */
+  .modal-dialog{
+    overflow-y: initial !important
+  }
+  .modal-body{
+      max-height: calc(100vh - 200px);
+      overflow-y: auto;
+  }
+
 /*Labels*/
 .lbl-bread-subtitle {
   font-size: 18px;
@@ -162,4 +171,10 @@
 
 .react-photo-album--photo {
   border-radius: 10px;
+}
+
+/*IMG*/
+.img-square{
+ 
+  max-height: 250px;
 }

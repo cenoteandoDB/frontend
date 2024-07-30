@@ -1,16 +1,16 @@
 import { useCallback, useEffect, useState } from "react";
 import { PaginationInterface, SortInterface } from "../../Types/UserTypes";
 import { gql, useMutation, useQuery } from "@apollo/client";
-import { ADD_FAVORITE_CENOTE, ALL_CENOTES, CREATE_CENOTE, DELETE_CENOTE, GET_CENOTE_BY_ID, GET_ENUM_CENOTE_TYPE, UPDATE_CENOTE } from "./CenotesGraphql";
-import { AddFavoriteCenote, CenoteInterface, CreateCenoteInterface, UpdateCenoteInterface } from "../../Types/CenotesTypes";
+import { ADD_FAVORITE_CENOTE, ALL_CENOTES, CREATE_CENOTE, CREATE_MOF, DELETE_CENOTE, GET_CENOTE_BY_ID, GET_CENOTE_DATA_BY_THEME, GET_CENOTE_THEMES_BY_CENOTE, GET_ENUM_CENOTE_TYPE, GET_MOF_BY_THEME, REMOVE_FAVORITE_CENOTE, UPDATE_CENOTE, UPDATE_MOF } from "./CenotesGraphql";
+import { AddFavoriteCenote, CreateCenoteInterface, createMofInterface, UpdateCenoteInterface, updateMofInterface } from "../../Types/CenotesTypes";
 
-export const useCenotes = (initialPagination: PaginationInterface, initialSort: SortInterface,  initialName: string | null = null, userId: string | undefined) => {
+export const useCenotes = (initialPagination: PaginationInterface, initialSort: SortInterface,  initialName: string | null = null) => {
     const [pagination, setPagination] = useState<PaginationInterface>(initialPagination);
     const [sort, setSort] = useState<SortInterface>(initialSort);
     const [name, setName] = useState<string | null>(initialName);
 
     const { data, error, loading, refetch } = useQuery(gql`${ALL_CENOTES}`, {
-        variables: { pagination, sort, name, userId },
+        variables: { pagination, sort, name},
         fetchPolicy: 'cache-and-network'
     });
     console.log(data)
@@ -57,13 +57,38 @@ export const useCenotes = (initialPagination: PaginationInterface, initialSort: 
     };
 };
 
-export const useGetCenoteById = (id: string | null) => {
-    const { data, loading, error } = useQuery(gql`${GET_CENOTE_BY_ID}`, {
+export const useGetCenoteById = (id: string | null | undefined) => {
+    const { data, loading, error, refetch } = useQuery(gql`${GET_CENOTE_BY_ID}`, {
       variables: { cenoteByIdId: id },
       skip: !id, // Skip query if no id is provided
     });
     
-    return { cenoteData: data?.cenoteById, loadingData:loading, errorData: error };
+    return { cenoteData: data?.cenoteById, loadingData:loading, errorData: error, refetchCenoteById: refetch};
+};
+
+export const useGetThemesByCenote = (id: string | null | undefined) => {
+  const { data, loading, error } = useQuery(gql`${GET_CENOTE_THEMES_BY_CENOTE}`, {
+    variables: { cenoteId: id },
+    skip: !id, // Skip query if no id is provided
+  });
+  
+  return { themesList: data?.getThemesByCenote, themesLoading:loading, themesError: error };
+};
+
+export const useGetCenoteByTheme = (cenoteId: string | null | undefined, theme: string | null | undefined) => {
+  const { data, loading, error, refetch } = useQuery(gql`${GET_CENOTE_DATA_BY_THEME}`, {
+    variables: { theme: theme ,cenoteId: cenoteId},
+    skip: !theme || !cenoteId, // Skip query if no id is provided
+  });
+  return { cenoteThemeData: data?.getCenoteDataByTheme, cenoteThemeLoading: loading, cenoteThemeError: error, refetchCenoteTheme: refetch};
+};
+
+export const useGetMofByTheme = (cenoteId: string | null | undefined, theme: string | null | undefined) => {
+  const { data, loading, error, refetch } = useQuery(gql`${GET_MOF_BY_THEME}`, {
+    variables: { theme: theme ,cenoteId: cenoteId},
+    skip: !theme || !cenoteId, // Skip query if no id is provided
+  });
+  return { mofsByThemeData: data?.getCenoteDataByTheme, mofsByThemeLoading: loading, mofsByThemeError: error, refetchMofByTheme: refetch};
 };
 
 //MUTATIONS
@@ -79,6 +104,20 @@ export const useCreateCenote = () => {
         }
     };
     return { createCenote, loading, error, success };
+}
+
+export const useCreateMof = () => {
+  const [ createMofMutation, {data, error, loading,} ] = useMutation(gql`${CREATE_MOF}`);
+  const [createMofsuccess, setCreateMofsuccess] = useState<boolean>(false);
+  const createMof = async (mof_data: createMofInterface) => {
+      try {
+          await createMofMutation({ variables:{newMof: mof_data} });
+          setCreateMofsuccess(true);
+      } catch (err) {
+        setCreateMofsuccess(false);
+      }
+  };
+  return { createMof, createMofLoading: loading, createMofError: error, createMofSuccess: createMofsuccess, setCreateMofsuccess };
 }
 
 export const useDeleteCenote = () => {
@@ -116,6 +155,20 @@ export const useUpdateCenote = () => {
     return {data, loading, error, updateCenote };
 }
 
+export const useUpdateMof = () => {
+  const [updateMofMutation, { data, loading, error }] = useMutation(gql`${UPDATE_MOF}`);
+  const [updateMofsuccess, setUpdateMofsuccess] = useState<boolean>(false);
+  const updateMof = async(MofInfo: updateMofInterface) => {
+      try {
+          await updateMofMutation({ variables: { updateMofInput: MofInfo } });
+          setUpdateMofsuccess(true);
+        } catch (e) {
+          console.log(e)
+          setUpdateMofsuccess(false);
+        }
+  }
+  return {updateMofSucces: data, updateMofLoading: loading, updateMofError: error, updateMof, setUpdateMofsuccess };
+}
 
 export const useAddFavoriteCenote = () => {
   const [addFavoriteCenote, { data, loading, error }] = useMutation(gql`${ADD_FAVORITE_CENOTE}`);
@@ -123,14 +176,30 @@ export const useAddFavoriteCenote = () => {
 
   const addCenote = async (favoriteCenote: AddFavoriteCenote) => {
     try {
-      const response = await addFavoriteCenote({ variables: { favoriteCenotes: favoriteCenote } });
-      setResult(response.data.addFavoriteCenote);
+      const response = await addFavoriteCenote({ variables: { userId: favoriteCenote.userId, cenoteId: favoriteCenote.cenoteId } });
+      setResult(response.data.addFavouriteCenote);
     } catch (err) {
       console.error(err);
     }
   };
 
   return { addCenote, favCenoteData: result, favCenoteLoading: loading, favCenoteError: error };
+};
+
+export const useRemoveFavoriteCenote = () => {
+  const [removeFavoriteCenote, { data, loading, error }] = useMutation(gql`${REMOVE_FAVORITE_CENOTE}`);
+  const [result, setResult] = useState(null);
+
+  const removeCenote = async (favoriteCenote: AddFavoriteCenote) => {
+    try {
+      const response = await removeFavoriteCenote({ variables: { userId: favoriteCenote.userId, cenoteId: favoriteCenote.cenoteId } });
+      setResult(response.data.removeFavouriteCenote);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  return { removeCenote, delFavCenoteData: result, delFavCenoteLoading: loading, delFavCenoteError: error };
 };
 
 export const useCenoteTypes = ()=> {

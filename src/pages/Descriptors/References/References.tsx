@@ -6,6 +6,8 @@ import { ToastContainer } from "react-toastify";
 import { ReferencesInterface } from "../../../Types/ReferencesTypes";
 import _ from "lodash";
 import { ClipLoader } from "react-spinners";
+import { CreateReference } from "../../../Components/Modals/CreateReference";
+import { UpdateReference } from "../../../Components/Modals/UpdateReference";
 
 export const References = () => {
   const initialPagination: PaginationInterface = { limit: 50, offset: 0 };
@@ -16,7 +18,8 @@ export const References = () => {
   const [searchTitle, setSearchTitle] = useState<string>("");
   const [ItemIdSelected, setItemIdSelected] = useState<string | null>(null)
   const [Sort, setSort] = useState<SortInterface>(initialSort);
-
+  const [showCreateReferenceModal, setShowCreateReferenceModal] = useState<boolean>(false);
+  const [showUpdateModal, setShowUpdatModal] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const totalPages = Math.ceil(totalItems / initialPagination.limit);
   const pageRange = 7; 
@@ -54,6 +57,24 @@ export const References = () => {
     }, 1000),
     []
   );
+
+  const handleUpdateReference = (ReferenceId?:  string) =>{
+    if(ReferenceId){
+      setItemIdSelected(ReferenceId)
+      setShowUpdatModal(true);
+    }
+  };
+
+  const handleCreateRefereceToggleModal = () => {
+    setShowCreateReferenceModal(!showCreateReferenceModal);
+  };
+
+  const handleUpdateReferenceToggleModal = () => {
+    setShowUpdatModal(!showUpdateModal);
+    if(!showUpdateModal){
+      setItemIdSelected(null);
+    }
+  };
 
   const getPageNumbers = () => {
     const pages = [];
@@ -113,6 +134,7 @@ export const References = () => {
                     <button
                       type="button"
                       className="btn btn-block btn-white btn-sm"
+                      onClick={handleCreateRefereceToggleModal}
                     >
                       <img src="/src/assets/Icons/plus.svg" alt="" />
                       Crear
@@ -199,6 +221,7 @@ export const References = () => {
                               )}
                             </a>
                           </th>
+                          <th></th>
                         </tr>
                       </thead>
                       <tbody>
@@ -216,6 +239,14 @@ export const References = () => {
                             <span className="tag tag-blue-round">{item?.type}</span>
                           </td>
                           <td>{item?.cenotes_count ? item.cenotes_count : 0}</td>
+                          <td>
+                            <a onClick={() => handleUpdateReference(item.firestore_id)}>
+                              <img src="/src/assets/Icons/edit.svg" alt="" />
+                            </a>
+                            <a>
+                              <img src="/src/assets/Icons/trash.svg" alt="" />
+                            </a>
+                          </td>
                         </tr>
                         )
                       )}
@@ -267,6 +298,17 @@ export const References = () => {
               </div>
             </div>
           </div>
+          <CreateReference
+            showModal={showCreateReferenceModal}
+            handleToggleModal={handleCreateRefereceToggleModal}
+            refetch={refetchReferences}
+          ></CreateReference>
+          <UpdateReference
+            id={ItemIdSelected}
+            showModal={showUpdateModal}
+            handleToggleModal={handleUpdateReferenceToggleModal}
+            refetch={refetchReferences}
+          ></UpdateReference>
         </section>
       </DashboardData>
     </>

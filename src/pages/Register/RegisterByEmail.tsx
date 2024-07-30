@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import { Dashboard } from "../Dashboard/Dashboard";
 import { useNavigate }  from 'react-router-dom';
-import { useRegister, useUserProfile, useGovernType } from '../../graphql/Users/UsersCustomHooks';
+import { useRegister, useUserProfile, useGovernType, useDegree } from '../../graphql/Users/UsersCustomHooks';
 import { EnumsInterface, UserInterface, ProfileDataInterface } from '../../Types/UserTypes';
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -29,7 +29,7 @@ export const RegisterByEmail = () => {
     govern_type: '', govern_institution: '', govern:'', institution:'',
     googleScholar: '', orchid: '', researchGate: '', linkedin: ''
   };
-    
+  const {degreeData, degreeLoading } = useDegree();
   const [userProfileData, setUserProfileData] = useState<ProfileDataInterface>(initialProfileData);
   const {data, error, loading, registerUser } = useRegister(UserProfileName);
   const {profileData} = useUserProfile();
@@ -93,6 +93,12 @@ export const RegisterByEmail = () => {
       }));
     }
   }, [UserProfileName])
+
+  useEffect(() => {
+    if(UserProfileName == 'TEACHER' || UserProfileName == 'STUDENT'){
+      setUserProfileData(prev => ({ ...prev, degree: degreeData[0].name }));
+    }
+  }, [degreeData, degreeLoading]);
   
   return (
     <div>
@@ -187,14 +193,15 @@ export const RegisterByEmail = () => {
                         <div className="form-group">
                           <label htmlFor="degree">Grado de estudios</label>
                           <div className=" mb-3">
-                            <input
-                            type="text"
-                            name="degree"
-                            value={userProfileData.degree || ''}
-                            onChange={handleChangeProfileData}
-                            className="form-control"
-                            required
-                            />
+                            <select 
+                              name="degree"
+                              className="form-control"
+                              value={userProfileData.degree || ''}
+                              onChange={handleChangeProfileData}>
+                              {degreeData && degreeData.map((item: EnumsInterface) => (
+                                <option key={item.name}  value={item.name}>{item.name}</option>
+                              ))}
+                          </select>
                           </div>
                         </div>
                         <div className="form-group">

@@ -1,6 +1,6 @@
 import React,  { useState, useEffect, useCallback } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client"; 
-import { GET_VARIABLES, DELETE_VARIABLE, CREATE_VARIABLE, GET_ENUM_CATEGORY_VALUES, GET_ENUM_ACCESS_LEVEL_VALUES, GET_ENUM_VARIABLE_TYPE_VALUES, GET_ENUM_SPHERE_VALUES, GET_ENUM_ORIGIN_VALUES, UPDATE_VARIABLE, GET_VARIABLE_BY_ID} from "./VariablesGraphql";
+import { GET_VARIABLES, DELETE_VARIABLE, CREATE_VARIABLE, GET_ENUM_CATEGORY_VALUES, GET_ENUM_ACCESS_LEVEL_VALUES, GET_ENUM_VARIABLE_TYPE_VALUES, GET_ENUM_SPHERE_VALUES, GET_ENUM_ORIGIN_VALUES, UPDATE_VARIABLE, GET_VARIABLE_BY_ID, GET_VARIABLES_BY_THEME, GET_ENUM_VARIABLE_REPRESENTATION, GET_CATEGORY_BY_THEME, GET_VARIABLES_BY_CATEGORY, GET_MOF_BY_CENOTE_AND_VARIABLE} from "./VariablesGraphql";
 import { CreateVariableInterface, UpdateVariableInterface, VariableInterface } from "../../Types/VariablesTypes";
 import { PaginationInterface, SortInterface } from "../../Types/UserTypes";
 import { GET_ENUM_THEME_VALUES } from "../Users/UsersGraphql";
@@ -52,12 +52,48 @@ export const useVariables = (initialPagination: PaginationInterface, initialSort
 };
 
 export const useGetVariableById = (id: string | null) => {
-    const { data, loading, error } = useQuery(gql`${GET_VARIABLE_BY_ID}`, {
+    const { data, loading, error, refetch } = useQuery(gql`${GET_VARIABLE_BY_ID}`, {
       variables: { getVariableByIdId: id },
-      skip: !id, // Skip query if no id is provided
+      skip: !id, 
     });
   
-    return { variableData: data?.getVariableById, loadingData:loading, errorData: error };
+    return { variableData: data?.getVariableById, loadingData:loading, errorData: error,  refetchVariableById: refetch };
+};
+
+export const useGetVariableByTheme = (theme: string | null) => {
+    const { data, loading, error, refetch } = useQuery(gql`${GET_VARIABLES_BY_THEME}`, {
+      variables: { theme: theme },
+      skip: !theme, 
+    });
+  
+    return { variablesByThemeData: data?.getVariablesByTheme, variablesByThemeLoading:loading, variablesByThemeError: error,  refetchVariableByTheme: refetch };
+};
+
+export const useGetCategoryByTheme = (theme: string | null) => {
+    const { data, loading, error, refetch } = useQuery(gql`${GET_CATEGORY_BY_THEME}`, {
+      variables: { theme: theme },
+      skip: !theme, 
+    });
+  
+    return { categoriesData: data?.getCategoriesByTheme, categoriesLoading:loading, categoriesError: error,  refetchCategoryByTheme: refetch };
+};
+
+export const useGetVariablesByCategory = (category: string | null) => {
+    const { data, loading, error, refetch } = useQuery(gql`${GET_VARIABLES_BY_CATEGORY}`, {
+      variables: { category: category },
+      skip: !category, 
+    });
+  
+    return { variableByCategoryData: data?.getVariablesByCategory, variableByCategoryLoading:loading, variableByCategoryError: error,  refetchVariablesByCategory: refetch };
+};
+
+export const useGetMofByCenoteAndVariable = (cenoteId: string | null | undefined, variableId: string | null) => {
+    const { data, loading, error, refetch } = useQuery(gql`${GET_MOF_BY_CENOTE_AND_VARIABLE}`, {
+      variables: { cenoteId: cenoteId, variableId: variableId  },
+      skip: !cenoteId && !variableId, 
+    });
+  
+    return { MofByVariableAndCenoteData: data?.getCenoteDataByVariable, MofByVariableAndCenoteLoading:loading, MofByVariableAndCenoteError: error,  refetchMofByVariableAndCenote: refetch };
 };
 
 //MUTATIONS
@@ -101,7 +137,7 @@ export const useUpdateVariable = () => {
         try {
             await updateUser({ variables: {
                 updatedVariable: variableInfo,
-                variableId: id
+                firestoreId: id
               } });
           } catch (e) {
             console.error(e);
@@ -162,5 +198,14 @@ export const useOrigin= ()=> {
         originData: data ? data.__type.enumValues : null,
         originError: error,
         originLoading: loading
+    };
+};
+
+export const useVariablesRepresentation= ()=> {
+    const { data, error, loading } = useQuery(gql`${GET_ENUM_VARIABLE_REPRESENTATION}`);
+    return {
+        variablesRepresentationData: data ? data.__type.enumValues : null,
+        variablesRepresentationError: error,
+        variablesRepresentationLoading: loading
     };
 };

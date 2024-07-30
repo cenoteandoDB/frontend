@@ -26,10 +26,14 @@
   font-weight: 800;
 }
 
+.title-size {
+  font-size: 20px;
+}
+
 /*Box*/
 .container-blue {
   background: #f8fafc;
-  padding: 16px 32px;
+  padding: 24px 16px;
   border-radius: 4px;
 }
 
@@ -40,4 +44,42 @@
 
 .right {
   margin-left: 50%;
+}
+
+.disable-style{
+  background-color: #dddddd9e;
+  color: #C6C6C6;
+}
+
+/*TWO COLUMNS*/
+.two-column-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.two-column-item {
+  flex: 1 1 50%;
+  box-sizing: border-box;
+  padding: 5px;
+}
+
+/*IF IS TEXT*/
+.measurement-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.variable-name {
+  flex: 1;
+  text-align: left;
+  padding-right: 10px;
+}
+
+.measurement-value {
+  flex: 1;
+  text-align: right;
+  padding-left: 10px;
 }

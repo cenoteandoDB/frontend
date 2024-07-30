@@ -65,7 +65,6 @@ export const Users = () => {
   };
 
   const handleUpdateUser = (UserId?:  string) =>{
-  
     if(UserId){
       setItemIdSelected(UserId)
       setShowUpdatModal(true);

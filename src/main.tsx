@@ -74,7 +74,7 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/cenote",
+        path: "/cenote/:id",
         element: <CenoteProfile />,
       },
       {

@@ -55,3 +55,44 @@ export interface CenoteInterface {
     userId: string;
     cenoteId: string;
   }
+
+  export interface MeasurementsInterface {
+    timestamp: string;
+    value: string;
+  }
+
+  export interface mofInterface {
+    id: string;
+    firstTimestamp: string;
+    cenoteId: string;
+    lastTimestamp: string;
+    measurements: MeasurementsInterface[];
+    variableIcon: string;
+    variableId: string;
+    variableName: string;
+    variableRepresentation: string;
+    variableUnits: string;
+  }
+
+
+  export interface createMofInterface {
+    cenoteId: string | null | undefined;
+    timestamp: string | null | undefined;
+    value: string;
+    variableId: string | null;
+  }
+
+  export interface updateMofInterface {
+    cenoteId: string | null | undefined;
+    timestamp: string | null | undefined;
+    oldTimestamp: string | null | undefined;
+    value: string;
+    oldValue: string
+    variableId: string | null;
+  }
+
+  export interface mofByThemeInterface {
+    category: string;
+    mofs: mofInterface[];
+  }
+
