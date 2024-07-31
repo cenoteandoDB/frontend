@@ -30,6 +30,10 @@
   font-size: 20px;
 }
 
+.simple-text-size {
+  font-size: 16px !important;
+}
+
 /*Box*/
 .container-blue {
   background: #f8fafc;
@@ -82,4 +86,12 @@
   flex: 1;
   text-align: right;
   padding-left: 10px;
+}
+
+/*GEOMORPHOLOGY*/
+
+.content-microcuenca{
+  background: #F1F3ED;
+  padding: 24px 16px;
+  border-radius: 4px;
 }

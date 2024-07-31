@@ -26,3 +26,9 @@ export interface UpdateMofPropsInterface {
   handleToggleModal?: () => void;
   refetch?: () => void
 }
+
+export interface CoordinatesPropsInterface {
+  lat: string;
+  lng: string;
+  cenote: string;
+}
