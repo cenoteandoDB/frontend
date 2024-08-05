@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.10.4",
+    "@react-google-maps/api": "^2.19.3",
     "@types/lodash": "^4.17.4",
     "bootstrap": "^5.3.3",
     "graphql": "^16.8.1",

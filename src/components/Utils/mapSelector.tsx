@@ -1,37 +1,52 @@
+
 import React, { useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
+import { GoogleMap, InfoWindow, LoadScript, Marker } from '@react-google-maps/api';
 import { CoordinatesPropsInterface } from '../../Types/UtilsTypes';
+import { ClipLoader } from 'react-spinners';
 
-const MapSelector: React.FC<CoordinatesPropsInterface> = ({lat, lng, cenote}) => {
-  const [position, setPosition] = useState({ lat: lat, lng: lng, cenote: cenote});
+const MapSelector: React.FC<CoordinatesPropsInterface> = ({ lat, lng, cenote }) => {
+  const [showInfoWindow, setShowInfoWindow] = useState(false);
 
-  const handleClick = (e: any) => {
-    setPosition({
-      lat: e.latlng.lat,
-      lng: e.latlng.lng,
-      cenote: cenote
-    });
-    console.log(position)
+  const center = {
+    lat: parseFloat(lat as unknown as string),
+    lng: parseFloat(lng as unknown as string)
+  };
+
+  const handleMarkerClick = () => {
+    setShowInfoWindow(true);
+  };
+
+  const handleInfoWindowCloseClick = () => {
+    setShowInfoWindow(false);
   };
 
   return (
-    <MapContainer
-      center={[position.lat, position.lng]}
-      zoom={10}
-      style={{ height: '70vh', width: '100%' }}
-      onClick={handleClick}
-    >
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution='&copy;CenoteandoData'
-      />
-      <Marker position={[position.lat, position.lng]}>
-        <Popup>
-            {position.cenote}
-        </Popup>
-      </Marker>
-    </MapContainer>
+    <>
+    { lat && lng ? (
+      <LoadScript googleMapsApiKey="AIzaSyAqmajyy50rbB3v_qTkmKje8UR-MrmIPZc">
+        <GoogleMap
+          mapContainerStyle={{
+            width: '100%',
+            height: '400px'
+          }}
+          center={center}
+          zoom={10}
+        >
+        <Marker position={center} onClick={handleMarkerClick} />
+        {showInfoWindow && (
+          <InfoWindow position={center} onCloseClick={handleInfoWindowCloseClick}>
+            <div>
+              <h2>{cenote}</h2>
+            </div>
+          </InfoWindow>
+        )}
+        </GoogleMap>
+      </LoadScript>
+    ): ( 
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '20vh' }}>
+        <ClipLoader loading={true} size={50} />
+      </div>)}
+    </>
   );
 };
 

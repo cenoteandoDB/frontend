@@ -212,15 +212,7 @@ export const References = () => {
                               )}
                             </a>
                           </th>
-                          <th>
-                            
-                            <a onClick={() => handleSortChange("cenotes_count")}>Cenotes mencionados{" "}
-                              {Sort.field == 'cenotes_count'? 
-                              (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
-                                <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
-                              )}
-                            </a>
-                          </th>
+                      
                           <th></th>
                         </tr>
                       </thead>
@@ -238,7 +230,7 @@ export const References = () => {
                             {" "}
                             <span className="tag tag-blue-round">{item?.type}</span>
                           </td>
-                          <td>{item?.cenotes_count ? item.cenotes_count : 0}</td>
+                         
                           <td>
                             <a onClick={() => handleUpdateReference(item.firestore_id)}>
                               <img src="/src/assets/Icons/edit.svg" alt="" />
