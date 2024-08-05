@@ -27,6 +27,7 @@ query Query($cenoteByIdId: ID!) {
         touristic
         latitude
         longitude
+        photos
         species {
           createdAt
           gbifId
@@ -36,6 +37,14 @@ query Query($cenoteByIdId: ID!) {
           thumbnail
           updatedAt
         }
+        references {
+          title
+          short_name
+          type
+          date_primary
+          authors
+          pdf_url
+      }
   }
 }`;
 

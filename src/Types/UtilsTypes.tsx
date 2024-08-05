@@ -32,3 +32,9 @@ export interface CoordinatesPropsInterface {
   lng: string;
   cenote: string;
 }
+
+export interface PhotoInterface {
+  src: string;
+  width: number;
+  height: number;
+}

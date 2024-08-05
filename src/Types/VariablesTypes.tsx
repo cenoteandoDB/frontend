@@ -11,7 +11,7 @@ export interface VariableInterface {
     sphere: string;
     units: string;
     methodology: string;
-    timeseries: string;
+    timeseries: boolean;
     cenote_count: string;
     createdAt: string;
     updatedAt: string;

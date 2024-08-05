@@ -16,6 +16,7 @@ export const Variants = () => {
   const initialSort: SortInterface = { sortOrder: "ASC", field: "name" };
 
   const { variableData,  variableError,  variableLoading, refetchVariables, updatePagination, updateSort, searchVariableByName, currentSortOrder, totalItems} = useVariables(initialPagination, initialSort);
+  console.log(variableData)
   const { handleDeleteVariable, deleteVariableLoading, deleteVariableError, deleteVariableData } = useDeleteVariable();
   const loading =  variableLoading || deleteVariableLoading;
   const noData = !variableLoading && (!variableData || variableData.length === 0);
@@ -201,7 +202,7 @@ export const Variants = () => {
                       <thead className="bg-header-footer">
                         <tr>
                           <th> 
-                            <a onClick={() => handleSortChange("sphere")}>Esferea{" "}
+                            <a onClick={() => handleSortChange("sphere")}>Esfera{" "}
                             {Sort.field == 'sphere'? 
                             (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
                               <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
@@ -274,6 +275,14 @@ export const Variants = () => {
                             )}
                           </a>
                           </th>
+                          <th>
+                            <a onClick={() => handleSortChange("origin")}>Temporalidad{" "}
+                            {Sort.field == 'origin'? 
+                            (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
+                              <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                            )}
+                          </a>
+                          </th>
                           <th></th>
                         </tr>
                       </thead>
@@ -315,6 +324,7 @@ export const Variants = () => {
                          
                           <td>  {item.units}</td>
                           <td>  {item.origin}</td>
+                          <td>  {item?.timeseries ? 'Temporales' : 'Fija'}</td>
                           <td>
                             {" "}
                             {/*<a className="d-none">

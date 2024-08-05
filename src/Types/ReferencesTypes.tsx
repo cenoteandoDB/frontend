@@ -19,7 +19,7 @@ export interface ReferencesInterface {
     uploaded_gcp: boolean;
     uploaded_mendeley: boolean;
     validated_mendeley: boolean;
-   
+    pdf_url?: string;
     referenced_cenotes: string[];
     referenced_species: string[];
     unique_code?: string;
@@ -75,6 +75,6 @@ export interface UpdateReferencesInterface {
   
     referenced_cenotes: string[];
     referenced_species: string[];
-
+   
     unique_code: string;
 }

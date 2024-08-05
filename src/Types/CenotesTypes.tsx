@@ -1,3 +1,5 @@
+import { ReferencesInterface } from "./ReferencesTypes";
+
 export interface CenoteInterface {
     firestore_id?: string;
     cenoteando_id?: string;
@@ -7,7 +9,7 @@ export interface CenoteInterface {
     state: string;
     municipality: string;
     type: string;
-  
+
     touristic: boolean;
     latitude: string;
     longitude: string;
@@ -19,7 +21,7 @@ export interface CenoteInterface {
   
     photos: string[];
     maps: string[];
-  
+    references? : ReferencesInterface[];
     createdAt: string;
     updatedAt: string;
   }

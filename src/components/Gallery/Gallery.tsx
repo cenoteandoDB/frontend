@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PhotoAlbum from "react-photo-album";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
@@ -9,38 +9,47 @@ import Slideshow from "yet-another-react-lightbox/plugins/slideshow";
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
+import { PhotoInterface } from "../../Types/UtilsTypes";
 
-const photos = [
-  {
-    src: "https://assets.turismocity.com/cdn-cgi/image/format=auto,width=500,height=440,fit=cover/cenote%20-%20ik%20kil.jpg",
-    width: 1080,
-    height: 800,
-  },
-  {
-    src: "https://www.mexicodesconocido.com.mx/wp-content/uploads/2023/04/homun29.jpg",
-    width: 1080,
-    height: 1620,
-  },
-  {
-    src: "https://static-resources.mirai.com/wp-content/uploads/sites/1738/20220912090223/Cenote-Ik-Kil.jpg",
-    width: 1080,
-    height: 720,
-  },
-  {
-    src: "https://www.lavanguardia.com/files/image_449_220/files/fp/uploads/2023/03/06/6406045a7c705.r_d.1010-805-2457.jpeg",
-    width: 1080,
-    height: 721,
-  },
-  {
-    src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5vYZTSuhjRlhoo6a5WgsMTGNAlhJYDjWdMU1N6y22CQ&s",
-    width: 1080,
-    height: 1620,
-  },
-];
+interface GalleryProps {
+  photoUrls: string[];
+}
 
-export const Gallery = () => {
+
+
+const getRandomValue = (min: number, max: number): number => {
+  return Math.random() < 0.5 ? min : max;
+};
+
+const usePhotoDimensions = (photoUrls: string[]): PhotoInterface[] => {
+  const [photos, setPhotos] = useState<PhotoInterface[]>([]);
+
+  useEffect(() => {
+    const promises = photoUrls.map(
+      (url) =>
+        new Promise<PhotoInterface>((resolve) => {
+          const img = new Image();
+          img.src = url;
+          img.onload = () => {
+            resolve({
+              src: url,
+              width: img.naturalWidth > 1080 ? getRandomValue(1000, 1080) : img.naturalWidth ,
+              height: img.naturalHeight > 720 ? getRandomValue(720, 800) : img.naturalHeight,
+            });
+          };
+        })
+    );
+
+    Promise.all(promises).then((photos) => setPhotos(photos));
+  }, [photoUrls]);
+
+  return photos;
+};
+
+export const Gallery:  React.FC<GalleryProps> = ({ photoUrls }) => {
   const [index, setIndex] = useState(-1);
-
+  //const photos = convertToPhotoObjects(photoUrls);
+  const photos = usePhotoDimensions(photoUrls);
   return (
     <>
       <PhotoAlbum

@@ -18,18 +18,17 @@ import { SpeciesInterface } from '../../../Types/SpeciesTypes';
 
 export const BiodiversityTab: React.FC<BiodiversityTabProps> = ({ speciesList }) => {
   return (
-        <div className="card card-solid pb-5 pt-2">
-        <div className="card-body pb-0">
+    <div className="card card-solid pb-5 pt-2">
+      <div className="card-body pb-0">
         <div className="header-section-cnt mb-4">
             <p className="header-section-text-cnt">Especies</p>
         </div>
         <div className="row">
           
             {renderComponents(speciesList)}
-           
+            
         </div>
-  
+      </div>
     </div>
-  </div>
   )
 }

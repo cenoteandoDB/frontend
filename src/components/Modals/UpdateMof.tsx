@@ -49,6 +49,7 @@ export const UpdateMof: React.FC<UpdateMofPropsInterface>= ({cenoteId, theme, sh
     const [ categoryAcordionTab, setCategoryAcordionTab] = useState<string>("tab-0")
     const [ variableAcordionTab, setVariableAcordionTab] = useState<string>("")
     const [ measurementsInput, setMeasurementsInput] = useState<string>("")
+    const [addRecord, setAddRecord] = useState<boolean>(false)
     const [isValid, setIsValid] = useState(false);
     const [ createMofFormData, setCreateMofFormData] = useState<createMofInterface>(initialCreateMofForm);
     const [ updateMofFormData, setUpdateMofFormData] = useState<updateMofInterface>(initialUpdateMofForm);
@@ -160,9 +161,14 @@ export const UpdateMof: React.FC<UpdateMofPropsInterface>= ({cenoteId, theme, sh
         if (createMofSuccess) {
             toast.success("Operación exitosa");
             if(refetch) refetch();
-            setVariableAcordionTab('');
+            refetchMofByVariableAndCenote();
+            //setVariableAcordionTab('');
+            setMeasurementsInput('');
             setCreateMofsuccess(false);
-            setVariableSelected(initialVariablesForm)
+            if(addRecord){
+                setAddRecord(false)
+            }
+            //setVariableSelected(initialVariablesForm)
          
         }
     }, [createMofError, createMofSuccess]);
@@ -174,9 +180,10 @@ export const UpdateMof: React.FC<UpdateMofPropsInterface>= ({cenoteId, theme, sh
         if (updateMofSucces) {
             toast.success("Operación exitosa");
             if(refetch) refetch();
-            setVariableAcordionTab('');
-            setCreateMofsuccess(false);
-            setVariableSelected(initialVariablesForm)
+            refetchMofByVariableAndCenote();
+            //setVariableAcordionTab('');
+            //setVariableSelected(initialVariablesForm)
+            setMeasurementsInput('');
             setUpdateMofsuccess(false);
         }
     }, [updateMofError, updateMofSucces]);
@@ -399,20 +406,21 @@ export const UpdateMof: React.FC<UpdateMofPropsInterface>= ({cenoteId, theme, sh
                                                                                         <ClipLoader loading={createMofLoading} size={50} />
                                                                                     </div>
                                                                                 ) : (
-                                                                                <form onSubmit={evt => handleCreateMof(evt)}>
-                                                                                    <div className="row">
-                                                                                        <div className="form-group col-md-4">
-                                                                                            <label className="modal-label-c" htmlFor="longitude">
-                                                                                                DEFINIR UN VALOR PARA : {variableSelected.name}
-                                                                                            </label>
-                                                                                            {renderInputCreateMofField()}
-                                                                                          
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <button  type="submit" className="btn btn-primary">
-                                                                                        Guardar
-                                                                                    </button>
-                                                                                </form>
+                                                                                    <div>
+                                                                                    <form onSubmit={evt => handleCreateMof(evt)}>
+                                                                                        <div className="card-header">
+                                                                                                DEFINIR UN NUEVO VALOR PARA : {variableSelected.name}
+                                                                                            </div>
+                                                                                            <div className="card-body">
+                                                                                                {renderInputUpdateMofField()}
+                                                                                            </div>
+                                                                                            <div className="card-footer">
+                                                                                                <button  type="submit"  disabled={!isValid} className="mt-3 mr-2 btn btn-primary">
+                                                                                                    Guardar
+                                                                                                </button>
+                                                                                            </div>
+                                                                                    </form>
+                                                                                </div>
                                                                                 )
                                                                             }
                                                                         </>
@@ -425,50 +433,89 @@ export const UpdateMof: React.FC<UpdateMofPropsInterface>= ({cenoteId, theme, sh
                                                                                 <ClipLoader loading={MofByVariableAndCenoteLoading} size={50} />
                                                                             </div>
                                                                         ) : (
-                                                                            <form onSubmit={evt => handleUpdateMof(evt)}>
-                                                                                <div className="row">
-                                                                                    <ul className="list-group">
-                                                                                        {MofByVariableAndCenoteData.measurements.map((itemMensurement: MeasurementsInterface, index: string) => 
-                                                                                            <li key={'measurements'+ index} className="list-group-item d-flex justify-content-between align-items-center">
-                                                                                               
-                                                                                                {measurementsInput == 'measurements'+ index ?
-                                                                                                ( 
-                                                                                                    <div>
-                                                                                                        <div className="card-header">
-                                                                                                            DEFINIR UN NUEVO VALOR PARA : {variableSelected.name}
-                                                                                                            <a  onClick={() => handleCancelNewMeasurementsValue()}>
-                                                                                                            <span className=" ml-3 badge badge-default badge-pill"> 
-                                                                                                                    <img src="/src/assets/Icons/close.svg" alt="" /> 
-                                                                                                                </span>
-                                                                                                            </a>
-                                                                                                        </div>
-                                                                                                        <div className="card-body">
-                                                                                                            {renderInputUpdateMofField()}
-                                                                                                            <button  type="submit"  disabled={!isValid} className="mt-3 mr-2 btn btn-primary">
-                                                                                                                Actualizar
-                                                                                                            </button>
-                                                                                                            <button  type="button"  disabled={!isValid} className="mt-3 btn btn-default" onClick={() => handleCancelNewMeasurementsValue()}>
-                                                                                                                Cancelar
-                                                                                                            </button>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                )
-                                                                                                : (
-                                                                                                    <a  onClick={() => handleSetMeasurementsValues(itemMensurement, 'measurements'+ index)}>
-                                                                                                        {itemMensurement.value}
-                                                                                                        <span className=" ml-3 badge badge-default badge-pill cursor-pointer"> 
-                                                                                                            <img src="/src/assets/Icons/edit.svg" alt="" /> 
-                                                                                                        </span>
-                                                                                                    </a>
-                                                                                                )
-                                                                                                } 
-                                                                                            </li>
-                                                                                        )}
-                                                                                    </ul>
-                                                                                </div>
-                                                                            
-                                                                    
-                                                                            </form>
+                                                                            <>
+                                                                          
+                                                                            {!addRecord ? 
+                                                                                (      
+                                                                                <form onSubmit={evt => handleUpdateMof(evt)}>
+                                                                                    <div className="row">
+                                                                                        <ul className="list-group">
+                                                                                            {MofByVariableAndCenoteData.measurements.map((itemMensurement: MeasurementsInterface, index: string) => 
+                                                                                                <>
+                                                                                                    <li key={'measurements'+ index} className="list-group-item d-flex justify-content-between align-items-center">
+                                                                                                    
+                                                                                                        {measurementsInput == 'measurements'+ index ?
+                                                                                                        ( 
+                                                                                                            <div>
+                                                                                                                <div className="card-header">
+                                                                                                                    DEFINIR UN NUEVO VALOR PARA : {variableSelected.name}
+                                                                                                                    <a  onClick={() => handleCancelNewMeasurementsValue()}>
+                                                                                                                    <span className=" ml-3 badge badge-default badge-pill"> 
+                                                                                                                            <img src="/src/assets/Icons/close.svg" alt="" /> 
+                                                                                                                        </span>
+                                                                                                                    </a>
+                                                                                                                </div>
+                                                                                                                <div className="card-body">
+                                                                                                                    {renderInputUpdateMofField()}
+                                                                                                                </div>
+                                                                                                                <div className="card-footer">
+                                                                                                                    <button  type="submit"  disabled={!isValid} className="mt-3 mr-2 btn btn-primary">
+                                                                                                                        Actualizar
+                                                                                                                    </button>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        )
+                                                                                                        : (
+                                                                                                            <div>
+                                                                                                            
+                                                                                                                    <a  onClick={() => handleSetMeasurementsValues(itemMensurement, 'measurements'+ index)}>
+                                                                                                                        {itemMensurement.value}
+                                                                                                                        <span className=" ml-3 badge badge-default badge-pill cursor-pointer"> 
+                                                                                                                            <img src="/src/assets/Icons/edit.svg" alt="" /> 
+                                                                                                                        </span>
+                                                                                                                    </a>
+                                                                                                            </div>
+                                                                                                        )
+                                                                                                        } 
+                                                                                                    </li>
+                                                                                                    
+                                                                                                
+                                                                                                </>
+                                                                                            )}
+                                                                                        </ul>
+                                                                                      
+                                                                                    </div>
+                                                                                    <hr />
+                                                                                    <button  type="button" onClick={() => setAddRecord(true)} className="btn btn-outline-info  btn-sm">
+                                                                                        <img src="/src/assets/Icons/plus.svg" alt="" /> Agregar Registro
+                                                                                    </button>
+                                                                                </form>):
+                                                                            (
+                                                                            <div>
+                                                                                <form onSubmit={evt => handleCreateMof(evt)}>
+                                                                                    <div className="card-header">
+                                                                                            DEFINIR UN NUEVO VALOR PARA : {variableSelected.name}
+                                                                                            <a  onClick={() => setAddRecord(false)}>
+                                                                                            <span className=" ml-3 badge badge-default badge-pill"> 
+                                                                                                    <img src="/src/assets/Icons/close.svg" alt="" /> 
+                                                                                                </span>
+                                                                                            </a>
+                                                                                        </div>
+                                                                                        <div className="card-body">
+                                                                                            {renderInputUpdateMofField()}
+                                                                                        </div>
+                                                                                        <div className="card-footer">
+                                                                                            <button  type="submit"  disabled={!isValid} className="mt-3 mr-2 btn btn-primary">
+                                                                                                Guardar
+                                                                                            </button>
+                                                                                        </div>
+                                                                                </form>
+                                                                            </div>
+                                                                            )
+
+                                                                            }
+                                                                            </>
+                                                                     
                                                                         )}
                                                                         </>
                                                                     }

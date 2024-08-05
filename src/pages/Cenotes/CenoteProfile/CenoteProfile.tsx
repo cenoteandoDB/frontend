@@ -13,12 +13,15 @@ import { EnumsInterface } from "../../../Types/UserTypes";
 import { BiodiversityTab } from "./BiodiversityTab";
 import { UpdateMof } from "../../../Components/Modals/UpdateMof";
 import MapSelector from "../../../Components/Utils/mapSelector";
+import { BibliographyTab } from "./BibliographyTab";
+import { IndicatorsTab } from "./IndicatorsTab";
 
 export const CenoteProfile = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [theme, setTheme] = useState<string | null>(null);
   const { cenoteData, loadingData, errorData } = useGetCenoteById(id);
+
   const { themesData } = useThemes(); //ALL THEMES
   const { themesList, themesLoading ,themesError } = useGetThemesByCenote(id);//THEMES WITH DATA
   const { mofsByThemeData, mofsByThemeError ,mofsByThemeLoading, refetchMofByTheme } = useGetMofByTheme(id, theme);
@@ -97,6 +100,27 @@ export const CenoteProfile = () => {
     }
     return null;
   };
+
+  const renderThemesIcons = (themeName: string): string => {
+    const themeIcons: { [key: string]: string } = {
+      IDENTIFICATION: 'Icon=tabler_map.svg',
+      GEOMORPHOLOGY: 'Icon=tabler_mountain.svg',
+      BIODIVERSITY: 'Icon=tabler_leaf.svg',
+      WATER: 'Icon=tabler_droplet.svg',
+      REGULATION: 'Icon=tabler_user-shield.svg',
+      TOURISM: 'Icon=tabler_beach.svg',
+      ORGANIZATION: 'Icon=tabler_calendar-month.svg',
+      CULTURAL: 'Icon=tabler_diamonds.svg',
+      INDICATOR: 'Icon=tabler_test-pipe.svg',
+      BIBLIOGRAPHY: 'Icon=tabler_book-2.svg'
+    };
+  
+    const theme = themesData.find((item: EnumsInterface) => item.name === themeName);
+    if (theme) {
+      return '/src/assets/cenoteando-icons/' + themeIcons[themeName] || '/src/assets/cenoteando-icons/Icon=tabler_diamonds.svg'; // Return the icon or a default icon if not found
+    }
+    return '/src/assets/cenoteando-icons/Icon=tabler_diamonds.svg'; // Return a default icon if theme is not found
+  };
   
   return (
     <div>
@@ -123,31 +147,7 @@ export const CenoteProfile = () => {
                       <p className="lbl-bread-subtitle">
                         “Cenote de aguas cristalinas”
                       </p>
-                      <label className="tag-green-round mr-2">
-                        <img src="/src/assets/Icons/check.svg" alt="" />
-                        90% de índice de capacidad de carga
-                      </label>
-                      <label className="tag-green-round mr-2">
-                        <img src="/src/assets/Icons/check.svg" alt="" />
-                        85% de índice de cumplimiento de buenas prácticas
-                      </label>
-                      <label className="tag-green-round mr-2">
-                        <img src="/src/assets/Icons/check.svg" alt="" />
-                        62% de índice de accesibilidad al cenote
-                      </label>{" "}
-                      <label className="tag-green-round mr-2">
-                        <img src="/src/assets/Icons/check.svg" alt="" />
-                        100% de índice de presencia en redes sociales
-                      </label>
-                      <label className="tag-green-round mr-2">
-                        <img src="/src/assets/Icons/check.svg" alt="" />
-                        88% de índice de descripción de biodiversidad
-                      </label>
-                      <label className="tag-green-round mr-2">
-                        <img src="/src/assets/Icons/check.svg" alt="" />
-                        67% de índice de satisfacción de experiencia con base en
-                        comentarios de visitantes
-                      </label>
+                     
                     </div>
                     <div className="col-sm-12 col-md-4">
                       <div className="row">
@@ -212,7 +212,11 @@ export const CenoteProfile = () => {
                 </div>
               </section>
               <section className="content">
-                <Gallery></Gallery>
+                {cenoteData && cenoteData.photos.length ? (
+                  <Gallery photoUrls={cenoteData.photos}></Gallery>
+                  ) : (   <img src="/src/assets/Images/no_image.jpg" className="react-photo-album--photo" loading="lazy" decoding="async"></img> )
+                }
+                
                 <div className="row mt-5">
                   <div className="col-12">
                     <div className="card card-primary card-outline card-outline-tabs">
@@ -230,17 +234,44 @@ export const CenoteProfile = () => {
                                 aria-selected={tabController === `custom-tabs-${index}-tab`}
                                 onClick={() => handleTabController(`custom-tabs-${index}-tab`, theme.name)}
                               >
-                                <img
-                                  className="image-center"
-                                  src="/src/assets/Icons/overall-info.svg"
-                                  alt={theme.name}
-                                />
+                                <img className="image-center" src={`${renderThemesIcons(theme.name)}`} alt={`${theme.name} icon`} />
                                 <br />
                                 {theme.name}
                               </a>
                             </li>
                           ))}
-                   
+                          <li className='nav-item' key='bibliography'>
+                              <a
+                               
+                                className={tabController === `custom-tabs-bibliography-tab` ? "nav-link active" : "nav-link"}
+                                id={`custom-tabs-bibliography-tab`}
+                                data-toggle="pill"
+                                role="tab"
+                                aria-controls={`custom-tabs-bibliography-content`}
+                                aria-selected={tabController === `custom-tabs-bibliography-tab`}
+                                onClick={() => handleTabController(`custom-tabs-bibliography-tab`, 'bibliography')}
+                              >
+                                <img className="image-center" src='/src/assets/cenoteando-icons/Icon=tabler_book-2.svg' alt='INDICATOR' />
+                                <br />
+                                BIBLIOGRAPHY
+                              </a>
+                          </li>
+                          <li className='nav-item' key='indicators'>
+                              <a
+                               
+                                className={tabController === `custom-tabs-indicators-tab` ? "nav-link active" : "nav-link"}
+                                id={`custom-tabs-indicators-tab`}
+                                data-toggle="pill"
+                                role="tab"
+                                aria-controls={`custom-tabs-indicators-content`}
+                                aria-selected={tabController === `custom-tabs-indicators-tab`}
+                                onClick={() => handleTabController(`custom-tabs-indicators-tab`, 'indicators')}
+                              >
+                                <img className="image-center" src='/src/assets/cenoteando-icons/Icon=tabler_diamonds.svg' alt='INDICATOR' />
+                                <br />
+                                INDICATORS
+                              </a>
+                          </li>
                           <ul className="navbar-nav ml-auto">
                             <li className="nav-item">
                               <a
@@ -501,6 +532,27 @@ export const CenoteProfile = () => {
                               )}
                             </div>
                           ))}
+
+                          {/*BIBLIOGRAPHY*/}
+                          <div
+                              key='bibliography-tab-content'
+                              className={tabController === `custom-tabs-bibliography-tab` ? "tab-pane fade show active" : "tab-pane fade"}
+                              id={`custom-tabs-bibliography-content`}
+                              role="tabpanel"
+                              aria-labelledby={`custom-tabs-bibliography-tab`}
+                            >
+                              <BibliographyTab referenceList={cenoteData.references}></BibliographyTab>
+                          </div>
+                            {/*INDICATORS*/}
+                          <div
+                              key='indicators-tab-content'
+                              className={tabController === `custom-tabs-indicators-tab` ? "tab-pane fade show active" : "tab-pane fade"}
+                              id={`custom-tabs-indicators-content`}
+                              role="tabpanel"
+                              aria-labelledby={`custom-tabs-indicators-tab`}
+                            >
+                              <IndicatorsTab></IndicatorsTab>
+                          </div>
                         </div>
                       </div>
                     </div>
