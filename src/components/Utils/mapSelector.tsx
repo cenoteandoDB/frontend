@@ -19,11 +19,12 @@ const MapSelector: React.FC<CoordinatesPropsInterface> = ({ lat, lng, cenote }) 
   const handleInfoWindowCloseClick = () => {
     setShowInfoWindow(false);
   };
+  const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
   return (
     <>
-    { lat && lng ? (
-      <LoadScript googleMapsApiKey="AIzaSyAqmajyy50rbB3v_qTkmKje8UR-MrmIPZc">
+    { lat && lng && googleMapsApiKey? (
+      <LoadScript googleMapsApiKey={googleMapsApiKey}>
         <GoogleMap
           mapContainerStyle={{
             width: '100%',

@@ -15,17 +15,21 @@ import { UpdateMof } from "../../../Components/Modals/UpdateMof";
 import MapSelector from "../../../Components/Utils/mapSelector";
 import { BibliographyTab } from "./BibliographyTab";
 import { IndicatorsTab } from "./IndicatorsTab";
+import { WaterTab } from "./WaterTab";
+import { AddImages } from "../../../Components/Modals/AddImages";
+
 
 export const CenoteProfile = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [theme, setTheme] = useState<string | null>(null);
-  const { cenoteData, loadingData, errorData } = useGetCenoteById(id);
+  const { cenoteData, loadingData, errorData, refetchCenoteById } = useGetCenoteById(id);
 
   const { themesData } = useThemes(); //ALL THEMES
   const { themesList, themesLoading ,themesError } = useGetThemesByCenote(id);//THEMES WITH DATA
   const { mofsByThemeData, mofsByThemeError ,mofsByThemeLoading, refetchMofByTheme } = useGetMofByTheme(id, theme);
   const [showUpdateMofModal, setShowUpdateMofModal] = useState<boolean>(false);
+  const [showAddImageModal, setShowAddImageModal] = useState<boolean>(false);
   const [tabController, setTabController] = useState("");
   const loading = loadingData;
 
@@ -44,7 +48,7 @@ export const CenoteProfile = () => {
   };
 
   const handleIsThemeDoubleView = (theme: string | undefined | null) => {
-    const themesDoubleView = ["GEOMORPHOLOGY", "BIODIVERSITY", 'TOURISM'];
+    const themesDoubleView = ["GEOMORPHOLOGY", "BIODIVERSITY", 'TOURISM', 'WATER'];
     if(themesDoubleView && theme){
       if(themesDoubleView.includes(theme)){
         return true;
@@ -57,7 +61,9 @@ export const CenoteProfile = () => {
     setShowUpdateMofModal(!showUpdateMofModal);
   };
 
-
+  const handleAddImageToggleModal = () => {
+    setShowAddImageModal(!showAddImageModal);
+  };
 
   useEffect(() => {
     if (theme) {
@@ -84,6 +90,7 @@ export const CenoteProfile = () => {
       setTabController("custom-tabs-0-tab");
     }
   }, [themesData]);
+
 
   const renderIconOnCheckOption = (mofItem: mofInterface, measurementValue: string) => {
     if (measurementValue === 'true' || measurementValue === '') {
@@ -121,7 +128,7 @@ export const CenoteProfile = () => {
     }
     return '/src/assets/cenoteando-icons/Icon=tabler_diamonds.svg'; // Return a default icon if theme is not found
   };
-  
+
   return (
     <div>
       <DashboardData>
@@ -216,6 +223,12 @@ export const CenoteProfile = () => {
                   <Gallery photoUrls={cenoteData.photos}></Gallery>
                   ) : (   <img src="/src/assets/Images/no_image.jpg" className="react-photo-album--photo" loading="lazy" decoding="async"></img> )
                 }
+                <div className="pull-right float-right">
+                  <a onClick={() => setShowAddImageModal(true)} className="cursor-pointer">
+                    <img src="/src/assets/icons/plus.svg"/>
+                      Agregar Imagen
+                  </a>
+                </div>
                 
                 <div className="row mt-5">
                   <div className="col-12">
@@ -342,7 +355,7 @@ export const CenoteProfile = () => {
 
                                 {/*ADD AND EDIT VARIABLES BUTTON*/}
                                 <div className="float-right col-md-12">
-                                  <a onClick={() => setShowUpdateMofModal(true)} className="btn btn-bg-blue-round mt-5 float-right">
+                                  <a onClick={() => setShowUpdateMofModal(true)} className="btn btn-bg-blue-round  float-right">
                                     <img src="/src/assets/Icons/plus.svg" className="mr-2 " />
                                     Add/Edit Variables
                                   </a>
@@ -374,158 +387,168 @@ export const CenoteProfile = () => {
                                     }
                                   </div>
                                 }
-                                
-                                {handleIsThemeDoubleView(theme.name) ? 
-                                (
-                                  <div className='mt-3 col-6'>
-                                  {mofsByThemeData && (
-                                    mofsByThemeData.map((item: mofByThemeInterface, index: number) => (
-                                      <div key={ 'category-' + index }>
-                                        <div className={index == 0 ? "container-blue col-md-12" : "container-blue mt-3 col-md-12"}>
-                                          <p className="title-color title-weight title-size">  <img src={"/src/assets/icons/star.svg"}></img> {item.category}</p>
-                                          {item && item.mofs.map((mofItem: mofInterface) => (
-                                            <div key={mofItem.id} >
-                                                <div>
-                                                  {mofItem.variableRepresentation === 'TEXT' &&
-                                                    (mofItem.measurements.map((measurements_item: MeasurementsInterface) => (
-                                                    <div className="measurement-item">
-                                                      <span className="variable-name title-color">
-                                                      {mofItem.variableIcon ?
-                                                        ( <img src={"/src/assets/cenoteando-icons/" + mofItem.variableIcon } alt={mofItem.variableIcon + '.svg'} /> ):
-                                                        ( <img src="/src/assets/Icons/check.svg" alt="check" /> )
-                                                      }
-                                                      {mofItem.variableName}
-                                                      </span>
-                                                      { measurements_item.value != 'true' &&  measurements_item.value != 'false' &&
-                                                        <span className="measurement-value"><strong>{measurements_item.value}</strong></span>
-                                                      }
-                                                    
-                                                    </div>
-                                                    ))
-                                                  )}
-                                                  {mofItem.variableRepresentation === 'CHECK' || mofItem.variableRepresentation === 'ICON' && (
-                                                    <div className="two-column-container">
-                                                      {mofItem.measurements.map((measurements_item: MeasurementsInterface, index: number) => (
-                                                        <div className="two-column-item" key={index}>
-                                                            { renderIconOnCheckOption(mofItem, measurements_item.value) }
-                                                            { mofItem.variableName }
-                                                        </div> 
-                                                      ))}
-                                                    </div>
-                                                  )}
 
-                                                  {mofItem.variableRepresentation === 'UNITS' &&
-                                                    (mofItem.measurements.map((measurements_item: MeasurementsInterface) => (
-                                                    <div className="measurement-item">
-                                                      <span className="variable-name title-color">
-                                                      {mofItem.variableIcon &&  ( <img src={"/src/assets/cenoteando-icons/" + mofItem.variableIcon } alt={mofItem.variableIcon + '.svg'} /> )} 
-                                                      {mofItem.variableName}
-                                                      </span>
-                                                      <span className="measurement-value"><strong>{measurements_item.value} {mofItem?.variableUnits}</strong></span>
-                                                    </div>
-                                                    ))
-                                                  )}
-
-                                                  {mofItem.variableRepresentation === 'LIST' &&
-                                                    <div className="two-column-container">
-                                                      <span className="title-color"><strong>{mofItem.variableName}:</strong></span>
-                                                      {mofItem.measurements.map((measurements_item: MeasurementsInterface, index: number) => (
-                                                        <div className="two-column-item" key={index}>
-                                                              {mofItem.variableIcon ?
-                                                                ( <img src={"/src/assets/cenoteando-icons/" + mofItem.variableIcon } alt={mofItem.variableIcon + '.svg'} /> ):
-                                                                ( <img src="/src/assets/Icons/check.svg" alt="check" /> )
-                                                              } 
-                                                            { <strong>{measurements_item.value}</strong> }
-                                                        </div>
-                                                      ))}
-                                                    </div>
-                                                  }
-
-                                                </div>
-                                            </div>
-                                          )  
-                                        )}
-                                        </div>
-                                      </div>
-                                    ))
-                                  )}
-                                  </div>
-                                ): 
-                                (
+                                { theme.name == 'WATER' &&
                                   <>
-                                    {mofsByThemeData && (
-                                      mofsByThemeData.map((item: mofByThemeInterface, index: number) => (
-                                        <div key={ 'category-' + index } className='mt-3 col-md-6'>
-                                          <div className="container-blue">
-                                            <p className="title-color title-weight title-size">  <img src={"/src/assets/icons/star.svg"}></img> {item.category}</p>
-                                            {item && item.mofs.map((mofItem: mofInterface) => (
-                                              <div key={mofItem.id} >
-                                                  <div>
-                                                    {mofItem.variableRepresentation === 'TEXT' &&
-                                                      (mofItem.measurements.map((measurements_item: MeasurementsInterface) => (
-                                                      <div className="measurement-item">
-                                                        <span className="variable-name title-color">
-                                                        {mofItem.variableIcon ?
-                                                          ( <img src={"/src/assets/cenoteando-icons/" + mofItem.variableIcon } alt={mofItem.variableIcon + '.svg'} /> ):
-                                                          ( <img src="/src/assets/Icons/check.svg" alt="check" /> )
-                                                        }
-                                                        {mofItem.variableName}
-                                                        </span>
-                                                        { measurements_item.value != 'true' &&  measurements_item.value != 'false' &&
-                                                          <span className="measurement-value"><strong>{measurements_item.value}</strong></span>
-                                                        }
-                                                      
-                                                      </div>
-                                                      ))
-                                                    )}
-                                                    {mofItem.variableRepresentation === 'CHECK' || mofItem.variableRepresentation === 'ICON' && (
-                                                      <div className="two-column-container">
-                                                        {mofItem.measurements.map((measurements_item: MeasurementsInterface, index: number) => (
-                                                          <div className="two-column-item" key={index}>
-                                                              { renderIconOnCheckOption(mofItem, measurements_item.value) }
-                                                              { mofItem.variableName }
-                                                          </div> 
-                                                        ))}
-                                                      </div>
-                                                    )}
+                                    { <WaterTab mofsByThemeData={mofsByThemeData} />}
+                                  </>
+                                }
+                                
+                                {theme.name != 'WATER' &&
+                                  <>
+                                    {handleIsThemeDoubleView(theme.name)  ? 
+                                    (
+                                      <div className='mt-3 col-6'>
+                                      {mofsByThemeData && (
+                                        mofsByThemeData.map((item: mofByThemeInterface, index: number) => (
+                                          <div key={ 'category-' + index }>
+                                            <div className={index == 0 ? "container-blue col-md-12" : "container-blue mt-3 col-md-12"}>
+                                              <p className="title-color title-weight title-size">  <img src={"/src/assets/icons/star.svg"}></img> {item.category}</p>
+                                              {item && item.mofs.map((mofItem: mofInterface) => (
+                                                <div key={mofItem.id} >
+                                                    <div>
+                                                      {mofItem.variableRepresentation === 'TEXT' &&
+                                                        (mofItem.measurements.map((measurements_item: MeasurementsInterface) => (
+                                                        <div className="measurement-item">
+                                                          <span className="variable-name title-color">
+                                                          {mofItem.variableIcon ?
+                                                            ( <img src={"/src/assets/cenoteando-icons/" + mofItem.variableIcon } alt={mofItem.variableIcon + '.svg'} /> ):
+                                                            ( <img src="/src/assets/Icons/check.svg" alt="check" /> )
+                                                          }
+                                                          {mofItem.variableName}
+                                                          </span>
+                                                          { measurements_item.value != 'true' &&  measurements_item.value != 'false' &&
+                                                            <span className="measurement-value"><strong>{measurements_item.value}</strong></span>
+                                                          }
+                                                        
+                                                        </div>
+                                                        ))
+                                                      )}
+                                                      {mofItem.variableRepresentation === 'CHECK' || mofItem.variableRepresentation === 'ICON' && (
+                                                        <div className="two-column-container">
+                                                          {mofItem.measurements.map((measurements_item: MeasurementsInterface, index: number) => (
+                                                            <div className="two-column-item" key={index}>
+                                                                { renderIconOnCheckOption(mofItem, measurements_item.value) }
+                                                                { mofItem.variableName }
+                                                            </div> 
+                                                          ))}
+                                                        </div>
+                                                      )}
 
-                                                    {mofItem.variableRepresentation === 'UNITS' &&
-                                                      (mofItem.measurements.map((measurements_item: MeasurementsInterface) => (
-                                                      <div className="measurement-item">
-                                                        <span className="variable-name title-color">
-                                                        {mofItem.variableIcon &&  ( <img src={"/src/assets/cenoteando-icons/" + mofItem.variableIcon } alt={mofItem.variableIcon + '.svg'} /> )} 
-                                                        {mofItem.variableName}
-                                                        </span>
-                                                        <span className="measurement-value"><strong>{measurements_item.value} {mofItem?.variableUnits}</strong></span>
-                                                      </div>
-                                                      ))
-                                                    )}
+                                                      {mofItem.variableRepresentation === 'UNITS' &&
+                                                        (mofItem.measurements.map((measurements_item: MeasurementsInterface) => (
+                                                        <div className="measurement-item">
+                                                          <span className="variable-name title-color">
+                                                          {mofItem.variableIcon &&  ( <img src={"/src/assets/cenoteando-icons/" + mofItem.variableIcon } alt={mofItem.variableIcon + '.svg'} /> )} 
+                                                          {mofItem.variableName}
+                                                          </span>
+                                                          <span className="measurement-value"><strong>{measurements_item.value} {mofItem?.variableUnits}</strong></span>
+                                                        </div>
+                                                        ))
+                                                      )}
 
-                                                    {mofItem.variableRepresentation === 'LIST' &&
-                                                      <div className="two-column-container">
-                                                        <span className="title-color"><strong>{mofItem.variableName}:</strong></span>
-                                                        {mofItem.measurements.map((measurements_item: MeasurementsInterface, index: number) => (
-                                                          <div className="two-column-item" key={index}>
-                                                                {mofItem.variableIcon ?
-                                                                  ( <img src={"/src/assets/cenoteando-icons/" + mofItem.variableIcon } alt={mofItem.variableIcon + '.svg'} /> ):
-                                                                  ( <img src="/src/assets/Icons/check.svg" alt="check" /> )
-                                                                } 
-                                                              { <strong>{measurements_item.value}</strong> }
-                                                          </div>
-                                                        ))}
-                                                      </div>
-                                                    }
+                                                      {mofItem.variableRepresentation === 'LIST' &&
+                                                        <div className="two-column-container">
+                                                          <span className="title-color"><strong>{mofItem.variableName}:</strong></span>
+                                                          {mofItem.measurements.map((measurements_item: MeasurementsInterface, index: number) => (
+                                                            <div className="two-column-item" key={index}>
+                                                                  {mofItem.variableIcon ?
+                                                                    ( <img src={"/src/assets/cenoteando-icons/" + mofItem.variableIcon } alt={mofItem.variableIcon + '.svg'} /> ):
+                                                                    ( <img src="/src/assets/Icons/check.svg" alt="check" /> )
+                                                                  } 
+                                                                { <strong>{measurements_item.value}</strong> }
+                                                            </div>
+                                                          ))}
+                                                        </div>
+                                                      }
 
-                                                  </div>
-                                              </div>
-                                            )  
-                                          )}
+                                                    </div>
+                                                </div>
+                                              )  
+                                            )}
+                                            </div>
                                           </div>
-                                        </div>
-                                      ))
+                                        ))
+                                      )}
+                                      </div>
+                                    ): 
+                                    (
+                                      <>
+                                        {mofsByThemeData && (
+                                          mofsByThemeData.map((item: mofByThemeInterface, index: number) => (
+                                            <div key={ 'category-' + index } className='mt-3 col-md-6'>
+                                              <div className="container-blue">
+                                                <p className="title-color title-weight title-size">  <img src={"/src/assets/icons/star.svg"}></img> {item.category}</p>
+                                                {item && item.mofs.map((mofItem: mofInterface) => (
+                                                  <div key={mofItem.id} >
+                                                      <div>
+                                                        {mofItem.variableRepresentation === 'TEXT' &&
+                                                          (mofItem.measurements.map((measurements_item: MeasurementsInterface) => (
+                                                          <div className="measurement-item">
+                                                            <span className="variable-name title-color">
+                                                            {mofItem.variableIcon ?
+                                                              ( <img src={"/src/assets/cenoteando-icons/" + mofItem.variableIcon } alt={mofItem.variableIcon + '.svg'} /> ):
+                                                              ( <img src="/src/assets/Icons/check.svg" alt="check" /> )
+                                                            }
+                                                            {mofItem.variableName}
+                                                            </span>
+                                                            { measurements_item.value != 'true' &&  measurements_item.value != 'false' &&
+                                                              <span className="measurement-value"><strong>{measurements_item.value}</strong></span>
+                                                            }
+                                                          
+                                                          </div>
+                                                          ))
+                                                        )}
+                                                        {mofItem.variableRepresentation === 'CHECK' || mofItem.variableRepresentation === 'ICON' && (
+                                                          <div className="two-column-container">
+                                                            {mofItem.measurements.map((measurements_item: MeasurementsInterface, index: number) => (
+                                                              <div className="two-column-item" key={index}>
+                                                                  { renderIconOnCheckOption(mofItem, measurements_item.value) }
+                                                                  { mofItem.variableName }
+                                                              </div> 
+                                                            ))}
+                                                          </div>
+                                                        )}
+
+                                                        {mofItem.variableRepresentation === 'UNITS' &&
+                                                          (mofItem.measurements.map((measurements_item: MeasurementsInterface) => (
+                                                          <div className="measurement-item">
+                                                            <span className="variable-name title-color">
+                                                            {mofItem.variableIcon &&  ( <img src={"/src/assets/cenoteando-icons/" + mofItem.variableIcon } alt={mofItem.variableIcon + '.svg'} /> )} 
+                                                            {mofItem.variableName}
+                                                            </span>
+                                                            <span className="measurement-value"><strong>{measurements_item.value} {mofItem?.variableUnits}</strong></span>
+                                                          </div>
+                                                          ))
+                                                        )}
+
+                                                        {mofItem.variableRepresentation === 'LIST' &&
+                                                          <div className="two-column-container">
+                                                            <span className="title-color"><strong>{mofItem.variableName}:</strong></span>
+                                                            {mofItem.measurements.map((measurements_item: MeasurementsInterface, index: number) => (
+                                                              <div className="two-column-item" key={index}>
+                                                                    {mofItem.variableIcon ?
+                                                                      ( <img src={"/src/assets/cenoteando-icons/" + mofItem.variableIcon } alt={mofItem.variableIcon + '.svg'} /> ):
+                                                                      ( <img src="/src/assets/Icons/check.svg" alt="check" /> )
+                                                                    } 
+                                                                  { <strong>{measurements_item.value}</strong> }
+                                                              </div>
+                                                            ))}
+                                                          </div>
+                                                        }
+
+                                                      </div>
+                                                  </div>
+                                                )  
+                                              )}
+                                              </div>
+                                            </div>
+                                          ))
+                                        )}
+                                      </>
                                     )}
                                   </>
-                                )}
+                                }
                                
                                 {/*{content[theme]}*/}
                               </div>
@@ -563,8 +586,15 @@ export const CenoteProfile = () => {
                 theme={theme}
                 showModal={showUpdateMofModal}
                 handleToggleModal={handleUpdateMofToggleModal}
-                refetch={refetchMofByTheme}
+                refetch={refetchCenoteById}
               ></UpdateMof>
+
+              <AddImages
+                id={id}
+                showModal={showAddImageModal}
+                handleToggleModal={handleAddImageToggleModal}
+                refetch={refetchMofByTheme}
+              ></AddImages>
             </section>
           </>
       )}

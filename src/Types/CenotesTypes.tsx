@@ -96,5 +96,8 @@ export interface CenoteInterface {
   export interface mofByThemeInterface {
     category: string;
     mofs: mofInterface[];
+    order?: number | null | undefined;
+    icon?: string | null | undefined;
+    color?: string;
   }
 

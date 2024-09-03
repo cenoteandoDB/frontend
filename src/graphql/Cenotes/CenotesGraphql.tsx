@@ -15,7 +15,6 @@ query GetCenotes($sort: SortField, $pagination: PaginationInput, $name: String) 
   }
 }`;
 
-
 export const GET_CENOTE_BY_ID = `
 query Query($cenoteByIdId: ID!) {
   cenoteById(id: $cenoteByIdId) {
@@ -97,6 +96,10 @@ export const GET_MOF_BY_THEME = `query GetCenoteDataByTheme($cenoteId: ID!, $the
   }
 }`;
 
+export const GET_UPLOAD_IMAGE_URL= `query Query($cenoteId: ID!, $photoName: String!, $contentType: String!) {
+  generateCenotePhotoUploadUrl(cenoteId: $cenoteId, photoName: $photoName, contentType: $contentType)
+}`;
+
 export const DELETE_CENOTE = `
 mutation DeleteCenote($deleteCenoteId: ID!) {
   deleteCenote(id: $deleteCenoteId)
@@ -109,11 +112,9 @@ mutation CreateCenote($newCenote: NewCenoteInput!) {
   }
 }`;
 
-export const CREATE_MOF =  
- `mutation CreateMof($newMof: NewMeasurementOrFactInput!) {
-  createMof(new_mof: $newMof) {
-    id
-  }
+export const CREATE_MOF = `
+mutation RequestCreateMof($newMof: NewMeasurementOrFactInput!) {
+  requestCreateMof(new_mof: $newMof)
 } `;
 
 export const UPDATE_CENOTE =  `
@@ -124,8 +125,8 @@ mutation UpdateCenote($updatedCenote: UpdatedCenoteInput!, $cenoteId: String!) {
 }`;
 
 export const UPDATE_MOF = `
-mutation UpdateMof($updateMofInput: UpdateMofInput!) {
-  updateMof(update_mof_input: $updateMofInput)
+mutation RequestUpdateMof($updateMofInput: UpdateMofInput!) {
+  requestUpdateMof(update_mof_input: $updateMofInput)
 }`;
 
 export const ADD_FAVORITE_CENOTE = `
@@ -135,6 +136,23 @@ mutation Mutation($userId: ID!, $cenoteId: ID!) {
 
 export const REMOVE_FAVORITE_CENOTE = `mutation RemoveFavouriteCenote($userId: ID!, $cenoteId: ID!) {
   removeFavouriteCenote(userId: $userId, cenoteId: $cenoteId)
+}`;
+
+export const GET_MOF_MODIFICATIONS = `query GetMofModificationRequests {
+  getMofModificationRequests {
+    cenoteId
+    firestore_id
+    mof {
+      timestamp
+      value
+    }
+    old_mof {
+      timestamp
+      value
+    }
+    type
+    variableId
+  }
 }`;
 
 export const GET_ENUM_CENOTE_TYPE = `
@@ -147,3 +165,4 @@ export const GET_ENUM_CENOTE_TYPE = `
     }
   }
 `;
+

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { PaginationInterface, SortInterface } from "../../Types/UserTypes";
 import { gql, useMutation, useQuery } from "@apollo/client";
-import { ADD_FAVORITE_CENOTE, ALL_CENOTES, CREATE_CENOTE, CREATE_MOF, DELETE_CENOTE, GET_CENOTE_BY_ID, GET_CENOTE_DATA_BY_THEME, GET_CENOTE_THEMES_BY_CENOTE, GET_ENUM_CENOTE_TYPE, GET_MOF_BY_THEME, REMOVE_FAVORITE_CENOTE, UPDATE_CENOTE, UPDATE_MOF } from "./CenotesGraphql";
+import { ADD_FAVORITE_CENOTE, ALL_CENOTES, CREATE_CENOTE, CREATE_MOF, DELETE_CENOTE, GET_CENOTE_BY_ID, GET_CENOTE_DATA_BY_THEME, GET_CENOTE_THEMES_BY_CENOTE, GET_ENUM_CENOTE_TYPE, GET_MOF_BY_THEME, GET_MOF_MODIFICATIONS, GET_UPLOAD_IMAGE_URL, REMOVE_FAVORITE_CENOTE, UPDATE_CENOTE, UPDATE_MOF } from "./CenotesGraphql";
 import { AddFavoriteCenote, CreateCenoteInterface, createMofInterface, UpdateCenoteInterface, updateMofInterface } from "../../Types/CenotesTypes";
 
 export const useCenotes = (initialPagination: PaginationInterface, initialSort: SortInterface,  initialName: string | null = null) => {
@@ -66,6 +66,18 @@ export const useGetCenoteById = (id: string | null | undefined) => {
     return { cenoteData: data?.cenoteById, loadingData:loading, errorData: error, refetchCenoteById: refetch};
 };
 
+export const useGetUploadImageUrl = (id: string | null | undefined, photoName:  string | null | undefined) => {
+  const { data, loading, error, refetch } = useQuery(gql`${GET_UPLOAD_IMAGE_URL}`, {
+    variables: { 
+      cenoteId: id,
+      photoName: photoName,
+      contentType: "application/octet-stream"
+    },
+    skip: !id || !photoName, // Skip query if no id is provided
+  });
+  return { urlData: data?.generateCenotePhotoUploadUrl, urlLoading:loading, urlError: error, refetchUrl: refetch};
+};
+
 export const useGetThemesByCenote = (id: string | null | undefined) => {
   const { data, loading, error } = useQuery(gql`${GET_CENOTE_THEMES_BY_CENOTE}`, {
     variables: { cenoteId: id },
@@ -91,6 +103,11 @@ export const useGetMofByTheme = (cenoteId: string | null | undefined, theme: str
   return { mofsByThemeData: data?.getCenoteDataByTheme, mofsByThemeLoading: loading, mofsByThemeError: error, refetchMofByTheme: refetch};
 };
 
+
+export const useGetMofModifications = () => {
+  const { data, loading, error } = useQuery(gql`${GET_MOF_MODIFICATIONS}`);
+  return { mofsModificationData: data?.getMofModificationRequests, mofsModificationLoading: loading, mofsModificationError: error};
+};
 //MUTATIONS
 export const useCreateCenote = () => {
     const [ createCenoteMutation, {data, error, loading,} ] = useMutation(gql`${CREATE_CENOTE}`);

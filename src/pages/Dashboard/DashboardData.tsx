@@ -8,7 +8,7 @@ interface DefaultHeaderProps {
 }
 export const DashboardData = ({ children }: DefaultHeaderProps) => {
   return (
-    <>
+    
       <div className="wrapper">
         <Header />
         <div className="content-wrapper ">
@@ -17,6 +17,6 @@ export const DashboardData = ({ children }: DefaultHeaderProps) => {
         </div>
         <Footer />
       </div>
-    </>
+    
   );
 };

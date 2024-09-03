@@ -1,3 +1,5 @@
+import { mofInterface } from "./CenotesTypes";
+
 export interface ConfirmActionPropsInterface {
   show: boolean;
   title: string;
@@ -13,7 +15,7 @@ export interface SingleModalPropsInterface {
 }
 
 export interface UpdatePropsInterface {
-  id: string | null;
+  id: string | null | undefined;
   showModal: boolean;
   handleToggleModal?: () => void;
   refetch?: () => void
@@ -22,6 +24,15 @@ export interface UpdatePropsInterface {
 export interface UpdateMofPropsInterface {
   cenoteId: string | undefined | null;
   theme: string | null;
+  showModal: boolean;
+  handleToggleModal?: () => void;
+  refetch?: () => void
+}
+
+export interface AddMofPropsInterface {
+  cenoteId: string | undefined | null;
+  theme: string | null;
+  category: string | null;
   showModal: boolean;
   handleToggleModal?: () => void;
   refetch?: () => void
@@ -37,4 +48,10 @@ export interface PhotoInterface {
   src: string;
   width: number;
   height: number;
+}
+
+export interface WaterTabInterface {
+  category: string;
+  mofs: mofInterface[];
+  color: string; 
 }

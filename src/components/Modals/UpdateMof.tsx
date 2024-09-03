@@ -43,6 +43,7 @@ export const UpdateMof: React.FC<UpdateMofPropsInterface>= ({cenoteId, theme, sh
     const [ category, setCategory] = useState('')
     const { categoriesData, categoriesLoading} = useGetCategoryByTheme(theme)
     const { variableByCategoryData, variableByCategoryLoading, refetchVariablesByCategory} = useGetVariablesByCategory(category);
+    console.log(variableByCategoryData)
     const { MofByVariableAndCenoteData, MofByVariableAndCenoteError, MofByVariableAndCenoteLoading, refetchMofByVariableAndCenote} = useGetMofByCenoteAndVariable(cenoteId, variableSelected.firestore_id);
     const { createMofSuccess, createMofError, createMofLoading, createMof, setCreateMofsuccess} = useCreateMof();
     const { updateMofSucces, updateMofError, updateMofLoading, updateMof, setUpdateMofsuccess} = useUpdateMof();
@@ -68,7 +69,7 @@ export const UpdateMof: React.FC<UpdateMofPropsInterface>= ({cenoteId, theme, sh
     
     };
 
-    const handleChangeMofValue = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleChangeMofValue = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement  | HTMLSelectElement>) => {
         const { name, value, type } = e.target;
         if (type === 'checkbox') {
           const { checked } = e.target as HTMLInputElement;
@@ -131,7 +132,7 @@ export const UpdateMof: React.FC<UpdateMofPropsInterface>= ({cenoteId, theme, sh
         setUpdateMofFormData(prev =>({...prev, oldValue: oldValues.value, oldTimestamp: oldValues.timestamp, value:oldValues.value,}))
     }
 
-    const handleChangeNewMeasurementsValue = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleChangeNewMeasurementsValue = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value, type } = e.target;
         if (type === 'checkbox') {
           const { checked } = e.target as HTMLInputElement;
@@ -232,7 +233,7 @@ export const UpdateMof: React.FC<UpdateMofPropsInterface>= ({cenoteId, theme, sh
             case 'UNITS':
             return (
                 <input
-                type="number"
+                type="text"
                 name="value"
                 className="form-control"
                 value={createMofFormData.value}
@@ -286,7 +287,7 @@ export const UpdateMof: React.FC<UpdateMofPropsInterface>= ({cenoteId, theme, sh
             case 'UNITS':
             return (
                 <input
-                type="number"
+                type="text"
                 name="value"
                 className="form-control"
                 value={updateMofFormData.value}
@@ -412,10 +413,10 @@ export const UpdateMof: React.FC<UpdateMofPropsInterface>= ({cenoteId, theme, sh
                                                                                                 DEFINIR UN NUEVO VALOR PARA : {variableSelected.name}
                                                                                             </div>
                                                                                             <div className="card-body">
-                                                                                                {renderInputUpdateMofField()}
+                                                                                                {renderInputCreateMofField()}
                                                                                             </div>
                                                                                             <div className="card-footer">
-                                                                                                <button  type="submit"  disabled={!isValid} className="mt-3 mr-2 btn btn-primary">
+                                                                                                <button  type="submit" className="mt-3 mr-2 btn btn-primary">
                                                                                                     Guardar
                                                                                                 </button>
                                                                                             </div>
@@ -459,7 +460,7 @@ export const UpdateMof: React.FC<UpdateMofPropsInterface>= ({cenoteId, theme, sh
                                                                                                                     {renderInputUpdateMofField()}
                                                                                                                 </div>
                                                                                                                 <div className="card-footer">
-                                                                                                                    <button  type="submit"  disabled={!isValid} className="mt-3 mr-2 btn btn-primary">
+                                                                                                                    <button  type="submit"  className="mt-3 mr-2 btn btn-primary">
                                                                                                                         Actualizar
                                                                                                                     </button>
                                                                                                                 </div>
@@ -486,9 +487,12 @@ export const UpdateMof: React.FC<UpdateMofPropsInterface>= ({cenoteId, theme, sh
                                                                                       
                                                                                     </div>
                                                                                     <hr />
-                                                                                    <button  type="button" onClick={() => setAddRecord(true)} className="btn btn-outline-info  btn-sm">
+                                                                                    {variableItem.timeseries == true && (
+                                                                                        <button  type="button" onClick={() => setAddRecord(true)} className="btn btn-outline-info  btn-sm">
                                                                                         <img src="/src/assets/Icons/plus.svg" alt="" /> Agregar Registro
                                                                                     </button>
+                                                                                    )}
+                                                                                    
                                                                                 </form>):
                                                                             (
                                                                             <div>
@@ -502,10 +506,10 @@ export const UpdateMof: React.FC<UpdateMofPropsInterface>= ({cenoteId, theme, sh
                                                                                             </a>
                                                                                         </div>
                                                                                         <div className="card-body">
-                                                                                            {renderInputUpdateMofField()}
+                                                                                            {renderInputCreateMofField()}
                                                                                         </div>
                                                                                         <div className="card-footer">
-                                                                                            <button  type="submit"  disabled={!isValid} className="mt-3 mr-2 btn btn-primary">
+                                                                                            <button  type="submit" className="mt-3 mr-2 btn btn-primary">
                                                                                                 Guardar
                                                                                             </button>
                                                                                         </div>
