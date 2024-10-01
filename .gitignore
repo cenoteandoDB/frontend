@@ -9,7 +9,7 @@ lerna-debug.log*
 
 #src/Auth/AuthConstants.tsx
 node_modules
-#dist
+dist
 #dist-ssr
 *.local
 
@@ -23,3 +23,6 @@ node_modules
 *.njsproj
 *.sln
 *.sw?
+
+# Firebase deploy
+.firebase/*.cache

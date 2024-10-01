@@ -8,7 +8,7 @@ import { IconSelector } from '../Utils/IconSelector';
 
 export const UpdateVariable: React.FC<UpdatePropsInterface> = ({id, showModal, handleToggleModal, refetch }) => {
     const initialVariablesForm: UpdateVariableInterface = {
-        firestore_id: id,
+        firestore_id: id ?? '',
         name: "",
         description: "",
         category: "",
@@ -23,7 +23,7 @@ export const UpdateVariable: React.FC<UpdatePropsInterface> = ({id, showModal, h
         icon:"",
         variableRepresentation: "" };
     const { data, loading, error, updateVariable } = useUpdateVariable();
-    const { variableData, loadingData, errorData, refetchVariableById} = useGetVariableById(id);
+    const { variableData, loadingData, errorData, refetchVariableById} = useGetVariableById(id ?? '');
     
     const [ variableInfo, setVariableInfo] = useState<UpdateVariableInterface>(initialVariablesForm);
     const [ isFormValid, setIsFormValid] = useState(false);
@@ -61,7 +61,7 @@ export const UpdateVariable: React.FC<UpdatePropsInterface> = ({id, showModal, h
         if (variableData && !loadingData) {
             console.log(variableData)
             setVariableInfo({
-                firestore_id: id,
+                firestore_id: id ?? '',
                 name: variableData.name,
                 description: variableData.description,
                 category: variableData.category,
