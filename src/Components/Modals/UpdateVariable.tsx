@@ -23,12 +23,7 @@ export const UpdateVariable: React.FC<UpdatePropsInterface> = ({id, showModal, h
         icon:"",
         variableRepresentation: "" };
     const { data, loading, error, updateVariable } = useUpdateVariable();
-<<<<<<< HEAD:src/Components/Modals/UpdateVariable.tsx
-    const { variableData, loadingData, errorData, refetchVariableById} = useGetVariableById(id ?? '');
-=======
     const { variableData, loadingData, errorData, refetchVariableById} = useGetVariableById(id ? id : null);
->>>>>>> 1431a75 (deploy 08/11/24):src/components/Modals/UpdateVariable.tsx
-    
     const [ variableInfo, setVariableInfo] = useState<UpdateVariableInterface>(initialVariablesForm);
     const [ isFormValid, setIsFormValid] = useState(false);
     const { categoryData, categoryLoading } = useCategories();
@@ -65,7 +60,7 @@ export const UpdateVariable: React.FC<UpdatePropsInterface> = ({id, showModal, h
       
             setVariableInfo({
                 firestore_id: id ?? '',
-                name: variableData.name,
+                name: variableTypeData.name,
                 description: variableData.description,
                 category: variableData.category,
                 accessLevel: variableData.accessLevel,
@@ -95,7 +90,7 @@ export const UpdateVariable: React.FC<UpdatePropsInterface> = ({id, showModal, h
           }
         }
         if(data && !error){
-          toast.success('Registro Actualizado Exitosamente');
+          toast.success('Registro Actualizado Exitosamente, Ir a inicio para aprobar los cambios');
           if (handleToggleModal) handleToggleModal();
           if (refetch) refetch();
           if (refetchVariableById) refetchVariableById;

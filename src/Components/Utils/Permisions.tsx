@@ -149,7 +149,7 @@ export const Permisions: React.FC<PermissionProps> = ({ userId }) => {
             }
     
             // All operations successful
-            toast.success("Successfully updated all permissions");
+            toast.success("Se actualizaron todos los permisos con éxito");
     
         } catch (error) {
             toast.error("Error updating permissions for selected cenotes");

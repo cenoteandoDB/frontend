@@ -32,7 +32,7 @@ export const Login = () => {
  
   
   if (isAuthenticated) {
-    return <Navigate to="/users" />;
+    return <Navigate to="/home" />;
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
