@@ -80,7 +80,6 @@ export const useVerifyUser = () => {
         } catch (error: unknown) {
             if (error instanceof Error) {
                 console.log('Error verifying code:', error.message);
-                console.error('Error verifying code:', error.message);
                 // Handle the error (e.g., show an error message to the user)
             } else {
                 console.error('An unknown error occurred');
@@ -167,7 +166,7 @@ export const useInviteUser = () => {
         }
     };
 
-    return { inviteUser, loading, error, success };
+    return { inviteUser, loading, error, success, dataInviteUser: data?.inviteUser };
 }
 
 export const useDeleteUser = () => {

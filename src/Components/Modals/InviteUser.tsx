@@ -2,17 +2,24 @@ import React, {useState, useEffect} from "react";
 import { EnumsInterface, InviteUserInterface } from "../../Types/UserTypes";
 import { SingleModalPropsInterface } from "../../Types/UtilsTypes";
 import { useUserRoles, useInviteUser } from "../../graphql/Users/UsersCustomHooks";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import { Permisions } from "../Utils/Permisions";
 
 export const InviteUser: React.FC<SingleModalPropsInterface> = ({showModal, handleToggleModal}) => {
   const {rolesData } = useUserRoles();
-  const { inviteUser, loading, error, success } = useInviteUser();
+  const { inviteUser, loading, error, success, dataInviteUser } = useInviteUser();
+  const [showTab, setShowTab] = useState('tab_1');
+  const [inviteUserId, setInviteUserId] = useState(null);
   const [inviteUserFormData, setInviteUserFormData] = useState<InviteUserInterface>({
     name: "",
     email: "",
-    userRole: ""
+    userRole: "BASIC"
   });
+ 
+  const handleToggleTab = (tabName: string) => {
+    setShowTab(tabName);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
       const { name, value } = e.target;
@@ -25,7 +32,6 @@ export const InviteUser: React.FC<SingleModalPropsInterface> = ({showModal, hand
   const handleInviteUser = async (event: React.FormEvent) => {
       event.preventDefault();
       inviteUser(inviteUserFormData);
-      
   };
 
   useEffect(() => {
@@ -36,17 +42,33 @@ export const InviteUser: React.FC<SingleModalPropsInterface> = ({showModal, hand
       }
     }
     if (success) {
+      setInviteUserId(dataInviteUser.id)
       toast.success("Operación exitosa");
-      if (handleToggleModal) {
-        handleToggleModal();
+     
+      if(inviteUserFormData.userRole == 'ADMIN'){
+        if (handleToggleModal) {
+          handleToggleModal();
+          setInviteUserFormData({
+            name: "",
+            email: "",
+            userRole: "BASIC"
+          });
+        }
+      } else {
+        setShowTab('tab_2')
       }
     }
-    setInviteUserFormData({
+    /*setInviteUserFormData({
       name: "",
       email: "",
       userRole: ""
-    });
-}, [error, success]);
+    });*/
+  }, [error, success]);
+
+  useEffect(() => {
+      setInviteUserFormData(prev => ({ ...prev, userRole: 'BASIC' }));
+  }, []);
+
 
   return (
     <div>
@@ -59,7 +81,7 @@ export const InviteUser: React.FC<SingleModalPropsInterface> = ({showModal, hand
           role="dialog"
           data-backdrop="static"
         >
-          <div className="modal-dialog">
+          <div className="modal-dialog modal-xl">
             <div className="modal-content">
               <div className="modal-header">
                 <h4 className="modal-title-c">Invitar Usuario</h4>
@@ -73,69 +95,107 @@ export const InviteUser: React.FC<SingleModalPropsInterface> = ({showModal, hand
                   <span aria-hidden="true">×</span>
                 </button>
               </div>
-              <form onSubmit={evt => handleInviteUser(evt)}>
-                <div className="modal-body">
-                  <div>
-                    <div className="form-group">
-                      <label
-                        className="modal-label-c"
-                        htmlFor="exampleInputEmail1"
+              <ul className="nav nav-pills ml-auto p-2 d-flex justify-content-between w-100 py-3 ">
+                {inviteUserId && success ? 
+                 <li className="nav-item flex-grow-1">
+                 <a className={showTab == 'tab_1' ? "nav-link  text-center text-cnt bg-active-cnt py-3" : "nav-link text-center text-cnt bg-cnt py-3"} 
+                   href="#tab_1" 
+                   data-toggle="tab">
+                    <img src="/src/assets/Icons/Done.svg"></img> Información básica
+                 </a>
+               </li>:  <li className="nav-item flex-grow-1">
+                  <a className={showTab == 'tab_1' ? "nav-link  text-center text-cnt bg-active-cnt py-3" : "nav-link text-center text-cnt bg-cnt py-3"} 
+                    href="#tab_1" 
+                    data-toggle="tab" 
+                    onClick={() => handleToggleTab('tab_1')}>
+                     <img src="/src/assets/Icons/Done.svg"></img> Información básica
+                  </a>
+                </li>}
+               
+                {success &&
+                 <li className="nav-item flex-grow-1">
+                 <a className={showTab == 'tab_2' ? "nav-link  text-center text-cnt bg-active-cnt py-3" : "nav-link text-center text-cnt bg-cnt py-3"} 
+                   href="#tab_2" 
+                   data-toggle="tab" 
+                   onClick={() => handleToggleTab('tab_2')}>
+                    <img src="/src/assets/Icons/progress.svg"></img> Cenotes y permisos
+                 </a>
+                </li>
+                }
+               
+              </ul>
+              <div className="tab-content">
+                <div className={showTab == 'tab_1' ? "tab-pane active" : "tab-pane"} id="tab_1">
+                  <form onSubmit={evt => handleInviteUser(evt)}>
+                    <div className="modal-body">
+                      <div>
+                        <div className="form-group">
+                          <label
+                            className="modal-label-c"
+                            htmlFor="exampleInputEmail1"
+                          >
+                            Correo Electrónico
+                          </label>
+                          <input
+                            type="email"
+                            name="email"
+                            className="form-control"
+                            value={inviteUserFormData.email}
+                            onChange={handleChange}
+                            required
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label
+                            className="modal-label-c"
+                            htmlFor="exampleInputPassword1"
+                          >
+                            Nombre
+                          </label>
+                          <input
+                            type="text"
+                            name="name"
+                            className="form-control"
+                            value={inviteUserFormData.name}
+                            onChange={handleChange}
+                            required
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label className="modal-label-c">Tipo de usuario</label>
+                          <select 
+                            name="userRole"
+                            className="form-control"
+                            value={inviteUserFormData.userRole}
+                            onChange={handleChange}>
+                            {rolesData && rolesData.map((item: EnumsInterface) => (
+                              <option key={item.name}  value={item.name}>{item.name}</option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="modal-footer justify-content-between">
+                      <button
+                        type="button"
+                        className="btn btn-default"
+                        data-dismiss="modal"
+                        onClick={handleToggleModal}
                       >
-                        Correo Electrónico
-                      </label>
-                      <input
-                        type="email"
-                        name="email"
-                        className="form-control"
-                        value={inviteUserFormData.email}
-                        onChange={handleChange}
-                        required
-                      />
+                        Close
+                      </button>
+                      <button  type="submit"  className="btn btn-primary">
+                        Invitar
+                      </button>
                     </div>
-                    <div className="form-group">
-                      <label
-                        className="modal-label-c"
-                        htmlFor="exampleInputPassword1"
-                      >
-                        Nombre
-                      </label>
-                      <input
-                        type="text"
-                        name="name"
-                        className="form-control"
-                        value={inviteUserFormData.name}
-                        onChange={handleChange}
-                        required
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label className="modal-label-c">Tipo de usuario</label>
-                      <select 
-                        name="userRole"
-                        className="form-control"
-                        value={inviteUserFormData.userRole}
-                        onChange={handleChange}>
-                        {rolesData && rolesData.map((item: EnumsInterface) => (
-                          <option key={item.name}  value={item.name}>{item.name}</option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
+                  </form>
                 </div>
-                <div className="modal-footer justify-content-between">
-                  <button
-                    type="button"
-                    className="btn btn-default"
-                    data-dismiss="modal"
-                    onClick={handleToggleModal}
-                  >
-                    Close
-                  </button>
-                  <button  type="submit"  className="btn btn-primary">
-                    Invitar
-                  </button>
+                <div className={showTab == 'tab_2' ? "tab-pane active" : "tab-pane"} id="tab_2">
+                  {inviteUserId && <Permisions userId={inviteUserId}></Permisions>}
+                           
                 </div>
-              </form>
+                
+              </div>
             </div>
           </div>
         </div>

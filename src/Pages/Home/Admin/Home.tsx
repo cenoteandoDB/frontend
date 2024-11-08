@@ -7,6 +7,7 @@ import FavoriteCenotes from "./FavoriteCenotes/FavoriteCenotes";
 import { NewUsersList } from "./NewUsersList/NewUsersList";
 import { RequestList } from "./RequestList/RequestList";
 import { HistoryList } from "./HistoryList/HistoryList";
+import { ToastContainer } from "react-toastify";
 
 export const Home = () => {
   return (
@@ -15,6 +16,7 @@ export const Home = () => {
         <section className="content-header">
           <div className="container-fluid">
             <div className="row mb-2">
+            <ToastContainer />
               <div className="col-sm-6 col-md-5">
                 <h1 className="lbl-bread-title">Cenoteando Data</h1>
                 <p className="lbl-bread-subtitle">
@@ -26,11 +28,11 @@ export const Home = () => {
           </div>
         </section>
         <section className="content">
-          <VisualizedCenotes></VisualizedCenotes>
+          {/*<VisualizedCenotes></VisualizedCenotes>*/}
           <FavoriteCenotes></FavoriteCenotes>
-          <NewUsersList></NewUsersList>
+          {/*<NewUsersList></NewUsersList>*/}
           <RequestList></RequestList>
-          <HistoryList></HistoryList>
+          {/*<HistoryList></HistoryList>*/}
         </section>
       </DashboardData>
     </div>

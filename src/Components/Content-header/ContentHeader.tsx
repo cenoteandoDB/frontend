@@ -16,34 +16,34 @@ export const ContentHeader = () => {
           <div className="collapse navbar-collapse order-3" id="navbarCollapse">
             <ul className="navbar-nav">
               <li className="nav-item">
-                <Link className="nav-link" to="/home">
+                <Link className="nav-link  btn-cnt-button-rad-8-round" to="/home">
                   Inicio
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/">
+                <Link className="nav-link  btn-cnt-button-rad-8-round" to="/">
                   Dashboard
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/cenotes">
+                <Link className="nav-link  btn-cnt-button-rad-8-round" to="/cenotes">
                   Lista de Cenotes
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/">
+                <Link className="nav-link  btn-cnt-button-rad-8-round" to="/">
                   Mapa de Cenotes
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/users">
+                <Link className="nav-link  btn-cnt-button-rad-8-round" to="/users">
                   Usuarios
                 </Link>
               </li>
 
               <li className={"nav-item dropdown " + show}>
                 <a
-                  className="nav-link"
+                  className="nav-link  btn-cnt-button-rad-8-round"
                   data-toggle="dropdown"
                   aria-expanded="true"
                   onClick={handleToggleDropdown}
@@ -80,7 +80,7 @@ export const ContentHeader = () => {
               </li>
 
               <li className="nav-item">
-                <Link className="nav-link" to="/">
+                <Link className="nav-link  btn-cnt-button-rad-8-round" to="/">
                   OAI-PMH
                 </Link>
               </li>

@@ -61,20 +61,20 @@ function Header() {
             {/* LISTA DE ENLANCES  */}
             <ul className="navbar-nav">
                {/*research  */}
-              <li className="nav-item">
-                <Link className="nav-link" to="/">
-                  Turismo
+              <li className="nav-item ml-5">
+                <Link className="nav-link btn-cnt-button-rad-8" to="/">
+                  Comunidad
                 </Link>
               </li>
                {/*turismo  */}
-              <li className="nav-item">
-                <Link className="nav-link" to="/">
-                  Research
+              <li className="nav-item ml-2">
+                <Link className="nav-link btn-cnt-button-rad-8" to="/">
+                  Science
                 </Link>
               </li>
                {/*data  */}
-              <li className="nav-item">
-                <Link className="nav-link" to="/">
+              <li className="nav-item ml-2">
+                <Link className="nav-link btn-cnt-button-rad-8-green " to="/">
                   Data
                 </Link>
               </li>

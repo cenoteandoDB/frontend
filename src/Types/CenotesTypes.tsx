@@ -53,6 +53,20 @@ export interface CenoteInterface {
     cenoteName: string;
   }
 
+  
+  export interface FavoriteCenote_v2 {
+    type: string;
+    touristic: string;
+    thumbnail: string;
+    state: string;
+    name: string;
+    municipality: string;
+    firestore_id: string;
+    cenoteando_id: string;
+  
+  }
+
+   
   export interface AddFavoriteCenote {
     userId: string;
     cenoteId: string;
@@ -81,7 +95,7 @@ export interface CenoteInterface {
     cenoteId: string | null | undefined;
     timestamp: string | null | undefined;
     value: string;
-    variableId: string | null;
+    variableId: string | null | undefined;
   }
 
   export interface updateMofInterface {
@@ -90,7 +104,7 @@ export interface CenoteInterface {
     oldTimestamp: string | null | undefined;
     value: string;
     oldValue: string
-    variableId: string | null;
+    variableId: string | null | undefined;
   }
 
   export interface mofByThemeInterface {

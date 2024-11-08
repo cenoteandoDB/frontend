@@ -62,7 +62,7 @@ const renderOrderWaterCategories = (mofsByThemeData: mofByThemeInterface[]) => {
   return (
     <>
       {sortedMofsByThemeData.map((item, index) => (
-        <div key={'water-' + index} className="container-category mt-3 col-md-12" style={{ backgroundColor: item.color }}>
+        <div key={'theme-' + index} className="container-category mt-3 col-md-12" style={{ backgroundColor: item.color }}>
           <p className="title-color title-weight title-size">
             {typeof item.icon === 'string' && (
               <img src={item.icon} alt="Category Icon" />
@@ -70,9 +70,9 @@ const renderOrderWaterCategories = (mofsByThemeData: mofByThemeInterface[]) => {
             {item.category}
           </p>
           {item.mofs.map((mofItem) => (
-            <div key={'water-' + mofItem.id}>
-              {mofItem.measurements.map((measurements_item) => (
-                <div className="measurement-item" key={measurements_item.timestamp}>
+            <div key={'mofs-' + mofItem.id}>
+              {mofItem.measurements.map((measurements_item, index) => (
+                <div className="measurement-item" key={'measurements-' + index}>
                   <span className="variable-name title-color">
                     {mofItem.variableName}
                   </span>

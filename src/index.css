@@ -1,15 +1,46 @@
 @import 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css';
 
+/*promary: background: #F5F8FE;?/
+/*primary texto: background: #1C1C1C;*/
 /*Buttons*/
 .btn-white {
   background-color: white;
   outline: none;
 }
 
+.bg-cnt{
+  background-color: #F5F8FE !important;
+}
+.bg-active-cnt {
+  background: #DAE1F1 !important;
+}
+
+
 .btn-white-border {
   background-color: white;
   outline: none;
   border: 1px solid #88a7bb;
+}
+
+
+.btn-cnt-button-rad-8 {
+  background-color: #F5F8FE;
+  color: #1C1C1C  !important;
+  border-radius: 5px;
+}
+
+.btn-cnt-button-rad-8-round {
+  background-color: #F5F8FE;
+  color: #1C1C1C  !important;
+  border-radius: 40px;
+  margin-left: 5px;
+} 
+
+
+.btn-cnt-button-rad-8-green {
+  background-color: #4CA74B;;
+  color: #ffffff !important;
+  border-radius: 5px;
 }
 
 .btn-bg-blue {
@@ -62,12 +93,38 @@
   cursor: pointer;
 }
 
+.checkboxp{
+  accent-color: #3D708F;
+}
+.checkbox-theme{
+  accent-color: #3D578F !important;
+}
+
 /*Tables*/
 .bg-header-footer {
   background-color: #f8fafc;
 }
 
 /*Tags*/
+.text-cnt{
+  color: #3D708F !important;
+}
+
+.text-cnt-pgrey{
+  line-height: 20px;
+  font-weight: 400;
+  font-size: 14px;
+  color: #525252 !important;
+}
+
+.text-cnt-label{
+  color: #3D578F !important;
+}
+
+.text-buttons-cnt{
+  color: #183981 !important;
+}
+
 .bg-tag-success {
   padding: 3px 6px;
   background-color: #f8fafc;
@@ -90,6 +147,7 @@
   background-color: #fff3b9;
   color: #71600e;
 }
+
 
 .tag-blue-round {
   padding: 1px 8px 1px 8px;
@@ -142,14 +200,20 @@
   text-align: left;
 }
 
-  /* Important part */
-  .modal-dialog{
-    overflow-y: initial !important
-  }
-  .modal-body{
-      max-height: calc(100vh - 200px);
-      overflow-y: auto;
-  }
+/* Important part */
+.modal-dialog {
+  border-radius: 24px !important;
+  overflow-y: initial !important;
+}
+
+.modal-header {
+  padding-top: 35px !important;
+}
+
+.modal-body{
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+}
 
 /*Labels*/
 .lbl-bread-subtitle {
@@ -162,6 +226,19 @@
   font-size: 48px;
   font-weight: 900;
   line-height: 48px;
+}
+
+/*Nav*/
+.main-header .nav-item > a {
+  padding: 15px !important; 
+  padding-top:0px !important;
+  padding-bottom:0px !important;
+
+  font-weight: 600;
+}
+
+.main-header .nav-link {
+  height: 1.8rem !important;
 }
 
 /*##SECTIONS*/
@@ -179,4 +256,10 @@
 .img-square{
  
   max-height: 250px;
+}
+
+/*header*/
+.bg-color-header{
+  background-color: #F5F8FE;
+
 }

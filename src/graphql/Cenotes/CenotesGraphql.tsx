@@ -138,21 +138,35 @@ export const REMOVE_FAVORITE_CENOTE = `mutation RemoveFavouriteCenote($userId: I
   removeFavouriteCenote(userId: $userId, cenoteId: $cenoteId)
 }`;
 
-export const GET_MOF_MODIFICATIONS = `query GetMofModificationRequests {
+export const GET_MOF_MODIFICATIONS = `query MofModificationRequests {
   getMofModificationRequests {
-    cenoteId
-    firestore_id
-    mof {
-      timestamp
-      value
+    mofModificationRequests {
+      cenoteId
+      cenoteName
+      creator
+      creatorId
+      firestore_id
+      mof {
+        timestamp
+        value
+      }
+      old_mof {
+        timestamp
+        value
+      }
+      type
+      variableCategory
+      variableId
     }
-    old_mof {
-      timestamp
-      value
-    }
-    type
-    variableId
   }
+}`;
+
+export const ACCEPT_MOF_REQUEST = `mutation AcceptMofRequest($updateMofId: ID!) {
+  acceptMofRequest(update_mof_id: $updateMofId)
+}`;
+
+export const REJECT_MOF_REQUEST = `mutation RejectMofRequest($updateMofId: ID!) {
+  rejectMofRequest(update_mof_id: $updateMofId)
 }`;
 
 export const GET_ENUM_CENOTE_TYPE = `

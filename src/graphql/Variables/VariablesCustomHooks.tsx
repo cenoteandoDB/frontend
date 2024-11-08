@@ -1,6 +1,6 @@
 import React,  { useState, useEffect, useCallback } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client"; 
-import { GET_VARIABLES, DELETE_VARIABLE, CREATE_VARIABLE, GET_ENUM_CATEGORY_VALUES, GET_ENUM_ACCESS_LEVEL_VALUES, GET_ENUM_VARIABLE_TYPE_VALUES, GET_ENUM_SPHERE_VALUES, GET_ENUM_ORIGIN_VALUES, UPDATE_VARIABLE, GET_VARIABLE_BY_ID, GET_VARIABLES_BY_THEME, GET_ENUM_VARIABLE_REPRESENTATION, GET_CATEGORY_BY_THEME, GET_VARIABLES_BY_CATEGORY, GET_MOF_BY_CENOTE_AND_VARIABLE} from "./VariablesGraphql";
+import { GET_VARIABLES, DELETE_VARIABLE, CREATE_VARIABLE, GET_ENUM_CATEGORY_VALUES, GET_ENUM_ACCESS_LEVEL_VALUES, GET_ENUM_VARIABLE_TYPE_VALUES, GET_ENUM_SPHERE_VALUES, GET_ENUM_ORIGIN_VALUES, UPDATE_VARIABLE, GET_VARIABLE_BY_ID, GET_VARIABLES_BY_THEME, GET_ENUM_VARIABLE_REPRESENTATION, GET_CATEGORY_BY_THEME, GET_VARIABLES_BY_CATEGORY, GET_MOF_BY_CENOTE_AND_VARIABLE, GET_ALL_VARIABLES} from "./VariablesGraphql";
 import { CreateVariableInterface, UpdateVariableInterface, VariableInterface } from "../../Types/VariablesTypes";
 import { PaginationInterface, SortInterface } from "../../Types/UserTypes";
 import { GET_ENUM_THEME_VALUES } from "../Users/UsersGraphql";
@@ -49,6 +49,20 @@ export const useVariables = (initialPagination: PaginationInterface, initialSort
         currentSortOrder: sort.sortOrder,
         totalItems: data ? data.getVariables.totalCount : 0,
     };
+};
+
+export const useAllVariables = () => {
+    const { data, error, loading } = useQuery(gql`${GET_ALL_VARIABLES}`, {
+        variables: { pagination: {"limit": 500, "offset": 1 }  },
+        fetchPolicy: 'cache-and-network'
+    });
+    
+    return {
+        loadingVariables: loading,
+        errorVariables: error,
+        variables: data?.getVariables?.variables || [],
+        totalCount: data?.getVariables?.totalCount || 0,
+    };  
 };
 
 export const useGetVariableById = (id: string | null) => {

@@ -36,7 +36,7 @@ export interface CreateVariableInterface {
 }
 
 export interface UpdateVariableInterface {
-    firestore_id: string | null;
+    firestore_id: string | null | undefined;
     name: string;
     category: string;
     description: string;

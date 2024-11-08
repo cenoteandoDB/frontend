@@ -18,3 +18,14 @@ export const getCurrentDate = () => {
   const formattedDate = currentDate.toISOString().split('.')[0] + 'Z';
   return formattedDate;
 }
+
+//SUBTRING DATE 0, 10
+export const getDateFormat = (date: string): string | null => {
+  // Extract only the date part (YYYY-MM-DD)
+  if(date){
+    return date.substring(0, 10);
+  }
+  return '';
+  
+  
+};

@@ -88,7 +88,7 @@ export const CreateVariable:React.FC<SingleModalPropsInterface> = ({showModal, h
   
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        console.log(variableFormData)
+
         createVariable(variableFormData);
     };
 

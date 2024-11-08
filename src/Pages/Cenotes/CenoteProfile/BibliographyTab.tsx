@@ -39,7 +39,7 @@ export const BibliographyTab: React.FC<ReferencesTabProps> = ({referenceList}) =
                 </thead>
                 <tbody>
                 {referenceList && referenceList.map((item: ReferencesInterface) => (
-                  <tr key={item.cenoteando_id}>
+                  <tr key={'reference-' + item.cenoteando_id}>
                     <td>{item?.short_name ?  item.short_name : item.title}</td>
                     <td>{item?.type} </td>
                     <td>{item?.date_primary}</td>

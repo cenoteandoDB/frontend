@@ -43,8 +43,7 @@ export const UpdateMof: React.FC<UpdateMofPropsInterface>= ({cenoteId, theme, sh
     const [ category, setCategory] = useState('')
     const { categoriesData, categoriesLoading} = useGetCategoryByTheme(theme)
     const { variableByCategoryData, variableByCategoryLoading, refetchVariablesByCategory} = useGetVariablesByCategory(category);
-    console.log(variableByCategoryData)
-    const { MofByVariableAndCenoteData, MofByVariableAndCenoteError, MofByVariableAndCenoteLoading, refetchMofByVariableAndCenote} = useGetMofByCenoteAndVariable(cenoteId, variableSelected.firestore_id);
+    const { MofByVariableAndCenoteData, MofByVariableAndCenoteError, MofByVariableAndCenoteLoading, refetchMofByVariableAndCenote} = useGetMofByCenoteAndVariable(cenoteId, variableSelected.firestore_id ? variableSelected.firestore_id : null);
     const { createMofSuccess, createMofError, createMofLoading, createMof, setCreateMofsuccess} = useCreateMof();
     const { updateMofSucces, updateMofError, updateMofLoading, updateMof, setUpdateMofsuccess} = useUpdateMof();
     const [ categoryAcordionTab, setCategoryAcordionTab] = useState<string>("tab-0")

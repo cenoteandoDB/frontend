@@ -48,7 +48,6 @@ export const UpdateReference: React.FC<UpdatePropsInterface> = ({id, showModal, 
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value , type} = e.target;
-        console.log( type)
         if(type == 'number'){
             setReferenceInfo((prevState) => ({
                 ...prevState,
@@ -128,7 +127,7 @@ export const UpdateReference: React.FC<UpdatePropsInterface> = ({id, showModal, 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if(id) {
-        console.log(referenceInfo)
+
         const sanitizedData = removeTypenameFromObject(referenceInfo);
         await updateReference(id, sanitizedData);
     }

@@ -45,7 +45,6 @@ export const CreateReference: React.FC<SingleModalPropsInterface> = ({showModal,
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value , type} = e.target;
-        console.log( type)
         if(type == 'number'){
             setReferenceFormData((prevState) => ({
                 ...prevState,

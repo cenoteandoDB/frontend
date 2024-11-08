@@ -16,7 +16,6 @@ export const Variants = () => {
   const initialSort: SortInterface = { sortOrder: "ASC", field: "name" };
 
   const { variableData,  variableError,  variableLoading, refetchVariables, updatePagination, updateSort, searchVariableByName, currentSortOrder, totalItems} = useVariables(initialPagination, initialSort);
-  console.log(variableData)
   const { handleDeleteVariable, deleteVariableLoading, deleteVariableError, deleteVariableData } = useDeleteVariable();
   const loading =  variableLoading || deleteVariableLoading;
   const noData = !variableLoading && (!variableData || variableData.length === 0);

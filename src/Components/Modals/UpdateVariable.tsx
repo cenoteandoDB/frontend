@@ -23,7 +23,11 @@ export const UpdateVariable: React.FC<UpdatePropsInterface> = ({id, showModal, h
         icon:"",
         variableRepresentation: "" };
     const { data, loading, error, updateVariable } = useUpdateVariable();
+<<<<<<< HEAD:src/Components/Modals/UpdateVariable.tsx
     const { variableData, loadingData, errorData, refetchVariableById} = useGetVariableById(id ?? '');
+=======
+    const { variableData, loadingData, errorData, refetchVariableById} = useGetVariableById(id ? id : null);
+>>>>>>> 1431a75 (deploy 08/11/24):src/components/Modals/UpdateVariable.tsx
     
     const [ variableInfo, setVariableInfo] = useState<UpdateVariableInterface>(initialVariablesForm);
     const [ isFormValid, setIsFormValid] = useState(false);
@@ -48,7 +52,6 @@ export const UpdateVariable: React.FC<UpdatePropsInterface> = ({id, showModal, h
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if(id) {
-            console.log(variableInfo)
             await updateVariable(id, variableInfo);
         }
     };
@@ -59,7 +62,7 @@ export const UpdateVariable: React.FC<UpdatePropsInterface> = ({id, showModal, h
 
     useEffect(() => {
         if (variableData && !loadingData) {
-            console.log(variableData)
+      
             setVariableInfo({
                 firestore_id: id ?? '',
                 name: variableData.name,

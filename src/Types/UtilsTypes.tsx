@@ -1,4 +1,4 @@
-import { mofInterface } from "./CenotesTypes";
+import { MeasurementsInterface, mofInterface } from "./CenotesTypes";
 
 export interface ConfirmActionPropsInterface {
   show: boolean;
@@ -54,4 +54,17 @@ export interface WaterTabInterface {
   category: string;
   mofs: mofInterface[];
   color: string; 
+}
+
+export interface MofModificationInterface {
+      cenoteId: string;
+      cenoteName: string;
+      creator: string;
+      creatorId: string;
+      firestore_id: string;
+      mof: MeasurementsInterface
+      old_mof: MeasurementsInterface
+      type: string;
+      variableCategory: string;
+      variableId: string;
 }

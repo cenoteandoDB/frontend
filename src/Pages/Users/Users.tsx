@@ -166,7 +166,7 @@ export const Users = () => {
                   <div className="col-md-2">
                     <button
                       type="button"
-                      className="btn btn-block btn-white btn-sm"
+                      className="btn btn-block btn-white btn-sm text-buttons-cnt"
                       onClick={handleInviteUserToggleModal}
                     >
                       <img src="/src/assets/Icons/add-user.svg" alt="" />
@@ -257,7 +257,7 @@ export const Users = () => {
                           <td>{item.surname}</td>
                           <td>{item.email}</td>
                           <td>
-                            <span className="tag bg-tag-success">{item?.profile ? item?.profile : 'INDEFINIDO'}</span>
+                            <span className="tag rounded py-1 px-2 text-buttons-cnt bg-cnt">{item?.profile ? item?.profile : 'INDEFINIDO'}</span>
                           </td>
                           <td>{item.createdAt}</td>
                           <td>

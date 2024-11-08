@@ -101,13 +101,25 @@ export const GET_USER_BY_EMAIL = `
       role
       email
       favouriteCenotesIds
+      favouriteCenotes {
+        type
+        touristic
+        thumbnail
+        state
+        name
+        municipality
+        firestore_id
+        cenoteando_id
+      }
     }
 }`;
 
 //MUTATIONS
 export const INVITE_USER =`
   mutation InviteUser($email: EmailAddress!, $name: String!, $userRole: UserRole!) {
-      inviteUser(email: $email, name: $name, userRole: $userRole)  
+    inviteUser(email: $email, name: $name, userRole: $userRole) {
+      id  
+    }
 }`;
 
 export const DELETE_USER =`

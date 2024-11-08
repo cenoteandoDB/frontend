@@ -1,3 +1,5 @@
+import { FavoriteCenote_v2 } from "./CenotesTypes";
+
 export interface LoginInterface {
   email: string;
   password: string;
@@ -16,6 +18,7 @@ export interface UserInterface {
   profile?: string;
   profileData?: ProfileDataInterface;
   favouriteCenotesIds?: string[]
+  favouriteCenotes?: FavoriteCenote_v2
 }
 
 export interface EnumsInterface{

@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import { PaginationInterface, SortInterface } from "../../Types/UserTypes";
 import { gql, useMutation, useQuery } from "@apollo/client";
-import { ADD_FAVORITE_CENOTE, ALL_CENOTES, CREATE_CENOTE, CREATE_MOF, DELETE_CENOTE, GET_CENOTE_BY_ID, GET_CENOTE_DATA_BY_THEME, GET_CENOTE_THEMES_BY_CENOTE, GET_ENUM_CENOTE_TYPE, GET_MOF_BY_THEME, GET_MOF_MODIFICATIONS, GET_UPLOAD_IMAGE_URL, REMOVE_FAVORITE_CENOTE, UPDATE_CENOTE, UPDATE_MOF } from "./CenotesGraphql";
+import { ACCEPT_MOF_REQUEST, ADD_FAVORITE_CENOTE, ALL_CENOTES, CREATE_CENOTE, CREATE_MOF, DELETE_CENOTE, GET_CENOTE_BY_ID, GET_CENOTE_DATA_BY_THEME, GET_CENOTE_THEMES_BY_CENOTE, GET_ENUM_CENOTE_TYPE, GET_MOF_BY_THEME, GET_MOF_MODIFICATIONS, GET_UPLOAD_IMAGE_URL, REJECT_MOF_REQUEST, REMOVE_FAVORITE_CENOTE, UPDATE_CENOTE, UPDATE_MOF } from "./CenotesGraphql";
 import { AddFavoriteCenote, CreateCenoteInterface, createMofInterface, UpdateCenoteInterface, updateMofInterface } from "../../Types/CenotesTypes";
+import { useAuthContext } from "../../Auth/AuthProvider";
+
+
 
 export const useCenotes = (initialPagination: PaginationInterface, initialSort: SortInterface,  initialName: string | null = null) => {
     const [pagination, setPagination] = useState<PaginationInterface>(initialPagination);
@@ -13,8 +16,7 @@ export const useCenotes = (initialPagination: PaginationInterface, initialSort: 
         variables: { pagination, sort, name},
         fetchPolicy: 'cache-and-network'
     });
-    console.log(data)
-    console.log(error)
+
     const updatePagination = useCallback((newPagination: Partial<PaginationInterface>) => {
         setPagination((prevPagination) => ({
             ...prevPagination,
@@ -79,35 +81,68 @@ export const useGetUploadImageUrl = (id: string | null | undefined, photoName:  
 };
 
 export const useGetThemesByCenote = (id: string | null | undefined) => {
+  const { token } = useAuthContext()
   const { data, loading, error } = useQuery(gql`${GET_CENOTE_THEMES_BY_CENOTE}`, {
     variables: { cenoteId: id },
-    skip: !id, // Skip query if no id is provided
+    skip: !id,
+    context: {
+      headers: {
+        Authorization: token ? `Bearer ${token}` : "",
+      },
+    }, 
   });
   
   return { themesList: data?.getThemesByCenote, themesLoading:loading, themesError: error };
 };
 
 export const useGetCenoteByTheme = (cenoteId: string | null | undefined, theme: string | null | undefined) => {
+  const { token } = useAuthContext()
   const { data, loading, error, refetch } = useQuery(gql`${GET_CENOTE_DATA_BY_THEME}`, {
     variables: { theme: theme ,cenoteId: cenoteId},
-    skip: !theme || !cenoteId, // Skip query if no id is provided
+    skip: !theme || !cenoteId,
+    context: {
+      headers: {
+        Authorization: token ? `Bearer ${token}` : "",
+      },
+    }, 
   });
   return { cenoteThemeData: data?.getCenoteDataByTheme, cenoteThemeLoading: loading, cenoteThemeError: error, refetchCenoteTheme: refetch};
 };
 
 export const useGetMofByTheme = (cenoteId: string | null | undefined, theme: string | null | undefined) => {
+  const { token } = useAuthContext()
   const { data, loading, error, refetch } = useQuery(gql`${GET_MOF_BY_THEME}`, {
     variables: { theme: theme ,cenoteId: cenoteId},
-    skip: !theme || !cenoteId, // Skip query if no id is provided
+    skip: !theme || !cenoteId,
+    context: {
+      headers: {
+        Authorization: token ? `Bearer ${token}` : "",
+      },
+    }, 
   });
+  console.log(data)
   return { mofsByThemeData: data?.getCenoteDataByTheme, mofsByThemeLoading: loading, mofsByThemeError: error, refetchMofByTheme: refetch};
 };
 
-
 export const useGetMofModifications = () => {
-  const { data, loading, error } = useQuery(gql`${GET_MOF_MODIFICATIONS}`);
-  return { mofsModificationData: data?.getMofModificationRequests, mofsModificationLoading: loading, mofsModificationError: error};
+  const { token } = useAuthContext(); // Retrieve the token from Auth context
+  
+  const { data, loading, error, refetch } = useQuery(gql`${GET_MOF_MODIFICATIONS}`, {
+    context: {
+      headers: {
+        Authorization: token ? `Bearer ${token}` : "", // Apply token as Bearer authorization
+      },
+    },
+  });
+
+  return {
+    mofsModificationRefetch: refetch,
+    mofsModificationData: data?.getMofModificationRequests?.mofModificationRequests,
+    mofsModificationLoading: loading,
+    mofsModificationError: error,
+  };
 };
+
 //MUTATIONS
 export const useCreateCenote = () => {
     const [ createCenoteMutation, {data, error, loading,} ] = useMutation(gql`${CREATE_CENOTE}`);
@@ -180,7 +215,6 @@ export const useUpdateMof = () => {
           await updateMofMutation({ variables: { updateMofInput: MofInfo } });
           setUpdateMofsuccess(true);
         } catch (e) {
-          console.log(e)
           setUpdateMofsuccess(false);
         }
   }
@@ -226,4 +260,40 @@ export const useCenoteTypes = ()=> {
         cenoteTypesError: error,
         cenoteTypesLoading: loading
     };
+};
+
+export const useAcceptMofRequest = () => {
+  const [acceptMofRequestMutation, { loading, error }] = useMutation(gql`${ACCEPT_MOF_REQUEST}`);
+  const [result, setResult] = useState(null);
+  const acceptMofRequest = async (updateMofId: string | number) => {
+    try {
+      const response = await acceptMofRequestMutation({
+        variables: {"updateMofId": updateMofId },
+      });
+      setResult(response.data.acceptMofRequest);
+    } catch (err) {
+      console.error("Error accepting MOF request:", err);
+      throw err;
+    }
+  };
+
+  return { setAcceptMofRequestResult: setResult,  acceptMofRequest, acceptMofRequesData: result, acceptMofRequesLoading: loading, acceptMofRequesError: error };
+};
+
+export const useRejectMofRequest = () => {
+  const [rejectMofRequestMutation, { loading, error }] = useMutation(gql`${REJECT_MOF_REQUEST}`);
+  const [result, setResult] = useState(null);
+  const rejectMofRequest = async (updateMofId: string | number) => {
+    try {
+      const response = await rejectMofRequestMutation({
+        variables: {"updateMofId": updateMofId },
+      });
+      setResult(response.data.rejectMofRequest);
+    } catch (err) {
+      console.error("Error accepting MOF request:", err);
+      throw err;
+    }
+  };
+
+  return { setRejectMofRequestResult: setResult,  rejectMofRequest, rejectMofRequesData: result, rejectMofRequesLoading: loading, rejectMofRequesError: error };
 };

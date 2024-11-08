@@ -32,7 +32,8 @@ export const CenoteProfile = () => {
   const [showAddImageModal, setShowAddImageModal] = useState<boolean>(false);
   const [tabController, setTabController] = useState("");
   const loading = loadingData;
-
+  console.log(mofsByThemeLoading)
+  console.log(mofsByThemeData)
   const handleTabController = (tabcontroller: string, theme: string) => {
     setTheme(theme);
     setTabController(tabcontroller);

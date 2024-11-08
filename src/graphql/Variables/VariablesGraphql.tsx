@@ -22,6 +22,20 @@ query GetVariables($sort: SortField, $pagination: PaginationInput, $name: String
     }
 }`;
 
+export const GET_ALL_VARIABLES = `
+query GetVariables($pagination: PaginationInput) {
+  getVariables(pagination: $pagination) {
+    totalCount
+    variables {
+      name
+      firestore_id
+      description
+      theme
+    }
+  }
+}
+`;
+
 export const GET_VARIABLE_BY_ID = `
 query GetVariableById($getVariableByIdId: ID!) {
   getVariableById(id: $getVariableByIdId) {

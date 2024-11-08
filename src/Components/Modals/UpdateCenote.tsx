@@ -43,7 +43,6 @@ export const UpdateCenote: React.FC<UpdatePropsInterface> = ({id, showModal, han
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if(id) {
-            console.log(cenoteInfo)
             await updateCenote(id, cenoteInfo);
         }
     };
