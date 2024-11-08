@@ -9,7 +9,7 @@ lerna-debug.log*
 
 #src/Auth/AuthConstants.tsx
 node_modules
-dist
+#dist
 #dist-ssr
 *.local
 
