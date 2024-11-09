@@ -140,7 +140,7 @@ export const Users = () => {
                           <span
                             className=" btn-white btn-sm form-control-c"
                           >
-                            <img src="/src/assets/Icons/search.svg" alt="" />
+                            <img src="/assets/Icons/search.svg" alt="" />
                           </span>
                         </div>
                         <input
@@ -159,7 +159,7 @@ export const Users = () => {
                       type="button"
                       className="btn btn-block btn-white  btn-sm"
                     >
-                      <img src="/src/assets/Icons/filter.svg" alt="" />
+                      <img src="/assets/Icons/filter.svg" alt="" />
                       Filtrar
                     </button>
                   </div>
@@ -169,18 +169,18 @@ export const Users = () => {
                       className="btn btn-block btn-white btn-sm text-buttons-cnt"
                       onClick={handleInviteUserToggleModal}
                     >
-                      <img src="/src/assets/Icons/add-user.svg" alt="" />
+                      <img src="/assets/Icons/add-user.svg" alt="" />
                       Invitar
                     </button>
                   </div>
                   <div className="col-md-1 d-none">
                     <a>
-                      <img src="/src/assets/Icons/edit.svg" alt="" />
+                      <img src="/assets/Icons/edit.svg" alt="" />
                     </a>
                   </div>
                   <div className="col-md-1 d-none">
                     <a>
-                      <img src="/src/assets/Icons/trash.svg" alt="" />
+                      <img src="/assets/Icons/trash.svg" alt="" />
                     </a>
                   </div>
                 </div>
@@ -208,40 +208,40 @@ export const Users = () => {
                           <th>
                           <a onClick={() => handleSortChange("name")}>  Nombre{" "}
                             {Sort.field == 'name'? 
-                            (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
-                              <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                            (<img src={Sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
+                              <img src="/assets/Icons/up-and-down-arrows.svg" alt="down"/>
                             )}
                           </a>
                           </th>
                           <th>
                           <a onClick={() => handleSortChange("surname")}> Apellidos{" "}
                             {Sort.field == 'surname'? 
-                            (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
-                              <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                            (<img src={Sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
+                              <img src="/assets/Icons/up-and-down-arrows.svg" alt="down"/>
                             )}
                            </a>
                           </th>
                           <th>
                           <a onClick={() => handleSortChange("email")}>Correo electrónico{" "}
                             {Sort.field == 'email'? 
-                            (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
-                              <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                            (<img src={Sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
+                              <img src="/assets/Icons/up-and-down-arrows.svg" alt="down"/>
                             )}
                           </a>
                           </th>
                           <th>
                             <a onClick={() => handleSortChange("profile")}>Tipo de usuario{" "}
                               {Sort.field == 'profile'? 
-                              (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
-                                <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                              (<img src={Sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
+                                <img src="/assets/Icons/up-and-down-arrows.svg" alt="down"/>
                               )}
                             </a>
                           </th>
                           <th>
                             <a onClick={() => handleSortChange("createdAt")}>Fecha de creación{" "}
                               {Sort.field == 'profile'? 
-                               (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
-                                <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                               (<img src={Sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
+                                <img src="/assets/Icons/up-and-down-arrows.svg" alt="down"/>
                               )}
                             </a>
                           </th>
@@ -263,13 +263,13 @@ export const Users = () => {
                           <td>
                             {" "}
                             <a className="d-none">
-                              <img src="/src/assets/Icons/eye.svg" alt="" />
+                              <img src="/assets/Icons/eye.svg" alt="" />
                             </a>
                             <a onClick={() => handleUpdateUser(item.id)}>
-                              <img src="/src/assets/Icons/edit.svg" alt="" />
+                              <img src="/assets/Icons/edit.svg" alt="" />
                             </a>
                             <a onClick={() => handleOpenDeleteModal(item.id)}>
-                              <img src="/src/assets/Icons/trash.svg" alt="" />
+                              <img src="/assets/Icons/trash.svg" alt="" />
                             </a>
                           </td>
                         </tr>

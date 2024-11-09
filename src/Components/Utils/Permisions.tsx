@@ -357,7 +357,7 @@ export const Permisions: React.FC<PermissionProps> = ({ userId }) => {
                                     </label><br />
                                     <label>
                                         <a className='text-buttons-cnt font-weight-normal cursor-pointer' onClick={() => handleGetVariables(cenote.cenoteId, cenote.name)}>
-                                            personalizar permisos  <img src="/src/assets/Icons/arrow-up-right.svg" alt="" />
+                                            personalizar permisos  <img src="/assets/Icons/arrow-up-right.svg" alt="" />
                                         </a>
                                     </label>
                                 </div>
@@ -558,7 +558,7 @@ export const Permisions: React.FC<PermissionProps> = ({ userId }) => {
                                                     <a onClick={() => toggleTheme(theme)} className="d-flex align-items-center text-cnt-label">
                                                         <strong>{theme}</strong>
                                                         <img
-                                                            src="/src/assets/Icons/arrow-down.svg"
+                                                            src="/assets/Icons/arrow-down.svg"
                                                             alt=""
                                                             style={{
                                                                 transition: 'transform 0.3s',

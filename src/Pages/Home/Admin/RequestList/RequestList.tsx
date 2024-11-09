@@ -48,21 +48,21 @@ export const RequestList = () => {
       case 'CREATE':
         return (
           <label className="tag-green-round">
-            <img src="/src/assets/Icons/new-arrow-up.svg" alt="New Arrow Up" />
+            <img src="/assets/Icons/new-arrow-up.svg" alt="New Arrow Up" />
             alta
           </label>
         );
       case 'UPDATE':
         return (
           <label className="tag-blue-round">
-            <img src="/src/assets/Icons/edit.svg" alt="" />
+            <img src="/assets/Icons/edit.svg" alt="" />
             Modificación
           </label>
         );
       case 'DELETE':
         return (
           <label className="tag-red-round">
-            <img src="/src/assets/Icons/trash.svg" alt="" />
+            <img src="/assets/Icons/trash.svg" alt="" />
             Eliminación
           </label>
         );
@@ -228,19 +228,19 @@ export const RequestList = () => {
                         <td>
                           <a  onClick={() => toggleRow(item?.variableId)}
                               style={{ cursor: 'pointer' }}>
-                            <img src="/src/assets/Icons/arrow-down.svg" alt="" />
+                            <img src="/assets/Icons/arrow-down.svg" alt="" />
                           </a>
                         </td>
                         <td>
                           <a className="btn_approve mr-1" onClick={() => handleApproveClick(item.firestore_id)}
                             style={{ cursor: 'pointer' }}>
-                            <img src="/src/assets/Icons/check.svg" alt="" />
+                            <img src="/assets/Icons/check.svg" alt="" />
                           </a>
                           <a 
                               className="btn_detach ml-1"  onClick={() => handleRejectClick(item.firestore_id)}
                               style={{ cursor: 'pointer' }}
                             >
-                              <img src="/src/assets/Icons/close.svg" alt="" />
+                              <img src="/assets/Icons/close.svg" alt="" />
                             </a>
                         </td>
                       </tr>

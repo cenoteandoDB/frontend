@@ -18,7 +18,7 @@ export const IconSelector: React.FC<IconSelectorProps> = ({ selectedIcon, onSele
             onClick={() => onSelectIcon(iconName)}
           >
             <img
-              src={`/src/assets/cenoteando-icons/${iconName}`}
+              src={`/assets/cenoteando-icons/${iconName}`}
               alt={`icon-${iconName}`}
               width="20"
               height="20"

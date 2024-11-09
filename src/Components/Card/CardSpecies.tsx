@@ -30,7 +30,7 @@ export const CardSpecies: React.FC<SpeciesInterface> = ({name, thumbnail, gbifId
                             <a  target='_blank' href={'https://www.gbif.org/es/occurrence/' + gbifId  }>
                                 GBIF
                                 <span>
-                                    <img src="/src/assets/Icons/arrow-up-right.svg" alt="" />
+                                    <img src="/assets/Icons/arrow-up-right.svg" alt="" />
                                 </span>
                             </a>
                         </li>
@@ -40,7 +40,7 @@ export const CardSpecies: React.FC<SpeciesInterface> = ({name, thumbnail, gbifId
                             <a target='_blank'  href={'https://mexico.inaturalist.org/observations/' + inaturalistId }>
                                 INatural
                                 <span>
-                                    <img src="/src/assets/Icons/arrow-up-right.svg" alt="" />
+                                    <img src="/assets/Icons/arrow-up-right.svg" alt="" />
                                 </span>
                             </a>
                         </li>

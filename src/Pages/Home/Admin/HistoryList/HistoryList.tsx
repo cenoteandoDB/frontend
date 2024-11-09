@@ -13,22 +13,22 @@ export const HistoryList = () => {
             <thead className="bg-header-footer">
               <tr>
                 <th>
-                  Acción <img src="/src/assets/Icons/arrow-down.svg" alt="" />
+                  Acción <img src="/assets/Icons/arrow-down.svg" alt="" />
                 </th>
                 <th>
-                  Fecha <img src="/src/assets/Icons/arrow-down.svg" alt="" />
+                  Fecha <img src="/assets/Icons/arrow-down.svg" alt="" />
                 </th>
                 <th>
                   Nombre del cenote{" "}
-                  <img src="/src/assets/Icons/arrow-down.svg" alt="" />
+                  <img src="/assets/Icons/arrow-down.svg" alt="" />
                 </th>
                 <th>
                   Categoria{" "}
-                  <img src="/src/assets/Icons/arrow-down.svg" alt="" />
+                  <img src="/assets/Icons/arrow-down.svg" alt="" />
                 </th>
                 <th>
                   Descriptor{" "}
-                  <img src="/src/assets/Icons/arrow-down.svg" alt="" />
+                  <img src="/assets/Icons/arrow-down.svg" alt="" />
                 </th>
                 <th></th>
               </tr>
@@ -37,7 +37,7 @@ export const HistoryList = () => {
               <tr>
                 <td>
                   <label className="tag-green-round">
-                    <img src="/src/assets/Icons/new-arrow-up.svg" alt="" />
+                    <img src="/assets/Icons/new-arrow-up.svg" alt="" />
                     Alta
                   </label>
                 </td>
@@ -47,14 +47,14 @@ export const HistoryList = () => {
                 <td>Contacto</td>
                 <td>
                   <a href="">
-                    <img src="/src/assets/Icons/arrow-down.svg" alt="" />
+                    <img src="/assets/Icons/arrow-down.svg" alt="" />
                   </a>
                 </td>
               </tr>
               <tr>
                 <td>
                   <label className="tag-red-round">
-                    <img src="/src/assets/Icons/trash.svg" alt="" />
+                    <img src="/assets/Icons/trash.svg" alt="" />
                     Eliminación
                   </label>
                 </td>
@@ -64,14 +64,14 @@ export const HistoryList = () => {
                 <td>Contacto</td>
                 <td>
                   <a href="">
-                    <img src="/src/assets/Icons/arrow-down.svg" alt="" />
+                    <img src="/assets/Icons/arrow-down.svg" alt="" />
                   </a>
                 </td>
               </tr>
               <tr>
                 <td>
                   <label className="tag-blue-round">
-                    <img src="/src/assets/Icons/edit.svg" alt="" />
+                    <img src="/assets/Icons/edit.svg" alt="" />
                     Modificación
                   </label>
                 </td>
@@ -81,14 +81,14 @@ export const HistoryList = () => {
                 <td>Contacto</td>
                 <td>
                   <a href="">
-                    <img src="/src/assets/Icons/arrow-down.svg" alt="" />
+                    <img src="/assets/Icons/arrow-down.svg" alt="" />
                   </a>
                 </td>
               </tr>
               <tr>
                 <td>
                   <label className="tag-green-round">
-                    <img src="/src/assets/Icons/new-arrow-up.svg" alt="" />
+                    <img src="/assets/Icons/new-arrow-up.svg" alt="" />
                     Alta
                   </label>
                 </td>
@@ -98,7 +98,7 @@ export const HistoryList = () => {
                 <td>Contacto</td>
                 <td>
                   <a href="">
-                    <img src="/src/assets/Icons/arrow-down.svg" alt="" />
+                    <img src="/assets/Icons/arrow-down.svg" alt="" />
                   </a>
                 </td>
               </tr>

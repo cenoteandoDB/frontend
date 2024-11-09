@@ -134,7 +134,7 @@ export const RegisterByEmail = () => {
                 <div className="login-box login-box-cnt margin-top-50">
                   <div className="card login-box-cnt">
                     <div className="card-body login-card-body">
-                      <a onClick={() => {setbrachScreen(false); setUserProfileName(''); setUserProfileData(initialProfileData);}} className='login-subtitle-font-card'> <img src="/src/assets/Icons/arrow-left.svg"/> volver</a>
+                      <a onClick={() => {setbrachScreen(false); setUserProfileName(''); setUserProfileData(initialProfileData);}} className='login-subtitle-font-card'> <img src="/assets/Icons/arrow-left.svg"/> volver</a>
                       <div className="justify-content-center text-center">
                         <p className="login-title-font-card mb-2 text-center">Último Paso</p>
                         <small className='text-center'>Selecciona el ramo al que perteneces.</small>
@@ -414,7 +414,7 @@ export const RegisterByEmail = () => {
                           <div className="input-group-append">
                             <div className="input-group-text">
                               <img
-                                src="/src/assets/Icons/slash-eye.svg"
+                                src="/assets/Icons/slash-eye.svg"
                                 alt=""
                               />
                             </div>
@@ -434,7 +434,7 @@ export const RegisterByEmail = () => {
                           <div className="input-group-append">
                             <div className="input-group-text">
                               <img
-                                src="/src/assets/Icons/slash-eye.svg"
+                                src="/assets/Icons/slash-eye.svg"
                                 alt=""
                               />
                             </div>

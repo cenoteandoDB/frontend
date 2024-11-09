@@ -115,7 +115,7 @@ export const References = () => {
                               <span
                                 className=" btn-white btn-sm form-control-c"
                               >
-                                <img src="/src/assets/Icons/search.svg" alt="" />
+                                <img src="/assets/Icons/search.svg" alt="" />
                               </span>
                             </div>
                             <input
@@ -136,7 +136,7 @@ export const References = () => {
                       className="btn btn-block btn-white btn-sm"
                       onClick={handleCreateRefereceToggleModal}
                     >
-                      <img src="/src/assets/Icons/plus.svg" alt="" />
+                      <img src="/assets/Icons/plus.svg" alt="" />
                       Crear
                     </button>
                   </div>
@@ -165,16 +165,16 @@ export const References = () => {
                           <th>
                             <a onClick={() => handleSortChange("title")}>Nombre corto{" "}
                               {Sort.field == 'title'? 
-                              (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
-                                <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                              (<img src={Sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
+                                <img src="/assets/Icons/up-and-down-arrows.svg" alt="down"/>
                               )}
                             </a>
                           </th>
                           <th>
                             <a onClick={() => handleSortChange("journal_name")}>Revista{" "}
                               {Sort.field == 'journal_name'? 
-                              (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
-                                <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                              (<img src={Sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
+                                <img src="/assets/Icons/up-and-down-arrows.svg" alt="down"/>
                               )}
                             </a>
                           </th>
@@ -182,8 +182,8 @@ export const References = () => {
                           <th>
                             <a onClick={() => handleSortChange("date_primary")}>Año{" "}
                               {Sort.field == 'date_primary'? 
-                              (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
-                                <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                              (<img src={Sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
+                                <img src="/assets/Icons/up-and-down-arrows.svg" alt="down"/>
                               )}
                             </a>
                           </th>
@@ -191,24 +191,24 @@ export const References = () => {
                             Autores{" "}
                             <a onClick={() => handleSortChange("authors")}>Autores{" "}
                               {Sort.field == 'authors'? 
-                              (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
-                                <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                              (<img src={Sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
+                                <img src="/assets/Icons/up-and-down-arrows.svg" alt="down"/>
                               )}
                             </a>
                           </th>
                           <th>
                             <a onClick={() => handleSortChange("doi")}>DOI{" "}
                               {Sort.field == 'doi'? 
-                              (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
-                                <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                              (<img src={Sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
+                                <img src="/assets/Icons/up-and-down-arrows.svg" alt="down"/>
                               )}
                             </a>
                           </th>
                           <th>
                             <a onClick={() => handleSortChange("Type")}>Tipo{" "}
                               {Sort.field == 'Type'? 
-                              (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
-                                <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                              (<img src={Sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
+                                <img src="/assets/Icons/up-and-down-arrows.svg" alt="down"/>
                               )}
                             </a>
                           </th>
@@ -233,10 +233,10 @@ export const References = () => {
                          
                           <td>
                             <a onClick={() => handleUpdateReference(item.firestore_id)}>
-                              <img src="/src/assets/Icons/edit.svg" alt="" />
+                              <img src="/assets/Icons/edit.svg" alt="" />
                             </a>
                             <a>
-                              <img src="/src/assets/Icons/trash.svg" alt="" />
+                              <img src="/assets/Icons/trash.svg" alt="" />
                             </a>
                           </td>
                         </tr>
