@@ -11,7 +11,7 @@ export const BibliographyTab: React.FC<ReferencesTabProps> = ({referenceList}) =
     <div className="card card-solid pb-5 pt-2">
     <div className="card-body pb-0">
       <div>
-          <p className="header-section-text-cnt title-color title-weight title-size"><img src={"/assets/icons/star.svg"}></img>Bibliografía</p>
+          <p className="header-section-text-cnt title-color title-weight title-size"><img src={"/assets/Icons/star.svg"}></img>Bibliografía</p>
       </div>
       <div className="row">
         

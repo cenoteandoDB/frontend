@@ -226,7 +226,7 @@ export const CenoteProfile = () => {
                 }
                 <div className="pull-right float-right">
                   <a onClick={() => setShowAddImageModal(true)} className="cursor-pointer">
-                    <img src="/assets/icons/plus.svg"/>
+                    <img src="/assets/Icons/plus.svg"/>
                       Agregar Imagen
                   </a>
                 </div>
@@ -404,7 +404,7 @@ export const CenoteProfile = () => {
                                         mofsByThemeData.map((item: mofByThemeInterface, index: number) => (
                                           <div key={ 'category-' + index }>
                                             <div className={index == 0 ? "container-blue col-md-12" : "container-blue mt-3 col-md-12"}>
-                                              <p className="title-color title-weight title-size">  <img src={"/assets/icons/star.svg"}></img> {item.category}</p>
+                                              <p className="title-color title-weight title-size">  <img src={"/assets/Icons/star.svg"}></img> {item.category}</p>
                                               {item && item.mofs.map((mofItem: mofInterface) => (
                                                 <div key={mofItem.id} >
                                                     <div>
@@ -479,7 +479,7 @@ export const CenoteProfile = () => {
                                           mofsByThemeData.map((item: mofByThemeInterface, index: number) => (
                                             <div key={ 'category-' + index } className='mt-3 col-md-6'>
                                               <div className="container-blue">
-                                                <p className="title-color title-weight title-size">  <img src={"/assets/icons/star.svg"}></img> {item.category}</p>
+                                                <p className="title-color title-weight title-size">  <img src={"/assets/Icons/star.svg"}></img> {item.category}</p>
                                                 {item && item.mofs.map((mofItem: mofInterface) => (
                                                   <div key={mofItem.id} >
                                                       <div>

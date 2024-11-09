@@ -26,7 +26,7 @@ function Header() {
     <>
       <nav className="main-header navbar navbar-expand-md navbar-light navbar-white">
         <div className="container">
-          <a href="../../index3.html" className="navbar-brand">
+          <a href="https://cenoteando.web.app/home" className="navbar-brand">
             <img src={logo} alt="Cenoteando Logo" className="brand-image" />
             {/*<span className="brand-text font-weight-light">AdminLTE 3</span>*/}
           </a>
