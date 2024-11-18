@@ -170,7 +170,7 @@ useEffect(() => {
                         <div className="input-group-append">
                           <div className="input-group-text">
                             <img
-                              src="/src/assets/Icons/slash-eye.svg"
+                              src="/assets/Icons/slash-eye.svg"
                               alt=""
                             />
                           </div>
@@ -190,7 +190,7 @@ useEffect(() => {
                         <div className="input-group-append">
                           <div className="input-group-text">
                             <img
-                              src="/src/assets/Icons/slash-eye.svg"
+                              src="/assets/Icons/slash-eye.svg"
                               alt=""
                             />
                           </div>

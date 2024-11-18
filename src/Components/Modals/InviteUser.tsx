@@ -101,14 +101,14 @@ export const InviteUser: React.FC<SingleModalPropsInterface> = ({showModal, hand
                  <a className={showTab == 'tab_1' ? "nav-link  text-center text-cnt bg-active-cnt py-3" : "nav-link text-center text-cnt bg-cnt py-3"} 
                    href="#tab_1" 
                    data-toggle="tab">
-                    <img src="/src/assets/Icons/Done.svg"></img> Información básica
+                    <img src="/assets/Icons/done.svg"></img> Información básica
                  </a>
                </li>:  <li className="nav-item flex-grow-1">
                   <a className={showTab == 'tab_1' ? "nav-link  text-center text-cnt bg-active-cnt py-3" : "nav-link text-center text-cnt bg-cnt py-3"} 
                     href="#tab_1" 
                     data-toggle="tab" 
                     onClick={() => handleToggleTab('tab_1')}>
-                     <img src="/src/assets/Icons/Done.svg"></img> Información básica
+                     <img src="/assets/Icons/done.svg"></img> Información básica
                   </a>
                 </li>}
                
@@ -118,7 +118,7 @@ export const InviteUser: React.FC<SingleModalPropsInterface> = ({showModal, hand
                    href="#tab_2" 
                    data-toggle="tab" 
                    onClick={() => handleToggleTab('tab_2')}>
-                    <img src="/src/assets/Icons/progress.svg"></img> Cenotes y permisos
+                    <img src="/assets/Icons/progress.svg"></img> Cenotes y permisos
                  </a>
                 </li>
                 }

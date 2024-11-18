@@ -76,7 +76,7 @@ export const SpeciesList = () => {
                             <span
                               className=" btn-white btn-sm form-control-c"
                             >
-                              <img src="/src/assets/Icons/search.svg" alt="" />
+                              <img src="/assets/Icons/search.svg" alt="" />
                             </span>
                           </div>
                           <input
@@ -97,7 +97,7 @@ export const SpeciesList = () => {
                       className={isTableList ?  "btn btn-block btn-white btn-sm border border-dark" :  "btn btn-block btn-white btn-sm"}
                       onClick={() => handleSetIsTableList(true)}
                     >
-                      <img src="/src/assets/Icons/table_list.svg" alt="" />
+                      <img src="/assets/Icons/table_list.svg" alt="" />
                     </button>
                   </div>
                   <div className="col-md-2">
@@ -106,7 +106,7 @@ export const SpeciesList = () => {
                       className={!isTableList ?  "btn btn-block btn-white btn-sm border border-dark" :  "btn btn-block btn-white btn-sm"}
                       onClick={() => handleSetIsTableList(false)}
                     >
-                      <img src="/src/assets/Icons/tabler-layout-grid.svg"  alt="" />
+                      <img src="/assets/Icons/tabler-layout-grid.svg" alt="" />
                     </button>
                   </div>
                 </div>
@@ -137,16 +137,16 @@ export const SpeciesList = () => {
                                 <th>
                                   <a onClick={() => handleSortChange("name")}>  Nombre científico{" "}
                                     {Sort.field == 'name'? 
-                                    (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
-                                      <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                                    (<img src={Sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
+                                      <img src="/assets/Icons/up-and-down-arrows.svg" alt="down"/>
                                     )}
                                   </a>
                                 </th>
                                 <th>
                                   <a onClick={() => handleSortChange("name")}>  Nombre Especie{" "}
                                     {Sort.field == 'name'? 
-                                    (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
-                                      <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                                    (<img src={Sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
+                                      <img src="/assets/Icons/up-and-down-arrows.svg" alt="down"/>
                                     )}
                                   </a>
                                 </th>

@@ -27,20 +27,20 @@ const renderWaterCustomFields = (CategoryName: string): { color: string, positio
   };
 
   const categoryIcon: { [key: string]: string } = {
-    NUTRIENT: '/src/assets/cenoteando-icons/Icon=tabler_hexagons.svg', 
-    HEAVY_METAL: '/src/assets/cenoteando-icons/Icon=tabler_flask.svg', 
-    BIOMARKERS: '/src/assets/cenoteando-icons/Icon=tabler_test-pipe-2.svg', 
-    FARMACEUTIC: '/src/assets/cenoteando-icons/Icon=tabler_vaccine-bottle.svg', 
-    ORGANOPHOSPHATE_PESTICIDES: '/src/assets/cenoteando-icons/Icon=tabler_spray.svg', 
-    ORGANOCHLORINE_PESTICIDES: '/src/assets/cenoteando-icons/Icon=tabler_spray.svg', 
-    POLYNUCLEAR_AROMATIC_HYDROCARBONS: '/src/assets/cenoteando-icons/Icon=tabler_flask-2.svg', 
-    VOLATILE_HYDROCARBONS: '/src/assets/cenoteando-icons/Icon=tabler_hexagons.svg'
+    NUTRIENT: '/assets/cenoteando-icons/Icon=tabler_hexagons.svg', 
+    HEAVY_METAL: '/assets/cenoteando-icons/Icon=tabler_flask.svg', 
+    BIOMARKERS: '/assets/cenoteando-icons/Icon=tabler_test-pipe-2.svg', 
+    FARMACEUTIC: '/assets/cenoteando-icons/Icon=tabler_vaccine-bottle.svg', 
+    ORGANOPHOSPHATE_PESTICIDES: '/assets/cenoteando-icons/Icon=tabler_spray.svg', 
+    ORGANOCHLORINE_PESTICIDES: '/assets/cenoteando-icons/Icon=tabler_spray.svg', 
+    POLYNUCLEAR_AROMATIC_HYDROCARBONS: '/assets/cenoteando-icons/Icon=tabler_flask-2.svg', 
+    VOLATILE_HYDROCARBONS: '/assets/cenoteando-icons/Icon=tabler_hexagons.svg'
   };
 
   return {
     color: categoryColors[CategoryName] || '#f8fafc',
     position: categoryPosition[CategoryName] || 10,
-    icon: categoryIcon[CategoryName] || '/src/assets/cenoteando-icons/Icon=tabler_droplet.svg'
+    icon: categoryIcon[CategoryName] || '/assets/cenoteando-icons/Icon=tabler_droplet.svg'
   };
 };
 

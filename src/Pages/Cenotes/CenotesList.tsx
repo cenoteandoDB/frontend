@@ -232,7 +232,7 @@ useEffect(() => {
                           <span
                             className=" btn-white btn-sm form-control-c"
                           >
-                            <img src="/src/assets/Icons/search.svg" alt="" />
+                            <img src="/assets/Icons/search.svg" alt="" />
                           </span>
                         </div>
                         <input
@@ -251,7 +251,7 @@ useEffect(() => {
                       type="button"
                       className="btn btn-block btn-white  btn-sm"
                       onClick={handleCreateCenoteToggleModal}>
-                      <img src="/src/assets/Icons/plus.svg" alt="" />
+                      <img src="/assets/Icons/plus.svg" alt="" />
                       Nuevo cenote
                     </button>
                   </div>
@@ -281,16 +281,16 @@ useEffect(() => {
                           <th>
                             <a onClick={() => handleSortChange("name")}>Nombre de cenote{" "}
                               {Sort.field == 'name'? 
-                              (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
-                                <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                              (<img src={Sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
+                                <img src="/assets/Icons/up-and-down-arrows.svg" alt="down"/>
                               )}
                             </a>
                           </th>
                           <th>
                             <a onClick={() => handleSortChange("state")}> Estado{" "}
                             {Sort.field == 'state'? 
-                            (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
-                              <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                            (<img src={Sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
+                              <img src="/assets/Icons/up-and-down-arrows.svg" alt="down"/>
                             )}
                           </a>
                           </th>
@@ -298,16 +298,16 @@ useEffect(() => {
                            
                             <a onClick={() => handleSortChange("municipality")}> Municipio{" "}
                             {Sort.field == 'municipality'? 
-                            (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
-                              <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                            (<img src={Sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
+                              <img src="/assets/Icons/up-and-down-arrows.svg" alt="down"/>
                             )}
                           </a>
                           </th>
                           <th> 
                             <a onClick={() => handleSortChange("type")}> Tipo{" "}
                             {Sort.field == 'type'? 
-                            (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
-                              <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                            (<img src={Sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
+                              <img src="/assets/Icons/up-and-down-arrows.svg" alt="down"/>
                             )}
                           </a>
                           </th>
@@ -315,8 +315,8 @@ useEffect(() => {
                             
                             <a onClick={() => handleSortChange("createdAt")}> Creado{" "}
                             {Sort.field == 'createdAt'? 
-                            (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
-                              <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                            (<img src={Sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
+                              <img src="/assets/Icons/up-and-down-arrows.svg" alt="down"/>
                             )}
                           </a>
                           </th>
@@ -324,24 +324,24 @@ useEffect(() => {
                             Actualizado{""}
                             <a onClick={() => handleSortChange("description")}>Descripción{" "}
                               {Sort.field == 'description'? 
-                              (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
-                                <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                              (<img src={Sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
+                                <img src="/assets/Icons/up-and-down-arrows.svg" alt="down"/>
                               )}
                             </a>
                           </th>
                           <th>
                             <a onClick={() => handleSortChange("updatedAt")}> Etiquetas{" "}
                               {Sort.field == 'updatedAt'? 
-                              (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
-                                <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                              (<img src={Sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
+                                <img src="/assets/Icons/up-and-down-arrows.svg" alt="down"/>
                               )}
                             </a>
                           </th>
                           <th>
                             <a onClick={() => handleSortChange("variable_count")}> Variable{""}
                             {Sort.field == 'variable_count'? 
-                            (<img src={Sort.sortOrder =='ASC'? "/src/assets/Icons/sort-arrow-up.svg": "/src/assets/Icons/sort-arrow-down.svg" }/>) : (
-                              <img src="/src/assets/Icons/up-and-down-arrows.svg" alt="down"/>
+                            (<img src={Sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
+                              <img src="/assets/Icons/up-and-down-arrows.svg" alt="down"/>
                             )}
                           </a>
                           </th>
@@ -354,11 +354,11 @@ useEffect(() => {
                             <td>
                               {handleIsFavoriteCenote(item?.firestore_id) ?
                               ( <a className="cursor-pointer" onClick={() => handleRemoveFavoriteCenote(item.firestore_id)}>
-                              <img src="/src/assets/Icons/heart-red.svg" alt="" />
+                              <img src="/assets/Icons/heart-red.svg" alt="" />
                             </a>)
                               : (
                                 <a className="cursor-pointer" onClick={() => handleAddFavoriteCenote(item.firestore_id)}>
-                                <img src="/src/assets/Icons/heart.svg" alt="" />
+                                <img src="/assets/Icons/heart.svg" alt="" />
                               </a>
                               )}
                             
@@ -374,7 +374,7 @@ useEffect(() => {
                                 <span className="tag tag-blue-round">
                                 {" "}
                                 <img
-                                  src="/src/assets/Icons/beach.svg"
+                                  src="/assets/Icons/beach.svg"
                                   alt=""
                                 />{" "}
                                 Turismo
@@ -386,13 +386,13 @@ useEffect(() => {
                             <td>
                             
                               <a className="cursor-pointer" onClick={() => {navigate(`/cenote/${testCenoteId}`);} }>
-                                <img src="/src/assets/Icons/eye.svg" alt="" />
+                                <img src="/assets/Icons/eye.svg" alt="" />
                               </a>
                               <a className="cursor-pointer" onClick={() => handleUpdateCenote(item.firestore_id)}>
-                                <img src="/src/assets/Icons/edit.svg" alt="" />
+                                <img src="/assets/Icons/edit.svg" alt="" />
                               </a>
                               <a className="cursor-pointer" onClick={() => handleOpenDeleteModal(item.firestore_id)}>
-                                <img src="/src/assets/Icons/trash.svg" alt="" />
+                                <img src="/assets/Icons/trash.svg" alt="" />
                               </a>
                             </td>
                           </tr>

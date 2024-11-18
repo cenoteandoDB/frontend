@@ -20,7 +20,7 @@ export const GeographicLayers = () => {
                           type="submit"
                           className="btn btn-white btn-sm form-control-c"
                         >
-                          <img src="/src/assets/Icons/search.svg" alt="" />
+                          <img src="/assets/Icons/search.svg" alt="" />
                         </button>
                       </div>
                       <input
@@ -36,7 +36,7 @@ export const GeographicLayers = () => {
                       type="button"
                       className="btn btn-block btn-white  btn-sm"
                     >
-                      <img src="/src/assets/Icons/filter.svg" alt="" />
+                      <img src="/assets/Icons/filter.svg" alt="" />
                       Filtrar
                     </button>
                   </div>
@@ -45,18 +45,18 @@ export const GeographicLayers = () => {
                       type="button"
                       className="btn btn-block btn-white btn-sm"
                     >
-                      <img src="/src/assets/Icons/plus.svg" alt="" />
+                      <img src="/assets/Icons/plus.svg" alt="" />
                       Crear
                     </button>
                   </div>
                   <div className="col-md-1">
                     <a>
-                      <img src="/src/assets/Icons/edit.svg" alt="" />
+                      <img src="/assets/Icons/edit.svg" alt="" />
                     </a>
                   </div>
                   <div className="col-md-1">
                     <a>
-                      <img src="/src/assets/Icons/trash.svg" alt="" />
+                      <img src="/assets/Icons/trash.svg" alt="" />
                     </a>
                   </div>
                 </div>
@@ -77,35 +77,35 @@ export const GeographicLayers = () => {
                           <th>
                             Categorías{" "}
                             <img
-                              src="/src/assets/Icons/arrow-down.svg"
+                              src="/assets/Icons/arrow-down.svg"
                               alt=""
                             />
                           </th>
                           <th>
                             Nombre{" "}
                             <img
-                              src="/src/assets/Icons/arrow-down.svg"
+                              src="/assets/Icons/arrow-down.svg"
                               alt=""
                             />
                           </th>
                           <th>
                             Descripción{" "}
                             <img
-                              src="/src/assets/Icons/arrow-down.svg"
+                              src="/assets/Icons/arrow-down.svg"
                               alt=""
                             />
                           </th>
                           <th>
                             Vectorial/Raster{" "}
                             <img
-                              src="/src/assets/Icons/arrow-down.svg"
+                              src="/assets/Icons/arrow-down.svg"
                               alt=""
                             />
                           </th>
                           <th>
                             Tipo{" "}
                             <img
-                              src="/src/assets/Icons/arrow-down.svg"
+                              src="/assets/Icons/arrow-down.svg"
                               alt=""
                             />
                           </th>
@@ -139,17 +139,17 @@ export const GeographicLayers = () => {
                           <td>
                             {" "}
                             <a className="mr-2">
-                              <img src="/src/assets/Icons/pdf.svg" alt="" />
+                              <img src="/assets/Icons/pdf.svg" alt="" />
                             </a>
                             <a className="mr-2">
                               <img
-                                src="/src/assets/Icons/arrow-down.svg"
+                                src="/assets/Icons/arrow-down.svg"
                                 alt=""
                               />
                             </a>
                             <a className="mr-2">
                               <img
-                                src="/src/assets/Icons/download.svg"
+                                src="/assets/Icons/download.svg"
                                 alt=""
                               />
                             </a>

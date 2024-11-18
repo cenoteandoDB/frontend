@@ -288,7 +288,7 @@ export const CreateVariable:React.FC<SingleModalPropsInterface> = ({showModal, h
                                 {variableFormData.icon && (
                                     <>
                                         <h6>Vista previa del icono seleccionado:</h6>
-                                        <img src={"/src/assets/cenoteando-icons/" + variableFormData.icon} alt="selected-icon" width="50" height="50" />
+                                        <img src={"/assets/cenoteando-icons/" + variableFormData.icon} alt="selected-icon" width="50" height="50" />
                                         <a onClick={() => handleIconSelect("")} className='text-danger cursor-pointer'>Remove</a>
                                     </>
                                 )}

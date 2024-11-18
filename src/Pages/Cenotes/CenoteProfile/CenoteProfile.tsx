@@ -95,13 +95,13 @@ export const CenoteProfile = () => {
 
   const renderIconOnCheckOption = (mofItem: mofInterface, measurementValue: string) => {
     if (measurementValue === 'true' || measurementValue === '') {
-      return <img src="/src/assets/Icons/check.svg" alt="check" />;
+      return <img src="/assets/Icons/check.svg" alt="check" />;
     } else if (measurementValue === 'false') {
-      return <img src="/src/assets/Icons/Icon=tabler_x.svg" alt="tabler_x" />;
+      return <img src="/assets/Icons/Icon=tabler_x.svg" alt="tabler_x" />;
     } else if (measurementValue !== '') {
       return (
         <img
-          src={`/src/assets/cenoteando-icons/${mofItem.variableIcon}`}
+          src={`/assets/cenoteando-icons/${mofItem.variableIcon}`}
           alt={`${mofItem.variableIcon}.svg`}
         />
       );
@@ -125,9 +125,9 @@ export const CenoteProfile = () => {
   
     const theme = themesData.find((item: EnumsInterface) => item.name === themeName);
     if (theme) {
-      return '/src/assets/cenoteando-icons/' + themeIcons[themeName] || '/src/assets/cenoteando-icons/Icon=tabler_diamonds.svg'; // Return the icon or a default icon if not found
+      return '/assets/cenoteando-icons/' + themeIcons[themeName] || '/assets/cenoteando-icons/Icon=tabler_diamonds.svg'; // Return the icon or a default icon if not found
     }
-    return '/src/assets/cenoteando-icons/Icon=tabler_diamonds.svg'; // Return a default icon if theme is not found
+    return '/assets/cenoteando-icons/Icon=tabler_diamonds.svg'; // Return a default icon if theme is not found
   };
 
   return (
@@ -147,7 +147,7 @@ export const CenoteProfile = () => {
                       <ToastContainer />
                       <p className="lbl-bread-subtitle mb-1">
                         {" "}
-                        <img src="/src/assets/Icons/map.svg" alt="" />
+                        <img src="/assets/Icons/map.svg" alt="" />
                         {cenoteData?.municipality},  {cenoteData?.state} 
 
                       </p>
@@ -165,7 +165,7 @@ export const CenoteProfile = () => {
                           className="btn btn-bg-blue-round  btn-block mt-5 float-right"
                         >
                           <img
-                            src="/src/assets/Icons/beach.svg"
+                            src="/assets/Icons/beach.svg"
                             alt=""
                             className="mr-2 " />
                           Turismo
@@ -178,7 +178,7 @@ export const CenoteProfile = () => {
                             type="button"
                             className="btn  btn-white  mt-5 float-right"
                           >
-                            <img src="/src/assets/Icons/edit.svg" alt="" />
+                            <img src="/assets/Icons/edit.svg" alt="" />
                           </button>
                         </div>
                         <div className="col-md-2">
@@ -187,7 +187,7 @@ export const CenoteProfile = () => {
                             className="btn btn-white  mt-5 float-right"
                           >
                             <img
-                              src="/src/assets/Icons/heart.svg"
+                              src="/assets/Icons/heart.svg"
                               alt=""
                               className="mr-2 " />
                           </button>
@@ -198,7 +198,7 @@ export const CenoteProfile = () => {
                             className="btn btn-white  mt-5 float-right"
                           >
                             <img
-                              src="/src/assets/Icons/upload.svg"
+                              src="/assets/Icons/upload.svg"
                               alt=""
                               className="mr-2 " />
                           </button>
@@ -209,7 +209,7 @@ export const CenoteProfile = () => {
                             className="btn btn-white  mt-5 float-right"
                           >
                             <img
-                              src="/src/assets/Icons/trash.svg"
+                              src="/assets/Icons/trash.svg"
                               alt=""
                               className="mr-2 " />
                           </button>
@@ -222,11 +222,11 @@ export const CenoteProfile = () => {
               <section className="content">
                 {cenoteData && cenoteData.photos.length ? (
                   <Gallery photoUrls={cenoteData.photos}></Gallery>
-                  ) : (   <img src="/src/assets/Images/no_image.jpg" className="react-photo-album--photo" loading="lazy" decoding="async"></img> )
+                  ) : (   <img src="/assets/Images/no_image.jpg" className="react-photo-album--photo" loading="lazy" decoding="async"></img> )
                 }
                 <div className="pull-right float-right">
                   <a onClick={() => setShowAddImageModal(true)} className="cursor-pointer">
-                    <img src="/src/assets/icons/plus.svg"/>
+                    <img src="/assets/Icons/plus.svg"/>
                       Agregar Imagen
                   </a>
                 </div>
@@ -265,7 +265,7 @@ export const CenoteProfile = () => {
                                 aria-selected={tabController === `custom-tabs-bibliography-tab`}
                                 onClick={() => handleTabController(`custom-tabs-bibliography-tab`, 'bibliography')}
                               >
-                                <img className="image-center" src='/src/assets/cenoteando-icons/Icon=tabler_book-2.svg' alt='INDICATOR' />
+                                <img className="image-center" src='/assets/cenoteando-icons/Icon=tabler_book-2.svg' alt='INDICATOR' />
                                 <br />
                                 BIBLIOGRAPHY
                               </a>
@@ -281,7 +281,7 @@ export const CenoteProfile = () => {
                                 aria-selected={tabController === `custom-tabs-indicators-tab`}
                                 onClick={() => handleTabController(`custom-tabs-indicators-tab`, 'indicators')}
                               >
-                                <img className="image-center" src='/src/assets/cenoteando-icons/Icon=tabler_diamonds.svg' alt='INDICATOR' />
+                                <img className="image-center" src='/assets/cenoteando-icons/Icon=tabler_diamonds.svg' alt='INDICATOR' />
                                 <br />
                                 INDICATORS
                               </a>
@@ -297,7 +297,7 @@ export const CenoteProfile = () => {
                               >
                                 <img
                                   className="image-center"
-                                  src="/src/assets/Icons/arrow-right.svg"
+                                  src="/assets/Icons/arrow-right.svg"
                                   alt="" />
                               </a>
                               <div
@@ -357,7 +357,7 @@ export const CenoteProfile = () => {
                                 {/*ADD AND EDIT VARIABLES BUTTON*/}
                                 <div className="float-right col-md-12">
                                   <a onClick={() => setShowUpdateMofModal(true)} className="btn btn-bg-blue-round  float-right">
-                                    <img src="/src/assets/Icons/plus.svg" className="mr-2 " />
+                                    <img src="/assets/Icons/plus.svg" className="mr-2 " />
                                     Add/Edit Variables
                                   </a>
                                 </div>
@@ -404,7 +404,7 @@ export const CenoteProfile = () => {
                                         mofsByThemeData.map((item: mofByThemeInterface, index: number) => (
                                           <div key={ 'category-' + index }>
                                             <div className={index == 0 ? "container-blue col-md-12" : "container-blue mt-3 col-md-12"}>
-                                              <p className="title-color title-weight title-size">  <img src={"/src/assets/icons/star.svg"}></img> {item.category}</p>
+                                              <p className="title-color title-weight title-size">  <img src={"/assets/Icons/star.svg"}></img> {item.category}</p>
                                               {item && item.mofs.map((mofItem: mofInterface) => (
                                                 <div key={mofItem.id} >
                                                     <div>
@@ -413,8 +413,8 @@ export const CenoteProfile = () => {
                                                         <div className="measurement-item">
                                                           <span className="variable-name title-color">
                                                           {mofItem.variableIcon ?
-                                                            ( <img src={"/src/assets/cenoteando-icons/" + mofItem.variableIcon } alt={mofItem.variableIcon + '.svg'} /> ):
-                                                            ( <img src="/src/assets/Icons/check.svg" alt="check" /> )
+                                                            ( <img src={"/assets/cenoteando-icons/" + mofItem.variableIcon } alt={mofItem.variableIcon + '.svg'} /> ):
+                                                            ( <img src="/assets/Icons/check.svg" alt="check" /> )
                                                           }
                                                           {mofItem.variableName}
                                                           </span>
@@ -440,7 +440,7 @@ export const CenoteProfile = () => {
                                                         (mofItem.measurements.map((measurements_item: MeasurementsInterface) => (
                                                         <div className="measurement-item">
                                                           <span className="variable-name title-color">
-                                                          {mofItem.variableIcon &&  ( <img src={"/src/assets/cenoteando-icons/" + mofItem.variableIcon } alt={mofItem.variableIcon + '.svg'} /> )} 
+                                                          {mofItem.variableIcon &&  ( <img src={"/assets/cenoteando-icons/" + mofItem.variableIcon } alt={mofItem.variableIcon + '.svg'} /> )} 
                                                           {mofItem.variableName}
                                                           </span>
                                                           <span className="measurement-value"><strong>{measurements_item.value} {mofItem?.variableUnits}</strong></span>
@@ -454,8 +454,8 @@ export const CenoteProfile = () => {
                                                           {mofItem.measurements.map((measurements_item: MeasurementsInterface, index: number) => (
                                                             <div className="two-column-item" key={index}>
                                                                   {mofItem.variableIcon ?
-                                                                    ( <img src={"/src/assets/cenoteando-icons/" + mofItem.variableIcon } alt={mofItem.variableIcon + '.svg'} /> ):
-                                                                    ( <img src="/src/assets/Icons/check.svg" alt="check" /> )
+                                                                    ( <img src={"/assets/cenoteando-icons/" + mofItem.variableIcon } alt={mofItem.variableIcon + '.svg'} /> ):
+                                                                    ( <img src="/assets/Icons/check.svg" alt="check" /> )
                                                                   } 
                                                                 { <strong>{measurements_item.value}</strong> }
                                                             </div>
@@ -479,7 +479,7 @@ export const CenoteProfile = () => {
                                           mofsByThemeData.map((item: mofByThemeInterface, index: number) => (
                                             <div key={ 'category-' + index } className='mt-3 col-md-6'>
                                               <div className="container-blue">
-                                                <p className="title-color title-weight title-size">  <img src={"/src/assets/icons/star.svg"}></img> {item.category}</p>
+                                                <p className="title-color title-weight title-size">  <img src={"/assets/Icons/star.svg"}></img> {item.category}</p>
                                                 {item && item.mofs.map((mofItem: mofInterface) => (
                                                   <div key={mofItem.id} >
                                                       <div>
@@ -488,8 +488,8 @@ export const CenoteProfile = () => {
                                                           <div className="measurement-item">
                                                             <span className="variable-name title-color">
                                                             {mofItem.variableIcon ?
-                                                              ( <img src={"/src/assets/cenoteando-icons/" + mofItem.variableIcon } alt={mofItem.variableIcon + '.svg'} /> ):
-                                                              ( <img src="/src/assets/Icons/check.svg" alt="check" /> )
+                                                              ( <img src={"/assets/cenoteando-icons/" + mofItem.variableIcon } alt={mofItem.variableIcon + '.svg'} /> ):
+                                                              ( <img src="/assets/Icons/check.svg" alt="check" /> )
                                                             }
                                                             {mofItem.variableName}
                                                             </span>
@@ -515,7 +515,7 @@ export const CenoteProfile = () => {
                                                           (mofItem.measurements.map((measurements_item: MeasurementsInterface) => (
                                                           <div className="measurement-item">
                                                             <span className="variable-name title-color">
-                                                            {mofItem.variableIcon &&  ( <img src={"/src/assets/cenoteando-icons/" + mofItem.variableIcon } alt={mofItem.variableIcon + '.svg'} /> )} 
+                                                            {mofItem.variableIcon &&  ( <img src={"/assets/cenoteando-icons/" + mofItem.variableIcon } alt={mofItem.variableIcon + '.svg'} /> )} 
                                                             {mofItem.variableName}
                                                             </span>
                                                             <span className="measurement-value"><strong>{measurements_item.value} {mofItem?.variableUnits}</strong></span>
@@ -529,8 +529,8 @@ export const CenoteProfile = () => {
                                                             {mofItem.measurements.map((measurements_item: MeasurementsInterface, index: number) => (
                                                               <div className="two-column-item" key={index}>
                                                                     {mofItem.variableIcon ?
-                                                                      ( <img src={"/src/assets/cenoteando-icons/" + mofItem.variableIcon } alt={mofItem.variableIcon + '.svg'} /> ):
-                                                                      ( <img src="/src/assets/Icons/check.svg" alt="check" /> )
+                                                                      ( <img src={"/assets/cenoteando-icons/" + mofItem.variableIcon } alt={mofItem.variableIcon + '.svg'} /> ):
+                                                                      ( <img src="/assets/Icons/check.svg" alt="check" /> )
                                                                     } 
                                                                   { <strong>{measurements_item.value}</strong> }
                                                               </div>

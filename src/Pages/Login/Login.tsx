@@ -141,7 +141,7 @@ export const Login = () => {
                           <div className="input-group-append">
                             <div className="input-group-text">
                               <img
-                                src="/src/assets/Icons/slash-eye.svg"
+                                src="/assets/Icons/slash-eye.svg"
                                 alt=""
                               />
                             </div>
@@ -167,7 +167,7 @@ export const Login = () => {
                           <Link to="/verifycode"
                             className="btn btn-white-border col-md-12 float-left"
                           >
-                             <img className="mb-1" src="/src/assets/Images/register.png" alt="" /> 
+                             <img className="mb-1" src="/assets/Images/register.png" alt="" />
                             <p>Registrarse con código de invitación</p>
                           </Link>
                         </div>
@@ -175,7 +175,7 @@ export const Login = () => {
                           <Link to="/registerv1"
                             className="btn btn-white-border col-md-12 float-right"
                           >
-                            <img className="mb-1" src="/src/assets/Images/register.png" alt="" /> 
+                            <img className="mb-1" src="/assets/Images/register.png" alt="" />
                             <p>Registrarse con correo electrónico</p>
                           </Link>
                         </div>

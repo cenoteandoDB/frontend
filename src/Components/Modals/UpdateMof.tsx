@@ -451,7 +451,7 @@ export const UpdateMof: React.FC<UpdateMofPropsInterface>= ({cenoteId, theme, sh
                                                                                                                     DEFINIR UN NUEVO VALOR PARA : {variableSelected.name}
                                                                                                                     <a  onClick={() => handleCancelNewMeasurementsValue()}>
                                                                                                                     <span className=" ml-3 badge badge-default badge-pill"> 
-                                                                                                                            <img src="/src/assets/Icons/close.svg" alt="" /> 
+                                                                                                                            <img src="/assets/Icons/close.svg" alt="" />
                                                                                                                         </span>
                                                                                                                     </a>
                                                                                                                 </div>
@@ -471,7 +471,7 @@ export const UpdateMof: React.FC<UpdateMofPropsInterface>= ({cenoteId, theme, sh
                                                                                                                     <a  onClick={() => handleSetMeasurementsValues(itemMensurement, 'measurements'+ index)}>
                                                                                                                         {itemMensurement.value}
                                                                                                                         <span className=" ml-3 badge badge-default badge-pill cursor-pointer"> 
-                                                                                                                            <img src="/src/assets/Icons/edit.svg" alt="" /> 
+                                                                                                                            <img src="/assets/Icons/edit.svg" alt="" />
                                                                                                                         </span>
                                                                                                                     </a>
                                                                                                             </div>
@@ -488,7 +488,7 @@ export const UpdateMof: React.FC<UpdateMofPropsInterface>= ({cenoteId, theme, sh
                                                                                     <hr />
                                                                                     {variableItem.timeseries == true && (
                                                                                         <button  type="button" onClick={() => setAddRecord(true)} className="btn btn-outline-info  btn-sm">
-                                                                                        <img src="/src/assets/Icons/plus.svg" alt="" /> Agregar Registro
+                                                                                        <img src="/assets/Icons/plus.svg" alt="" /> Agregar Registro
                                                                                     </button>
                                                                                     )}
                                                                                     
@@ -500,7 +500,7 @@ export const UpdateMof: React.FC<UpdateMofPropsInterface>= ({cenoteId, theme, sh
                                                                                             DEFINIR UN NUEVO VALOR PARA : {variableSelected.name}
                                                                                             <a  onClick={() => setAddRecord(false)}>
                                                                                             <span className=" ml-3 badge badge-default badge-pill"> 
-                                                                                                    <img src="/src/assets/Icons/close.svg" alt="" /> 
+                                                                                                    <img src="/assets/Icons/close.svg" alt="" />
                                                                                                 </span>
                                                                                             </a>
                                                                                         </div>

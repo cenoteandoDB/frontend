@@ -19,7 +19,7 @@ const CardHome: React.FC<Props> = ({ hideEditDetails = true }) => {
                   className="img-fluid"
                 />
                 <a className="position-absolute position-icon">
-                  <img src="/src/assets/Icons/heart.svg" alt="" />
+                  <img src="/assets/Icons/heart.svg" alt="" />
                 </a>
               </div>
               <div className="col-12">
@@ -30,13 +30,13 @@ const CardHome: React.FC<Props> = ({ hideEditDetails = true }) => {
                 <ul className="ml-4 mb-0 fa-ul text-muted d-flex flex-wrap">
                   <li className="small d-flex align-items-center mr-5 mb-2 tag-icon-cnt">
                     <span className="fa-li">
-                      <img src="/src/assets/Icons/map.svg" />
+                      <img src="/assets/Icons/map.svg" />
                     </span>
                     Lugar
                   </li>
                   <li className="small d-flex align-items-center mr-5 mb-2 tag-icon-cnt">
                     <span className="fa-li">
-                      <img src="/src/assets/Icons/beach.svg" />
+                      <img src="/assets/Icons/beach.svg" />
                     </span>
                     Turismo
                   </li>
@@ -47,13 +47,13 @@ const CardHome: React.FC<Props> = ({ hideEditDetails = true }) => {
                   <ul className="ml-4 mb-0 fa-ul text-muted">
                     <li className="small">
                       <span className="fa-li">
-                        <img src="/src/assets/Icons/eye.svg" alt="" />
+                        <img src="/assets/Icons/eye.svg" alt="" />
                       </span>
                       Visto: DD-MM-YY
                     </li>
                     <li className="small">
                       <span className="fa-li">
-                        <img src="/src/assets/Icons/edit.svg" alt="" />
+                        <img src="/assets/Icons/edit.svg" alt="" />
                       </span>
                       Editado: DD-MM-YY
                     </li>

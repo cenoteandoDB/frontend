@@ -13,24 +13,24 @@ export const NewUsersList = () => {
             <thead className="bg-header-footer">
               <tr>
                 <th>
-                  ID <img src="/src/assets/Icons/arrow-down.svg" alt="" />
+                  ID <img src="/assets/Icons/arrow-down.svg" alt="" />
                 </th>
                 <th>
-                  Usuario <img src="/src/assets/Icons/arrow-down.svg" alt="" />
+                  Usuario <img src="/assets/Icons/arrow-down.svg" alt="" />
                 </th>
                 <th>
-                  Registro <img src="/src/assets/Icons/arrow-down.svg" alt="" />
+                  Registro <img src="/assets/Icons/arrow-down.svg" alt="" />
                 </th>
                 <th>
-                  Permisos <img src="/src/assets/Icons/arrow-down.svg" alt="" />
+                  Permisos <img src="/assets/Icons/arrow-down.svg" alt="" />
                 </th>
                 <th>
                   Tipo de permisos{" "}
-                  <img src="/src/assets/Icons/arrow-down.svg" alt="" />
+                  <img src="/assets/Icons/arrow-down.svg" alt="" />
                 </th>
                 <th>
                   Tipo de usuario{" "}
-                  <img src="/src/assets/Icons/arrow-down.svg" alt="" />
+                  <img src="/assets/Icons/arrow-down.svg" alt="" />
                 </th>
                 <th></th>
                 <th></th>
@@ -48,15 +48,15 @@ export const NewUsersList = () => {
                 </td>
                 <td>
                   <a href="">
-                    <img src="/src/assets/Icons/arrow-down.svg" alt="" />
+                    <img src="/assets/Icons/arrow-down.svg" alt="" />
                   </a>
                 </td>
                 <td>
                   <a className="btn_approve mr-1">
-                    <img src="/src/assets/Icons/check.svg" alt="" />
+                    <img src="/assets/Icons/check.svg" alt="" />
                   </a>
                   <a className="btn_detach ml-1">
-                    <img src="/src/assets/Icons/close.svg" alt="" />
+                    <img src="/assets/Icons/close.svg" alt="" />
                   </a>
                 </td>
               </tr>
@@ -71,15 +71,15 @@ export const NewUsersList = () => {
                 </td>
                 <td>
                   <a href="">
-                    <img src="/src/assets/Icons/arrow-down.svg" alt="" />
+                    <img src="/assets/Icons/arrow-down.svg" alt="" />
                   </a>
                 </td>
                 <td>
                   <a className="btn_approve mr-1">
-                    <img src="/src/assets/Icons/check.svg" alt="" />
+                    <img src="/assets/Icons/check.svg" alt="" />
                   </a>
                   <a className="btn_detach ml-1">
-                    <img src="/src/assets/Icons/close.svg" alt="" />
+                    <img src="/assets/Icons/close.svg" alt="" />
                   </a>
                 </td>
               </tr>
@@ -94,15 +94,15 @@ export const NewUsersList = () => {
                 </td>
                 <td>
                   <a href="">
-                    <img src="/src/assets/Icons/arrow-down.svg" alt="" />
+                    <img src="/assets/Icons/arrow-down.svg" alt="" />
                   </a>
                 </td>
                 <td>
                   <a className="btn_approve mr-1">
-                    <img src="/src/assets/Icons/check.svg" alt="" />
+                    <img src="/assets/Icons/check.svg" alt="" />
                   </a>
                   <a className="btn_detach ml-1">
-                    <img src="/src/assets/Icons/close.svg" alt="" />
+                    <img src="/assets/Icons/close.svg" alt="" />
                   </a>
                 </td>
               </tr>
@@ -117,15 +117,15 @@ export const NewUsersList = () => {
                 </td>
                 <td>
                   <a href="">
-                    <img src="/src/assets/Icons/arrow-down.svg" alt="" />
+                    <img src="/assets/Icons/arrow-down.svg" alt="" />
                   </a>
                 </td>
                 <td>
                   <a className="btn_approve mr-1">
-                    <img src="/src/assets/Icons/check.svg" alt="" />
+                    <img src="/assets/Icons/check.svg" alt="" />
                   </a>
                   <a className="btn_detach ml-1">
-                    <img src="/src/assets/Icons/close.svg" alt="" />
+                    <img src="/assets/Icons/close.svg" alt="" />
                   </a>
                 </td>
               </tr>

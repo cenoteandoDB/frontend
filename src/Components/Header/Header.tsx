@@ -1,7 +1,7 @@
 import {useState, useEffect} from "react";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "../../Auth/AuthProvider";
-import logo from "../../assets/logo.png";
+import logo from "../../../public/assets/logo.png";
 import "./Header.css"
 function Header() {
   const {user, isAuthenticated , logout, getUser } = useAuthContext()
@@ -26,7 +26,7 @@ function Header() {
     <>
       <nav className="main-header navbar navbar-expand-md navbar-light navbar-white">
         <div className="container">
-          <a href="../../index3.html" className="navbar-brand">
+          <a href="https://cenoteando.web.app/home" className="navbar-brand">
             <img src={logo} alt="Cenoteando Logo" className="brand-image" />
             {/*<span className="brand-text font-weight-light">AdminLTE 3</span>*/}
           </a>
@@ -89,7 +89,7 @@ function Header() {
                 href="#"
                 role="button"
               >
-                <img src="/src/assets/Icons/facebook.svg" alt="" />
+                <img src="/assets/Icons/facebook.svg" alt="" />
               </a>
             </li>
             <li className="nav-item">
@@ -100,7 +100,7 @@ function Header() {
                 href="#"
                 role="button"
               >
-                <img src="/src/assets/Icons/instagram.svg" alt="" />
+                <img src="/assets/Icons/instagram.svg" alt="" />
               </a>
             </li>
             <li className="nav-item">
@@ -111,7 +111,7 @@ function Header() {
                 href="#"
                 role="button"
               >
-                <img src="/src/assets/Icons/linkedin.svg" alt="" />
+                <img src="/assets/Icons/linkedin.svg" alt="" />
               </a>
             </li>
              {/*USER DROPDOWN  */}
@@ -123,7 +123,7 @@ function Header() {
                onClick={handleUserToggleDropdown}>
                 <div className="media avatar-dropdown">
                     <img
-                      src="/src/assets/Icons/avatar.svg"
+                      src="/assets/Icons/avatar.svg"
                       alt="User Avatar"
                       className="img-size-25 img-circle mr-3"
                     />
@@ -131,7 +131,7 @@ function Header() {
                       <h3 className="dropdown-item-title font-weight-bold">
                         {user?.name}
                         <img
-                          src={ showUserDropdown ? "/src/assets/Icons/arrow-down.svg" : "/src/assets/Icons/arrow-up.svg"}
+                          src={ showUserDropdown ? "/assets/Icons/arrow-down.svg" : "/assets/Icons/arrow-up.svg"}
                           alt="User Avatar"
                           className="img-size-25 img-circle mr-3"
                         />

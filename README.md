@@ -54,3 +54,14 @@ export default {
 - 0.- Seleccionar la rama de desarrollo en este caso dev `git checkout dev `
 - 1.- Usar el comando par aunir los cambios `git merge <Nombre de la rama que se desea unir a la de desarrollo>`
 - 2.- Actualizar la rama dev `git push origin dev`
+
+
+# Deploy application
+
+1. Authenticate to firebase (firebase login)
+
+2. Modify backend URI to production URI
+
+3. Build the application (npm run build)
+
+4. Deploy the application to Firebase Hosting (firebase deploy)

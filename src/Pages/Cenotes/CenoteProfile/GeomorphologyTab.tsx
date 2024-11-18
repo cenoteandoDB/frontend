@@ -6,7 +6,7 @@ export const GeomorphologyTab = () => {
      <div className="content-microcuenca">
      <p className="title-color title-weight title-size">  Zona de captación de agua (Microcuenca)</p>
       <div className='measurement-item d-flex'>
-      <div>  <img src="/src/assets/Images/geomorphology/microcuenca.png" alt="" width={100} /> </div>
+      <div>  <img src="/assets/Images/geomorphology/microcuenca.png" alt="" width={100} /> </div>
         <div className='variable-name '>
         
           <p className='ml-3 text-info simple-text-size'>Tipo de microcuenca</p>

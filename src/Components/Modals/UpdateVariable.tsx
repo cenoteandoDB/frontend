@@ -280,7 +280,7 @@ export const UpdateVariable: React.FC<UpdatePropsInterface> = ({id, showModal, h
                                 {variableInfo.icon && (
                                     <>
                                         <h6>Vista previa del icono seleccionado:</h6>
-                                        <img src={"/src/assets/cenoteando-icons/" + variableInfo.icon} alt="selected-icon" width="50" height="50" />
+                                        <img src={"/assets/cenoteando-icons/" + variableInfo.icon} alt="selected-icon" width="50" height="50" />
                                         <a onClick={() => handleIconSelect("")} className='text-danger cursor-pointer'>Remove</a>
                                     </>
                                 )}
