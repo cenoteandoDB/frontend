@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { DashboardData } from "../Dashboard/DashboardData";
 import { useAddFavoriteCenote, useCenotes, useDeleteCenote, useRemoveFavoriteCenote } from "../../graphql/Cenotes/CenotesCustomHooks";
 import { CenoteInterface } from "../../Types/CenotesTypes";
@@ -19,8 +19,10 @@ export const List_cenotes = () => {
   const initialSort: SortInterface = { sortOrder: "ASC", field: "name" };
   const navigate = useNavigate();
   const testCenoteId = "00YaFC8pXUrx7ib4wx8Z";
+  const isFirstRender = useRef(true);
 
   const { user } = useAuthContext()
+  const [searchName, setSearchName] = useState<string>("");
   const { cenotesData, cenotesError, cenotesLoading, refetchCenotes, updatePagination, updateSort, searchCenoteByName, currentSortOrder, totalItems} = useCenotes(initialPagination, initialSort);
   const { handleDeleteCenote, deleteCenoteLoading, deleteCenoteError, deleteCenoteData } = useDeleteCenote();
   const { addCenote, favCenoteData, favCenoteLoading, favCenoteError } = useAddFavoriteCenote();
@@ -29,7 +31,6 @@ export const List_cenotes = () => {
   const [favoriteCenote, setFavoriteCenote] = useState({userId: '', cenoteId: ''});
   const loading =  cenotesLoading || favCenoteLoading || deleteCenoteLoading || delFavCenoteLoading;
   const noData = !cenotesLoading && (!cenotesData || cenotesData.length === 0);
-  const [searchName, setSearchName] = useState<string>("");
   const [showCreateCenoteModal, setShowCreateCenoteModal] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showUpdateModal, setShowUpdatModal] = useState<boolean>(false);
@@ -68,10 +69,12 @@ export const List_cenotes = () => {
 
   const handleSearch = useCallback(
     _.debounce((name: string) => {
-      setCurrentPage(0);
-      updatePagination({ ...initialPagination, offset: 0 });
-      searchCenoteByName(name);
-    }, 1000),
+      if (isFirstRender.current) {
+        console.log("I'm here to render")
+        setCurrentPage(0);
+        updatePagination({ ...initialPagination, offset: 0 });
+        searchCenoteByName(name);
+      }}, 1000),
     []
   );
 
@@ -156,7 +159,11 @@ export const List_cenotes = () => {
 
   const pageNumbers = getPageNumbers();
 
-    //USE EFECTS
+  //USE EFECTS
+  useEffect(() => {
+    isFirstRender.current = false;
+  }, []);
+
   useEffect(() => {
     handleSearch(searchName);
   }, [searchName, handleSearch, searchCenoteByName]);
