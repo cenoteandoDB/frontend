@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import { PaginationInterface, SortInterface } from "../../Types/UserTypes";
 import { gql, useMutation, useQuery } from "@apollo/client";
-import { ACCEPT_MOF_REQUEST, ADD_FAVORITE_CENOTE, ALL_CENOTES, CREATE_CENOTE, CREATE_MOF, DELETE_CENOTE, GET_CENOTE_BY_ID, GET_CENOTE_DATA_BY_THEME, GET_CENOTE_THEMES_BY_CENOTE, GET_ENUM_CENOTE_TYPE, GET_MOF_BY_THEME, GET_MOF_MODIFICATIONS, GET_UPLOAD_IMAGE_URL, REJECT_MOF_REQUEST, REMOVE_FAVORITE_CENOTE, UPDATE_CENOTE, UPDATE_MOF } from "./CenotesGraphql";
+import { ACCEPT_MOF_REQUEST, ADD_FAVORITE_CENOTE, ALL_CENOTES, CHANGE_CENOTE_MAIN_PHOTO, CREATE_CENOTE, CREATE_MOF, DELETE_CENOTE, DELETE_PHOTO, GET_CENOTE_BY_ID, GET_CENOTE_DATA_BY_THEME, GET_CENOTE_THEMES_BY_CENOTE, GET_ENUM_CENOTE_TYPE, GET_MOF_BY_THEME, GET_MOF_MODIFICATIONS, GET_UPLOAD_IMAGE_URL, REJECT_MOF_REQUEST, REMOVE_FAVORITE_CENOTE, UPDATE_CENOTE, UPDATE_MOF } from "./CenotesGraphql";
 import { AddFavoriteCenote, CreateCenoteInterface, createMofInterface, UpdateCenoteInterface, updateMofInterface } from "../../Types/CenotesTypes";
 import { useAuthContext } from "../../Auth/AuthProvider";
+import { changeMainPhotoInterface, PhotoInterface } from "../../Types/UtilsTypes";
 
 
 
@@ -235,6 +236,38 @@ export const useAddFavoriteCenote = () => {
   };
 
   return { addCenote, favCenoteData: result, favCenoteLoading: loading, favCenoteError: error };
+};
+
+export const useChangeCenoteMainPhoto = () => {
+  const [changeCenoteMainPhoto, { data, loading, error }] = useMutation(gql`${CHANGE_CENOTE_MAIN_PHOTO}`);
+  const [result, setResult] = useState(null);
+
+  const changeMainPhoto = async (cenoteId: string, photoId: string) => {
+    try {
+      const response = await changeCenoteMainPhoto({ variables: { cenoteId: cenoteId, photoId: photoId } });
+      setResult(response?.data?.changeCenoteMainPhoto);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  return { changeMainPhoto, mainPhotoResult: result, mainPhotoLoading: loading, mainPhotoError: error, mainPhotoSetResult: setResult };
+};
+
+export const useDeletePhoto = () => {
+  const [deletePhoto, { data, loading, error }] = useMutation(gql`${DELETE_PHOTO}`);
+  const [result, setResult] = useState(null);
+
+  const deleteOnePhoto = async (cenoteId: string, photoId: string) => {
+    try {
+      const response = await deletePhoto({ variables: { cenoteId: cenoteId, photoId: photoId } });
+      setResult(response?.data?.changeCenoteMainPhoto);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  return { deleteOnePhoto, deletePhotoResult: result, deletePhotoLoading: loading, deletePhotoError: error, deletePhotoSetResult: setResult };
 };
 
 export const useRemoveFavoriteCenote = () => {

@@ -1,7 +1,7 @@
 .img-fluid {
   border-radius: 8px;
-  width: 100%;
-  height: auto;
+  width: 100% !important;
+  height: auto  !important;
 }
 
 .position-icon {

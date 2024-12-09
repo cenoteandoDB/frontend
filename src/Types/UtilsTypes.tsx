@@ -18,12 +18,14 @@ export interface UpdatePropsInterface {
   id: string | null | undefined;
   showModal: boolean;
   handleToggleModal?: () => void;
-  refetch?: () => void
+  refetch?: () => void;
+  refetchCenoteById?: () => void;
 }
 
 export interface UpdateMofPropsInterface {
   cenoteId: string | undefined | null;
   theme: string | null;
+  category: string | null;
   showModal: boolean;
   handleToggleModal?: () => void;
   refetch?: () => void
@@ -45,10 +47,19 @@ export interface CoordinatesPropsInterface {
 }
 
 export interface PhotoInterface {
+  id: string;
+  isMain: boolean;
+  url: string;
   src: string;
   width: number;
   height: number;
 }
+
+export interface changeMainPhotoInterface {
+  cenote_id: string;
+  photo_id: boolean;
+}
+
 
 export interface WaterTabInterface {
   category: string;

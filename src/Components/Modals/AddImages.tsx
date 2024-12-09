@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import axios from 'axios';
 
 
-export const AddImages: React.FC<UpdatePropsInterface> = ({id, showModal, handleToggleModal, refetch }) => {
+export const AddImages: React.FC<UpdatePropsInterface> = ({id, showModal, handleToggleModal, refetch, refetchCenoteById }) => {
     const [file, setFile] = useState<File | null>(null);
     const [photoName, setPhotoName] = useState<string | null>(null);
     const { urlData, urlLoading, urlError, refetchUrl } = useGetUploadImageUrl(id, photoName ?? '');
@@ -43,6 +43,7 @@ export const AddImages: React.FC<UpdatePropsInterface> = ({id, showModal, handle
           setPhotoName(null);
           setFile(null);
           toast.success('Imagen ha cargado exitosamente')
+          if (refetchCenoteById) refetchCenoteById()
           console.log('File uploaded successfully', response);
         } catch (error) {
           console.error('Error uploading file', error);

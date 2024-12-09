@@ -1,0 +1,21 @@
+.img-fluid {
+    border-radius: 8px;
+    width: 100% !important;
+    height: auto  !important;
+  }
+  
+.position-icon-left {
+    top: 3px;
+    left: 10px;
+}
+.position-icon-right {
+    top: 3px;
+    right: 10px;
+}
+
+.image-buttons-profile {
+    background-color: #ffff;
+    padding: 5px;
+    border-radius: 4px;
+    width: fit-content !important;
+}

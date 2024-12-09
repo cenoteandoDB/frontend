@@ -21,7 +21,7 @@ export const List_cenotes = () => {
   const testCenoteId = "00YaFC8pXUrx7ib4wx8Z";
   const isFirstRender = useRef(true);
 
-  const { user } = useAuthContext()
+  const { user } = useAuthContext();
   const [searchName, setSearchName] = useState<string>("");
   const { cenotesData, cenotesError, cenotesLoading, refetchCenotes, updatePagination, updateSort, searchCenoteByName, currentSortOrder, totalItems} = useCenotes(initialPagination, initialSort);
   const { handleDeleteCenote, deleteCenoteLoading, deleteCenoteError, deleteCenoteData } = useDeleteCenote();
@@ -129,7 +129,7 @@ export const List_cenotes = () => {
   };
 
   const handleIsFavoriteCenote = (cenoteId: string | undefined | null) => {
-    if(userData.favouriteCenotesIds && cenoteId){
+    if(userData && userData.favouriteCenotesIds && cenoteId){
       if(userData.favouriteCenotesIds?.includes(cenoteId)){
         return true;
       }

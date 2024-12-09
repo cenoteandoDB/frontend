@@ -17,14 +17,16 @@ import { BibliographyTab } from "./BibliographyTab";
 import { IndicatorsTab } from "./IndicatorsTab";
 import { WaterTab } from "./WaterTab";
 import { AddImages } from "../../../Components/Modals/AddImages";
+import { EditMofs } from "../../../Components/Modals/EditMofs";
 
 
 export const CenoteProfile = () => {
+
   const { id } = useParams();
   const navigate = useNavigate();
   const [theme, setTheme] = useState<string | null>(null);
+  const [category, setCategory] = useState<string | null>(null);
   const { cenoteData, loadingData, errorData, refetchCenoteById } = useGetCenoteById(id);
-
   const { themesData } = useThemes(); //ALL THEMES
   const { themesList, themesLoading ,themesError } = useGetThemesByCenote(id);//THEMES WITH DATA
   const { mofsByThemeData, mofsByThemeError ,mofsByThemeLoading, refetchMofByTheme } = useGetMofByTheme(id, theme);
@@ -32,8 +34,6 @@ export const CenoteProfile = () => {
   const [showAddImageModal, setShowAddImageModal] = useState<boolean>(false);
   const [tabController, setTabController] = useState("");
   const loading = loadingData;
-  console.log(mofsByThemeLoading)
-  console.log(mofsByThemeData)
   const handleTabController = (tabcontroller: string, theme: string) => {
     setTheme(theme);
     setTabController(tabcontroller);
@@ -62,6 +62,12 @@ export const CenoteProfile = () => {
     setShowUpdateMofModal(!showUpdateMofModal);
   };
 
+  const handleOpenUpdateMofToggleModal = (category: string) => {
+    setCategory(category)
+    setShowUpdateMofModal(true);
+  };
+
+
   const handleAddImageToggleModal = () => {
     setShowAddImageModal(!showAddImageModal);
   };
@@ -74,8 +80,9 @@ export const CenoteProfile = () => {
 
   useEffect(() => {
     if(errorData){
+      
       toast.error('El Registro no se encontro en la Base de datos')
-      navigate(`/cenotes`);
+      //navigate(`/cenotes`);
     }
   }, [errorData])
 
@@ -221,7 +228,7 @@ export const CenoteProfile = () => {
               </section>
               <section className="content">
                 {cenoteData && cenoteData.photos.length ? (
-                  <Gallery photoUrls={cenoteData.photos}></Gallery>
+                  <Gallery photoData={cenoteData.photos} cenoteId={id} refetchCenoteById={refetchCenoteById}></Gallery>
                   ) : (   <img src="/assets/Images/no_image.jpg" className="react-photo-album--photo" loading="lazy" decoding="async"></img> )
                 }
                 <div className="pull-right float-right">
@@ -354,13 +361,13 @@ export const CenoteProfile = () => {
                               ) : (
                               <div className="row">
 
-                                {/*ADD AND EDIT VARIABLES BUTTON*/}
+                                {/*ADD AND EDIT VARIABLES BUTTON
                                 <div className="float-right col-md-12">
-                                  <a onClick={() => setShowUpdateMofModal(true)} className="btn btn-bg-blue-round  float-right">
+                                  <a onClick={() => handleOpenUpdateMofToggleModal(true)} className="btn btn-bg-blue-round  float-right">
                                     <img src="/assets/Icons/plus.svg" className="mr-2 " />
                                     Add/Edit Variables
                                   </a>
-                                </div>
+                                </div>*/}
 
                                 {/*CUSTOM FEATURES*/}
 
@@ -388,13 +395,11 @@ export const CenoteProfile = () => {
                                     }
                                   </div>
                                 }
-
                                 { theme.name == 'WATER' &&
                                   <>
                                     { <WaterTab mofsByThemeData={mofsByThemeData} />}
                                   </>
                                 }
-                                
                                 {theme.name != 'WATER' &&
                                   <>
                                     {handleIsThemeDoubleView(theme.name)  ? 
@@ -404,7 +409,10 @@ export const CenoteProfile = () => {
                                         mofsByThemeData.map((item: mofByThemeInterface, index: number) => (
                                           <div key={ 'category-' + index }>
                                             <div className={index == 0 ? "container-blue col-md-12" : "container-blue mt-3 col-md-12"}>
-                                              <p className="title-color title-weight title-size">  <img src={"/assets/Icons/star.svg"}></img> {item.category}</p>
+                                              <div className="d-flow-root">
+                                                  <p className="title-color title-weight title-size float-left">  <img src={"/assets/Icons/star.svg"}></img> {item.category}</p>
+                                                  <a className="title-color title-size float-right" onClick={() => handleOpenUpdateMofToggleModal(item.category)}>  <img src={"/assets/Icons/edit.svg"}/> Editar</a>
+                                              </div>
                                               {item && item.mofs.map((mofItem: mofInterface) => (
                                                 <div key={mofItem.id} >
                                                     <div>
@@ -479,7 +487,11 @@ export const CenoteProfile = () => {
                                           mofsByThemeData.map((item: mofByThemeInterface, index: number) => (
                                             <div key={ 'category-' + index } className='mt-3 col-md-6'>
                                               <div className="container-blue">
-                                                <p className="title-color title-weight title-size">  <img src={"/assets/Icons/star.svg"}></img> {item.category}</p>
+                                                <div className="d-flow-root">
+                                                  <p className="title-color title-weight title-size float-left">  <img src={"/assets/Icons/star.svg"}></img> {item.category}</p>
+                                                  <a className="title-color title-size float-right" onClick={() => handleOpenUpdateMofToggleModal(item.category)}>  <img src={"/assets/Icons/edit.svg"}/> Editar</a>
+                                                </div>
+                                             
                                                 {item && item.mofs.map((mofItem: mofInterface) => (
                                                   <div key={mofItem.id} >
                                                       <div>
@@ -565,7 +577,10 @@ export const CenoteProfile = () => {
                               role="tabpanel"
                               aria-labelledby={`custom-tabs-bibliography-tab`}
                             >
-                              <BibliographyTab referenceList={cenoteData.references}></BibliographyTab>
+                              {cenoteData &&
+                                <BibliographyTab referenceList={cenoteData.references}></BibliographyTab>
+                              }
+                              
                           </div>
                             {/*INDICATORS*/}
                           <div
@@ -582,19 +597,30 @@ export const CenoteProfile = () => {
                     </div>
                   </div>
                 </div>
-              <UpdateMof
+              {/*<UpdateMof
                 cenoteId={id}
                 theme={theme}
                 showModal={showUpdateMofModal}
                 handleToggleModal={handleUpdateMofToggleModal}
                 refetch={refetchCenoteById}
-              ></UpdateMof>
+              ></UpdateMof>*/}
+
+              <EditMofs
+                cenoteId={id}
+                theme={theme}
+                category={category}
+                showModal={showUpdateMofModal}
+                handleToggleModal={handleUpdateMofToggleModal}
+                refetch={refetchCenoteById}
+              ></EditMofs>
+
 
               <AddImages
                 id={id}
                 showModal={showAddImageModal}
                 handleToggleModal={handleAddImageToggleModal}
                 refetch={refetchMofByTheme}
+                refetchCenoteById={refetchCenoteById}
               ></AddImages>
             </section>
           </>

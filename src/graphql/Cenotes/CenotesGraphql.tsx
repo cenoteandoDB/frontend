@@ -18,34 +18,40 @@ query GetCenotes($sort: SortField, $pagination: PaginationInput, $name: String) 
 export const GET_CENOTE_BY_ID = `
 query Query($cenoteByIdId: ID!) {
   cenoteById(id: $cenoteByIdId) {
-        firestore_id
-        name
-        state
-        municipality
-        type
-        touristic
-        latitude
-        longitude
-        photos
-        species {
-          createdAt
-          gbifId
-          id
-          inaturalistId
-          name
-          thumbnail
-          updatedAt
-        }
-        references {
-          title
-          short_name
-          type
-          date_primary
-          authors
-          pdf_url
-      }
+    firestore_id
+    name
+    state
+    municipality
+    type
+    touristic
+    latitude
+    longitude
+    
+    species {
+      createdAt
+      gbifId
+      id
+      inaturalistId
+      name
+      thumbnail
+      updatedAt
+    }
+    references {
+      title
+      short_name
+      type
+      date_primary
+      authors
+      pdf_url
+    }
+    photos {
+      id
+      isMain
+      url
+    }
   }
-}`;
+}
+`;
 
 export const GET_CENOTE_THEMES_BY_CENOTE = `
 query Query($cenoteId: ID!) {
@@ -78,20 +84,25 @@ export const GET_FAVORITE_CENOTES = ` query Query($getFavouriteCenotesId: ID!) {
 export const GET_MOF_BY_THEME = `query GetCenoteDataByTheme($cenoteId: ID!, $theme: VariableTheme!) {
   getCenoteDataByTheme(cenoteId: $cenoteId, theme: $theme) {
     category
-    mofs {
-       cenoteId
-    firstTimestamp
-    id
-    lastTimestamp
-    variableIcon
-    variableId
-    variableName
-    variableRepresentation
-    variableUnits
-    measurements {
-      timestamp
-      value
-    }
+      mofs {
+        cenoteId
+        firstTimestamp
+        id
+        lastTimestamp
+        variableIcon
+        variableId
+        variableName
+        variableRepresentation
+        variableUnits
+        measurements {
+          timestamp
+          value
+        }
+        permissions {
+          canDelete
+          canEdit
+          canView
+        }
     }
   }
 }`;
@@ -136,6 +147,22 @@ mutation Mutation($userId: ID!, $cenoteId: ID!) {
 
 export const REMOVE_FAVORITE_CENOTE = `mutation RemoveFavouriteCenote($userId: ID!, $cenoteId: ID!) {
   removeFavouriteCenote(userId: $userId, cenoteId: $cenoteId)
+}`;
+
+export const CHANGE_CENOTE_MAIN_PHOTO = `mutation ChangeCenoteMainPhoto($cenoteId: ID!, $photoId: String!) {
+  changeCenoteMainPhoto(cenoteId: $cenoteId, photoId: $photoId) {
+    id
+    isMain
+    url
+  }
+}`;
+
+export const DELETE_PHOTO = `mutation DeletePhoto($cenoteId: ID!, $photoId: String!) {
+  deletePhoto(cenoteId: $cenoteId, photoId: $photoId) {
+    id
+    isMain
+    url
+  }
 }`;
 
 export const GET_MOF_MODIFICATIONS = `query MofModificationRequests {

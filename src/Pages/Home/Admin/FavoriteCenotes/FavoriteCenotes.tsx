@@ -28,7 +28,11 @@ export default function FavoriteCenotes() {
     }
   };
 
-  const renderComponents = () => {
+  const 
+  
+  
+  
+  renderComponents = () => {
     const components = [];
     for (let i = 0; i < 6; i++) {
       components.push(<CardHome hideEditDetails={false} key={i} />);

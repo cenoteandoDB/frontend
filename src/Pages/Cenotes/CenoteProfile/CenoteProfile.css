@@ -100,3 +100,7 @@
   padding: 24px 16px;
   border-radius: 4px;
 }
+
+.d-flow-root{
+  display: flow-root;
+}
