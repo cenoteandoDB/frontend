@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import {loginPost, useAuth} from '../graphql/Users/UsersCustomHooks';
+import { loginPost } from '../graphql/Users/UsersCustomHooks';
 import { UserInterface, LoginRequestDto } from '../Types/UserTypes';
-import { useUserByEmail } from '../graphql/Users/UsersCustomHooks';
 
 interface AuthContextProps {
   token: string | null;
@@ -10,7 +9,6 @@ interface AuthContextProps {
   login: (loginData: LoginRequestDto) => Promise<void>;
   logout: () => void;
   error: string | null;
-  getUser: () => void;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
@@ -18,8 +16,6 @@ const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
   const [refreshToken, setRefreshToken] = useState<string | null>(localStorage.getItem('refreshToken'));
-  const [email, setEmail] = useState<string | null>(localStorage.getItem('email'));
-  const { user: fetchedUser, error: fetchError } = useUserByEmail(email || '');
   const [user, setUser] = useState<UserInterface | undefined>();
   const [error, setError] = useState<string | null>(null);
 
@@ -31,7 +27,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       localStorage.setItem('email', loginResponse.email);
       setToken(loginResponse.jwt);
       setRefreshToken(loginResponse.refreshToken);
-      setUser(loginResponse);
+      setUser(loginResponse as UserInterface);
       setError(null);
     } catch (err) {
       setError('Incorrect email or password');
@@ -48,32 +44,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setError(null);
   };
 
-  const getUser = () => {
-    if (email) {
-      setUser(fetchedUser);
-    }
-  };
-
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
     const storedEmail = localStorage.getItem('email');
 
     if (storedToken && storedEmail) {
       setToken(storedToken);
-      setEmail(storedEmail);
     }
   }, []);
-
-  useEffect(() => {
-    if (fetchedUser) {
-      setUser(fetchedUser);
-    }
-  }, [fetchedUser]);
 
   const isAuthenticated = !!token;
 
   return (
-    <AuthContext.Provider value={{ token, user, isAuthenticated, login, logout, error, getUser }}>
+    <AuthContext.Provider value={{ token, user, isAuthenticated, login, logout, error }}>
       {children}
     </AuthContext.Provider>
   );

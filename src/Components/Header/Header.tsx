@@ -1,10 +1,10 @@
-import {useState, useEffect} from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "../../Auth/AuthProvider";
 import logo from "../../../public/assets/logo.png";
 import "./Header.css"
 function Header() {
-  const {user, isAuthenticated , logout, getUser } = useAuthContext()
+  const {user, isAuthenticated , logout } = useAuthContext()
   const [showUserDropdown, setShowUserDropdown] = useState(false);
 
   const handleUserToggleDropdown = () => {
@@ -15,12 +15,6 @@ function Header() {
     logout();
   };
   const showUser = showUserDropdown ? "show" : "";
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      getUser();
-    }
-  }, [isAuthenticated, user]); 
 
   return (
     <>

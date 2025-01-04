@@ -1,84 +1,40 @@
-import React,  { useState, useEffect, useCallback, useMemo  } from "react";
+import { useState, useMemo  } from "react";
 import { gql, useQuery, useMutation, useLazyQuery } from "@apollo/client"; 
-import { ALL_USERS, ALL_USERS_BY_SORT, USER_BY_ID, GET_ENUM_USER_ROLE_VALUES, INVITE_USER, DELETE_USER, 
-      VERIFY_USER, UPDATE_USER_INFO, LOGIN, GET_USER_BY_EMAIL, GET_ENUM_USER_PROFILE_VALUES,
+import { GET_ENUM_USER_ROLE_VALUES, INVITE_USER,
+      VERIFY_USER, UPDATE_USER_INFO, LOGIN, GET_ENUM_USER_PROFILE_VALUES,
       REGISTER_TOURIST, REGISTER_TEACHER, REGISTER_STUDENT, REGISTER_INVESTIGATOR, REGISTER_GOVERN,
       GET_ENUM_GOVERN_TYPE_VALUES,
       GET_ENUM_DEGREE} from "./UsersGraphql";
 import {
     InviteUserInterface,
-    PaginationInterface,
-    SortInterface,
     UserInterface,
     LoginRequestDto,
     ProfileDataInterface,
 } from "../../Types/UserTypes";
 import { removeEmptyFields } from "../../Services/UtilsService";
-import { GET_FAVORITE_CENOTES } from "../Cenotes/CenotesGraphql";
 import {apiRequest, BASE_API_URL} from "../../api/rest-api.ts";
 
-//QUERYS
-export const useUsers = (initialPagination: PaginationInterface, initialSort: SortInterface,  initialName: string | null = null) => {
-    const [pagination, setPagination] = useState<PaginationInterface>(initialPagination);
-    const [sort, setSort] = useState<SortInterface>(initialSort);
-    const [name, setName] = useState<string | null>(initialName);
-  
-    const { data, error, loading, refetch } = useQuery(gql`${ALL_USERS_BY_SORT}`, {
-        variables: { pagination, sort, name  },
-        fetchPolicy: 'cache-and-network'
-    });
-
-    const updatePagination = useCallback((newPagination: Partial<PaginationInterface>) => {
-        setPagination((prevPagination) => ({
-            ...prevPagination,
-            ...newPagination
-        }));
-    }, []);
-
-    const updateSort = useCallback((newSort: Partial<SortInterface>) => {
-        setSort((prevSort) => ({
-            ...prevSort,
-            ...newSort
-        }));
-    }, []);
-
-    const searchUserByName = useCallback((newName: string | null) => {
-          setName(newName);
-    }, []);
-
-    useEffect(() => {
-        refetch();
-    }, [pagination, sort, refetch]);
-
-    useEffect(() => {
-      refetch();
-  }, [name, refetch]);
-
-
-    return {
-        usersData: data ? data.getUsers.users : [],
-        usersError: error,
-        usersLoading: loading,
-        refetchUsers: refetch,
-        updatePagination,
-        updateSort,
-        searchUserByName,
-        currentSortOrder: sort.sortOrder,
-        totalItems: data ? data.getUsers.totalCount : 0,
-    };
-};
-
-export const useUsersList = ()=> {
-    const { data, error, loading } = useQuery(gql`${ALL_USERS}`);
-    return {
-        usersData: data ? data.getUsers : null,
-        usersError: error,
-        usersLoading: loading
-    };
+//QUERIES
+export const loginPost = async (loginRequestDto: LoginRequestDto) => {
+    return await apiRequest(`${BASE_API_URL}/login`, 'POST', loginRequestDto);
 }
 
 export const getUsersList = async ()=> {
     return await apiRequest(`${BASE_API_URL}/api/users`, 'GET');
+}
+
+export const getGetUserById = async (id: string | null | undefined) => {
+    return apiRequest(`${BASE_API_URL}/api/users/${id}`, 'GET');
+
+    
+};
+
+export const getUserFavouriteCenotes = (id: string) => {
+    return apiRequest(`${BASE_API_URL}/api/users/${id}/cenotes`, 'GET');
+}
+
+export const updateUser = async  (id: string, updatedUser: any) => {
+    return await apiRequest(`${BASE_API_URL}/api/users/${id}`, 'PUT', updatedUser);
 }
 
 export const deleteUser = async  (id: string) => {
@@ -107,67 +63,6 @@ export const useVerifyUser = () => {
 
 }
 
-export const useUserByEmail = (email: string) => {
-  const { data, loading, error } = useQuery(gql`${GET_USER_BY_EMAIL}`, {
-    variables: { email },
-    skip: !email,
-  });
-
-  const [user, setUser] = useState<UserInterface | undefined>(undefined);
-
-  useEffect(() => {
-    if (data && !loading && !error) {
-      setUser(data.getUserByEmail);
-    }
-  }, [data, loading, error]);
-
-  return { user, loading, error };
-};
-
-export const useGetUserById = (id: string | null | undefined) => {
-  const { data, loading, error, refetch } = useQuery(gql`${USER_BY_ID}`, {
-    variables: { getUserByIdId: id },
-    skip: !id, // Skip query if no id is provided
-  });
-
-  const refetchUserById = async () => {
-    try {
-      if (id) {
-        await refetch({ getUserByIdId: id });
-      } else {
-        console.error('ID is null or undefined. Cannot refetch.');
-      }
-    } catch (err) {
-      console.error('Error refetching favorite cenotes:', err);
-    }
-  };
-  return { userData: data?.getUserById, loadingData:loading, errorData: error, refetchUserById: refetchUserById };
-};
-
-export const useGetFavoriteCenotesById = (id: string | null | undefined) => {
-  const { data, loading, error, refetch } = useQuery(gql`${GET_FAVORITE_CENOTES}`, {
-    variables: { getFavouriteCenotesId: id },
-    skip: !id, // Skip query if no id is provided
-  });
-
-  const refetchFavListCenote = async () => {
-    try {
-      if (id) {
-        await refetch({ getFavouriteCenotesId: id });
-      } else {
-        console.error('ID is null or undefined. Cannot refetch.');
-      }
-    } catch (err) {
-      console.error('Error refetching favorite cenotes:', err);
-    }
-  };
-  return { 
-    FavCenoteListData: data?.getFavouriteCenotes, 
-    FavCenoteListLoading:loading, 
-    FavCenoteListError: error, 
-    refetchFavListCenote};
-};
-
 //MUTATIONS
 export const useInviteUser = () => {
     const [ inviteUserMutation, {data, error, loading,} ] = useMutation(gql`${INVITE_USER}`);
@@ -185,25 +80,6 @@ export const useInviteUser = () => {
     return { inviteUser, loading, error, success, dataInviteUser: data?.inviteUser };
 }
 
-export const useDeleteUser = () => {
-    const [deleteUser, { data, loading, error }] = useMutation(gql`${DELETE_USER}`);
-  
-    const handleDeleteUser = async (userId: string) => {
-      try {
-        await deleteUser({ variables: { userId } });
-      } catch (err) {
-        console.error("Error deleting user:", err);
-      }
-    };
-  
-    return {
-      handleDeleteUser,
-      deleteUserData: data,
-      deleteUserLoading: loading,
-      deleteUserError: error,
-    };
-};
-
 export const useUpdateUserInfo = () => {
     const [updateUser, { data, loading, error }] = useMutation(gql`${UPDATE_USER_INFO}`);
 
@@ -220,24 +96,6 @@ export const useUpdateUserInfo = () => {
     }
     return {data, loading, error, updateUserInfo };
 }
-
-export const loginPost = async (loginRequestDto: LoginRequestDto) => {
-    const response = await apiRequest(`${BASE_API_URL}/login`, 'POST', loginRequestDto);
-    return response;
-}
-
-export const useAuth = () => {
-  const [loginMutation, { data, loading, error }] = useMutation(gql`${LOGIN}`);
-
-  const login = loginPost;
-
-  return {
-    login,
-    data,
-    loading,
-    error,
-  };
-};
 
 export const useRegister = (userProfile: string) => {
   const REGISTER = useMemo(() => {

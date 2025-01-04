@@ -1,71 +1,62 @@
 import React, { useEffect, useState } from 'react'
 import { UpdatePropsInterface } from '../../Types/UtilsTypes'
-import {useGetUserById, useUserRoles, useUpdateUserInfo } from '../../graphql/Users/UsersCustomHooks';
+import { getGetUserById, updateUser } from '../../graphql/Users/UsersCustomHooks';
 import { ClipLoader } from "react-spinners";
-import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import { EnumsInterface, UserInterface } from '../../Types/UserTypes';
+import { UserInterface } from '../../Types/UserTypes';
+import {UserRoleEnum} from "../../graphql/Users/UserDto.ts";
 
 export const UpdateUser: React.FC<UpdatePropsInterface> = ({id, showModal, handleToggleModal, refetch }) => {
-    const { rolesData } = useUserRoles()
-    const initialuserInfo: UserInterface = {email: '',name: '', surname: '',role: '' };
-    const {data, loading, error, updateUserInfo } = useUpdateUserInfo();
-    const { userData, loadingData, errorData } = useGetUserById(id);
-    const [userInfo, setUserInfo] = useState<UserInterface>(initialuserInfo);
+    const initialUserInfo: UserInterface = {email: '',name: '', surname: '',role: '' };
+    const [loading, setLoading] = useState(true);
+    const [userInfo, setUserInfo] = useState<UserInterface>(initialUserInfo);
     const [isFormValid, setIsFormValid] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setUserInfo((prevState) => ({
             ...prevState,
-            [name]: value
+            [name]: value.trim()
         }));
     };
-    
-    const handleSubmit = async (e: React.FormEvent) => {
 
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if(id) {
-            await updateUserInfo(id, userInfo);
+            await updateUser(id, userInfo);
+            if (handleToggleModal && refetch) {
+                handleToggleModal();
+                refetch();
+            }
         }
     };
 
     useEffect(() => {
-        if (userData && !loadingData) {
-            setUserInfo({email: userData.email ,name: userData.name, surname: userData.surname, role: userData.role});
-        } else {
-            setUserInfo(initialuserInfo);
-        }
-        if(errorData){
-            toast.error('El registro no existe o no tiene un identificador')
-        }
-    }, [userData, errorData]);
+        const getUserInfoToUpdate = async (id: string | null | undefined) => {
+            try {
+                const user = await getGetUserById(id);
+                setUserInfo(user as UserInterface);
+                setLoading(false);
+            } catch (error) {
+                console.error('Error fetching users:', error);
+            }
+        };
+
+        getUserInfoToUpdate(id);
+    }, [id]);
 
     useEffect(() => {
-        if (error) {
-          toast.error('La operación no se pudo completar, inténtelo nuevamente.')
-          if (handleToggleModal) {
-            handleToggleModal();
-          }
-        }
-        if(data && !error){
-          toast.success('Usuario Actualizado Exitosamente');
-          if (handleToggleModal) {
-            handleToggleModal();
-            if (refetch) refetch();
-          }
-        } 
-    }, [data, error])
-    
-    useEffect(() => {
-      if(id){
-        const isFormFilled = id && Object.values(userInfo).every(value => value.trim());
-        setIsFormValid(isFormFilled ? true : false);
-      }else{
+      if (id) {
+          const isFormFilled = Object.values(userInfo).every(value => {
+              return value != "";
+          });
+          console.log(`Formed is valid? ${isFormFilled}`);
+        setIsFormValid(isFormFilled);
+      } else{
         setIsFormValid(false);
       }
     }, [id, userInfo]);
-    
+
     return (
         <div>
             {showModal && (
@@ -91,13 +82,11 @@ export const UpdateUser: React.FC<UpdatePropsInterface> = ({id, showModal, handl
                         <span aria-hidden="true">×</span>
                     </button>
                     </div>
-                    {loadingData ? (
+                    {loading ? (
                         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-                            <ClipLoader loading={loadingData} size={50} />
+                            <ClipLoader loading={loading} size={50} />
                         </div>
-                    ) : errorData ? (
-                        <p>No se pudo Cargar la información</p>
-                    ) :(
+                    ) : (
                         <form onSubmit={handleSubmit}>
                             <div className="modal-body">
                                 <div>
@@ -151,13 +140,15 @@ export const UpdateUser: React.FC<UpdatePropsInterface> = ({id, showModal, handl
                                     </div>
                                     <div className="form-group">
                                         <label className="modal-label-c">Tipo de usuario</label>
-                                        <select 
+                                        <select
                                         name="role"
                                         className="form-control"
                                         value={userInfo.role}
                                         onChange={handleChange}>
-                                        {rolesData && rolesData.map((item: EnumsInterface) => (
-                                            <option key={item.name}  value={item.name}>{item.name}</option>
+                                        {Object.values(UserRoleEnum).map((role) => (
+                                            <option key={role} value={role}>
+                                                {role}
+                                            </option>
                                         ))}
                                         </select>
                                     </div>

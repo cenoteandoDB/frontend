@@ -5,6 +5,7 @@ import { useUserRoles, useInviteUser } from "../../graphql/Users/UsersCustomHook
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { Permisions } from "../Utils/Permisions";
+import {UserRoleEnum} from "../../graphql/Users/UserDto.ts";
 
 export const InviteUser: React.FC<SingleModalPropsInterface> = ({showModal, handleToggleModal}) => {
   const {rolesData } = useUserRoles();
@@ -168,8 +169,10 @@ export const InviteUser: React.FC<SingleModalPropsInterface> = ({showModal, hand
                             className="form-control"
                             value={inviteUserFormData.userRole}
                             onChange={handleChange}>
-                            {rolesData && rolesData.map((item: EnumsInterface) => (
-                              <option key={item.name}  value={item.name}>{item.name}</option>
+                            {Object.values(UserRoleEnum).map((role) => (
+                                <option key={role} value={role}>
+                                  {role}
+                                </option>
                             ))}
                           </select>
                         </div>

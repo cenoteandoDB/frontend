@@ -17,7 +17,7 @@ export const Users = () => {
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState<boolean>(false);
-  const [showUpdateModal, setShowUpdatModal] = useState<boolean>(false);
+  const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
   const [ItemIdSelected, setItemIdSelected] = useState<string | null>(null);
 
 
@@ -47,11 +47,15 @@ export const Users = () => {
     }
   };
 
-  const handleUpdateUser = (UserId?:  string) =>{
+  const handleUpdateUser = (userId?:  string) =>{
+    setShowUpdateModal(true);
+    if(userId){
+      setItemIdSelected(userId);
+    }
   };
 
   const handleUpdateUserToggleModal = () => {
-    setShowUpdatModal(!showUpdateModal);
+    setShowUpdateModal(!showUpdateModal);
     if(!showUpdateModal){
       setItemIdSelected(null);
     }
@@ -92,7 +96,7 @@ export const Users = () => {
     }
   };
 
-  //USE EFFECTS
+  // USE EFFECTS
 
   useEffect(() => {
     fetchUsers();
@@ -306,7 +310,7 @@ export const Users = () => {
             id={ItemIdSelected}
             showModal={showUpdateModal}
             handleToggleModal={handleUpdateUserToggleModal}
-            //refetch={refetchUsers}
+            refetch={fetchUsers}
           ></UpdateUser>
         </section>
       </DashboardData>
