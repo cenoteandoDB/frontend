@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import { Dashboard } from "../Dashboard/Dashboard";
 import { Navigate } from "react-router-dom";
 import { useAuthContext } from "../../Auth/AuthProvider";
-import { LoginInterface } from "../../Types/UserTypes";
+import { LoginRequestDto } from "../../Types/UserTypes";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import "./Login.css";
 
 
 export const Login = () => {
+  //const navigate = useNavigate();
   const [isFormValid, setIsFormValid] = useState(false);
   const [errorResponse, setErrorResponse] = useState("");
-  const [formData, setFormData] = useState<LoginInterface>({email: "", password: ""});
+  const [formData, setFormData] = useState<LoginRequestDto>({email: "", password: ""});
   const { getUser, login, isAuthenticated, error, user } = useAuthContext();
 
   useEffect(() => {
@@ -47,6 +48,7 @@ export const Login = () => {
     e.preventDefault();
     try {
       await login(formData);
+      //navigate("/home");
     } catch (err) {
       console.error('Login failed:', err);
     }

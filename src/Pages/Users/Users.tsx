@@ -1,74 +1,53 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { DashboardData } from "../Dashboard/DashboardData";
 import { InviteUser } from "../../Components/Modals/InviteUser";
 import { ConfirmAction } from "../../Components/Modals/ConfirmAction";
 import { UpdateUser } from "../../Components/Modals/UpdateUser";
-import { useUsers, useDeleteUser } from "../../graphql/Users/UsersCustomHooks";
-import { UserInterface, PaginationInterface, SortInterface } from "../../Types/UserTypes";
+import {deleteUser, getUsersList} from "../../graphql/Users/UsersCustomHooks";
+import {SortInterface, UserInterface} from "../../Types/UserTypes";
 
 import { ClipLoader } from "react-spinners";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import _, { set } from 'lodash';
 
 export const Users = () => {
-  const initialPagination: PaginationInterface = { limit: 50, offset: 0 };
-  const initialSort: SortInterface = { sortOrder: "ASC", field: "name" };
-  //const initialName: string | null = null;
+  const [loading, setLoading] = useState(true);
+  const [users, setUsers] = useState([]);
+  const [searchName, setSearchName] = useState<string>("");
 
-  const { usersData, usersError, usersLoading, refetchUsers, updatePagination, updateSort, searchUserByName, currentSortOrder, totalItems} = useUsers(initialPagination, initialSort);
-  const { handleDeleteUser, deleteUserLoading, deleteUserError, deleteUserData } = useDeleteUser();
-
-  const loading = usersLoading || deleteUserLoading;
-  const noData = !usersLoading && (!usersData || usersData.length === 0);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState<boolean>(false);
   const [showUpdateModal, setShowUpdatModal] = useState<boolean>(false);
-  const [currentPage, setCurrentPage] = useState<number>(0);
-  const [searchName, setSearchName] = useState<string>("");
-  const [ItemIdSelected, setItemIdSelected] = useState<string | null>(null)
+  const [ItemIdSelected, setItemIdSelected] = useState<string | null>(null);
+
+
+  const initialSort: SortInterface = { sortOrder: "ASC", field: "name" };
   const [Sort, setSort] = useState<SortInterface>(initialSort);
 
   //FUNCIONES
   const handleSortChange = ( field: string) => {
-    const newSortOrder = currentSortOrder === "ASC" ? "DESC" : "ASC";
-    setSort({ field: field, sortOrder: newSortOrder})
-    updateSort({ field: field, sortOrder: newSortOrder});
   };
   
   const handleNextPage = () => {
-    const nextPage = currentPage + 1;
-    setCurrentPage(nextPage);
-    updatePagination({ ...initialPagination, offset: nextPage * initialPagination.limit });
   };
 
   const handlePreviousPage = () => {
-    const prevPage = currentPage - 1;
-    setCurrentPage(prevPage);
-    updatePagination({ ...initialPagination, offset: (prevPage - 1) * initialPagination.limit });
   };
 
   const handlePage = (page: number) => {
-    setCurrentPage(page);
-    updatePagination({ ...initialPagination, offset: (page - 1) * initialPagination.limit });
   };
 
-  const handleSearch = useCallback(
-    _.debounce((name: string) => {
-      searchUserByName(name);
-    }, 1000),
-    []
-  );
-
-  const handleDelete = (userId: string) => {
-    handleDeleteUser(userId);
+  const handleDelete = async (userId: string) => {
+    setLoading(true);
+    try {
+      await deleteUser(userId);
+      fetchUsers();
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    }
   };
 
   const handleUpdateUser = (UserId?:  string) =>{
-    if(UserId){
-      setItemIdSelected(UserId)
-      setShowUpdatModal(true);
-    }
   };
 
   const handleUpdateUserToggleModal = () => {
@@ -82,10 +61,10 @@ export const Users = () => {
     setShowInviteModal(!showInviteModal);
   };
 
-  const handleOpenDeleteModal = (UserId?: string) => {
+  const handleOpenDeleteModal = (userId?: string) => {
     setShowDeleteModal(true);
-    if(UserId){
-      setItemIdSelected(UserId);
+    if(userId){
+      setItemIdSelected(userId);
     }
   };
 
@@ -103,23 +82,21 @@ export const Users = () => {
     setItemIdSelected('');
   };
 
-  //USE EFECTS
-  useEffect(() => {
-      handleSearch(searchName);
-  }, [searchName, handleSearch, searchUserByName]);
+  const fetchUsers = async () => {
+    try {
+      const usersList = await getUsersList();
+      setUsers(usersList);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    }
+  };
+
+  //USE EFFECTS
 
   useEffect(() => {
-    if (deleteUserData) {
-      toast.success("Usuario eliminado exitosamente");
-      refetchUsers();
-    }
-  }, [deleteUserData, refetchUsers]);
-
-  useEffect(() => {
-    if (usersError || deleteUserError) {
-        toast.error(`"Esta operación no se ha podido completar"`);
-    }
-  }, [usersError, deleteUserError]);
+    fetchUsers();
+  }, []);
 
   return (
     <>
@@ -134,7 +111,7 @@ export const Users = () => {
               <div className="col-sm-6 col-md-7">
                 <div className="row">
                   <div className="col-md-6">
-                    <form onSubmit={() => handleSearch}>
+                    <form onSubmit={() => console.log("TODO here")}>
                       <div className="input-group input-group-sm">
                         <div className="input-group-append">
                           <span
@@ -199,7 +176,7 @@ export const Users = () => {
                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
                       <ClipLoader loading={loading} size={50} />
                     </div>
-                    ) : noData ? (
+                    ) : users.length == 0 ? (
                     <p>No se encontraron usuarios</p>
                   ) : (
                     <table className="table table-hover text-nowrap">
@@ -207,7 +184,7 @@ export const Users = () => {
                         <tr>
                           <th>
                           <a onClick={() => handleSortChange("name")}>  Nombre{" "}
-                            {Sort.field == 'name'? 
+                            {Sort.field == 'name'?
                             (<img src={Sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
                               <img src="/assets/Icons/up-and-down-arrows.svg" alt="down"/>
                             )}
@@ -215,7 +192,7 @@ export const Users = () => {
                           </th>
                           <th>
                           <a onClick={() => handleSortChange("surname")}> Apellidos{" "}
-                            {Sort.field == 'surname'? 
+                            {Sort.field == 'surname'?
                             (<img src={Sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
                               <img src="/assets/Icons/up-and-down-arrows.svg" alt="down"/>
                             )}
@@ -223,7 +200,7 @@ export const Users = () => {
                           </th>
                           <th>
                           <a onClick={() => handleSortChange("email")}>Correo electrónico{" "}
-                            {Sort.field == 'email'? 
+                            {Sort.field == 'email'?
                             (<img src={Sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
                               <img src="/assets/Icons/up-and-down-arrows.svg" alt="down"/>
                             )}
@@ -231,7 +208,7 @@ export const Users = () => {
                           </th>
                           <th>
                             <a onClick={() => handleSortChange("profile")}>Tipo de usuario{" "}
-                              {Sort.field == 'profile'? 
+                              {Sort.field == 'profile'?
                               (<img src={Sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
                                 <img src="/assets/Icons/up-and-down-arrows.svg" alt="down"/>
                               )}
@@ -239,7 +216,7 @@ export const Users = () => {
                           </th>
                           <th>
                             <a onClick={() => handleSortChange("createdAt")}>Fecha de creación{" "}
-                              {Sort.field == 'profile'? 
+                              {Sort.field == 'profile'?
                                (<img src={Sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
                                 <img src="/assets/Icons/up-and-down-arrows.svg" alt="down"/>
                               )}
@@ -250,14 +227,14 @@ export const Users = () => {
                       </thead>
                       <tbody>
                  
-                        {usersData && usersData.map((item: UserInterface) => (
+                        {users && users.map((item: UserInterface) => (
                           <tr key={item.id}>
                          
                           <td>{item.name} </td>
                           <td>{item.surname}</td>
                           <td>{item.email}</td>
                           <td>
-                            <span className="tag rounded py-1 px-2 text-buttons-cnt bg-cnt">{item?.profile ? item?.profile : 'INDEFINIDO'}</span>
+                            <span className="tag rounded py-1 px-2 text-buttons-cnt bg-cnt">{item.role}</span>
                           </td>
                           <td>{item.createdAt}</td>
                           <td>
@@ -283,18 +260,18 @@ export const Users = () => {
                     <ul className="pagination pagination-sm m-0 float-right">
                      
                       <a className="mr-3">
-                        Total: {totalItems}
+                        Total: {100}
                       </a>
                    
                       <li className="page-item">
-                        <button className="page-link" disabled={currentPage == 1} onClick={handlePreviousPage}>
+                        <button className="page-link" disabled={true} onClick={handlePreviousPage}>
                           «
                         </button>
                       </li>
-                      {Array.from({ length: Math.ceil(totalItems / initialPagination.limit) }, (_, index) => (
+                      {Array.from({ length: Math.ceil(100 / 10) }, (_, index) => (
                         <li className="page-item" key={index}>
                           <a
-                            className={currentPage === index + 1 ? "page-link text-white bg-primary" : "page-link"}
+                            className={0 === index + 1 ? "page-link text-white bg-primary" : "page-link"}
                             onClick={() => handlePage(index + 1)}
                           >
                              {index + 1}
@@ -303,7 +280,7 @@ export const Users = () => {
                         </li>
                       ))}
                       <li className="page-item" >
-                        <button className="page-link" disabled={currentPage  == Math.ceil(totalItems / initialPagination.limit)} onClick={handleNextPage}>
+                        <button className="page-link" disabled={true} onClick={handleNextPage}>
                           »
                         </button>
                       </li>
@@ -329,7 +306,7 @@ export const Users = () => {
             id={ItemIdSelected}
             showModal={showUpdateModal}
             handleToggleModal={handleUpdateUserToggleModal}
-            refetch={refetchUsers}
+            //refetch={refetchUsers}
           ></UpdateUser>
         </section>
       </DashboardData>

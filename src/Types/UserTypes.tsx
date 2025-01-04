@@ -1,6 +1,6 @@
 import { FavoriteCenote_v2 } from "./CenotesTypes";
 
-export interface LoginInterface {
+export interface LoginRequestDto {
   email: string;
   password: string;
 }

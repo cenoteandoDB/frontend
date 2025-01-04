@@ -5,9 +5,17 @@ import { ALL_USERS, ALL_USERS_BY_SORT, USER_BY_ID, GET_ENUM_USER_ROLE_VALUES, IN
       REGISTER_TOURIST, REGISTER_TEACHER, REGISTER_STUDENT, REGISTER_INVESTIGATOR, REGISTER_GOVERN,
       GET_ENUM_GOVERN_TYPE_VALUES,
       GET_ENUM_DEGREE} from "./UsersGraphql";
-import { InviteUserInterface, PaginationInterface, SortInterface, UserInterface, LoginInterface, ProfileDataInterface } from "../../Types/UserTypes";
+import {
+    InviteUserInterface,
+    PaginationInterface,
+    SortInterface,
+    UserInterface,
+    LoginRequestDto,
+    ProfileDataInterface,
+} from "../../Types/UserTypes";
 import { removeEmptyFields } from "../../Services/UtilsService";
 import { GET_FAVORITE_CENOTES } from "../Cenotes/CenotesGraphql";
+import {apiRequest, BASE_API_URL} from "../../api/rest-api.ts";
 
 //QUERYS
 export const useUsers = (initialPagination: PaginationInterface, initialSort: SortInterface,  initialName: string | null = null) => {
@@ -67,6 +75,14 @@ export const useUsersList = ()=> {
         usersError: error,
         usersLoading: loading
     };
+}
+
+export const getUsersList = async ()=> {
+    return await apiRequest(`${BASE_API_URL}/api/users`, 'GET');
+}
+
+export const deleteUser = async  (id: string) => {
+    return await apiRequest(`${BASE_API_URL}/api/users/${id}`, 'DELETE');
 }
 
 export const useVerifyUser = () => {
@@ -205,19 +221,15 @@ export const useUpdateUserInfo = () => {
     return {data, loading, error, updateUserInfo };
 }
 
+export const loginPost = async (loginRequestDto: LoginRequestDto) => {
+    const response = await apiRequest(`${BASE_API_URL}/login`, 'POST', loginRequestDto);
+    return response;
+}
+
 export const useAuth = () => {
   const [loginMutation, { data, loading, error }] = useMutation(gql`${LOGIN}`);
 
-  const login = async (loginData: LoginInterface) => {
-    try {
-      const response = await loginMutation({ variables: loginData });
-      const token = response.data.login;
-      return { token };
-    } catch (err) {
-      console.error('Login error:', err);
-      throw err;
-    }
-  };
+  const login = loginPost;
 
   return {
     login,

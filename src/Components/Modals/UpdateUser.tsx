@@ -59,7 +59,7 @@ export const UpdateUser: React.FC<UpdatePropsInterface> = ({id, showModal, handl
     
     useEffect(() => {
       if(id){
-        const isFormFilled = id.trim() && Object.values(userInfo).every(value => value.trim());
+        const isFormFilled = id && Object.values(userInfo).every(value => value.trim());
         setIsFormValid(isFormFilled ? true : false);
       }else{
         setIsFormValid(false);

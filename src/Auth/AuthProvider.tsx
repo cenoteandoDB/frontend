@@ -1,13 +1,13 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useAuth } from '../graphql/Users/UsersCustomHooks';
-import { UserInterface, LoginInterface } from '../Types/UserTypes';
+import {loginPost, useAuth} from '../graphql/Users/UsersCustomHooks';
+import { UserInterface, LoginRequestDto } from '../Types/UserTypes';
 import { useUserByEmail } from '../graphql/Users/UsersCustomHooks';
 
 interface AuthContextProps {
   token: string | null;
   user: UserInterface | undefined;
   isAuthenticated: boolean;
-  login: (loginData: LoginInterface) => Promise<void>;
+  login: (loginData: LoginRequestDto) => Promise<void>;
   logout: () => void;
   error: string | null;
   getUser: () => void;
@@ -17,20 +17,21 @@ const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
+  const [refreshToken, setRefreshToken] = useState<string | null>(localStorage.getItem('refreshToken'));
   const [email, setEmail] = useState<string | null>(localStorage.getItem('email'));
   const { user: fetchedUser, error: fetchError } = useUserByEmail(email || '');
   const [user, setUser] = useState<UserInterface | undefined>();
   const [error, setError] = useState<string | null>(null);
 
-  const { login: loginApi } = useAuth();
-
-  const login = async (loginData: LoginInterface) => {
+  const login = async (loginData: LoginRequestDto) => {
     try {
-      const { token } = await loginApi(loginData);
-      localStorage.setItem('token', token);
-      localStorage.setItem('email', loginData.email);
-      setToken(token);
-      setEmail(loginData.email);
+      const loginResponse = await loginPost(loginData);
+      localStorage.setItem('token', loginResponse.jwt);
+      localStorage.setItem('refreshToken', loginResponse.refreshToken);
+      localStorage.setItem('email', loginResponse.email);
+      setToken(loginResponse.jwt);
+      setRefreshToken(loginResponse.refreshToken);
+      setUser(loginResponse);
       setError(null);
     } catch (err) {
       setError('Incorrect email or password');
@@ -40,8 +41,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = () => {
     localStorage.removeItem('token');
-    localStorage.removeItem('email');
+    localStorage.removeItem('refreshToken');
     setToken(null);
+    setRefreshToken(null);
     setUser(undefined);
     setError(null);
   };

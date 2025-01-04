@@ -1,4 +1,4 @@
-import { API_URL } from "../Auth/AuthConstants";
+import {BASE_API_URL} from "../api/rest-api.ts";
 
 const error_default = {
   title: "Error de conexión",
@@ -8,7 +8,7 @@ const error_default = {
 
 export const loginValidate = async (username: string, password: string) => {
   try {
-    const response = await fetch(API_URL + "/login", {
+    const response = await fetch(BASE_API_URL + "/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
