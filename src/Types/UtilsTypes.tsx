@@ -14,6 +14,13 @@ export interface SingleModalPropsInterface {
   refetch?: () => void;
 }
 
+export interface UpdateCenotePropsInterface {
+    id: string | null | undefined;
+    showModal: boolean;
+    handleToggleModal: () => void;
+    refetch: () => void;
+}
+
 export interface UpdatePropsInterface {
   id: string | null | undefined;
   showModal: boolean;

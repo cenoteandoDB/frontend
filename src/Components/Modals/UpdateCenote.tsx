@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { UpdateCenoteInterface } from '../../Types/CenotesTypes'
-import { useCenoteTypes, useGetCenoteById, useUpdateCenote } from '../../graphql/Cenotes/CenotesCustomHooks';
-import { toast } from 'react-toastify';
-import { EnumsInterface } from '../../Types/UserTypes';
-import { UpdatePropsInterface } from '../../Types/UtilsTypes';
+import {
+    getCenoteById,
+    updateCenote,
+} from '../../graphql/Cenotes/CenotesCustomHooks';
+import {UpdateCenotePropsInterface } from '../../Types/UtilsTypes';
+import {CenoteTypeEnum} from "../../graphql/Cenotes/CenoteDto.ts";
 
-export const UpdateCenote: React.FC<UpdatePropsInterface> = ({id, showModal, handleToggleModal, refetch }) => {
+export const UpdateCenote: React.FC<UpdateCenotePropsInterface> = ({id, showModal, handleToggleModal, refetch }) => {
     const initialCenotesForm: UpdateCenoteInterface = {
         name: "",
         municipality: "",
@@ -15,12 +17,9 @@ export const UpdateCenote: React.FC<UpdatePropsInterface> = ({id, showModal, han
         longitude: "",
         latitude: "",
     }
-
-    const { data, loading, error, updateCenote } = useUpdateCenote();
-    const { cenoteData, loadingData, errorData } = useGetCenoteById(id);
+    const [loading, setLoading] = useState(true);
     const [ cenoteInfo, setCenoteInfo] = useState<UpdateCenoteInterface>(initialCenotesForm);
     const [ isFormValid, setIsFormValid] = useState(false);
-    const { cenoteTypesData, cenoteTypesLoading } = useCenoteTypes();
 
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -42,52 +41,35 @@ export const UpdateCenote: React.FC<UpdatePropsInterface> = ({id, showModal, han
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if(id) {
+        if (id) {
             await updateCenote(id, cenoteInfo);
+            refetch();
         }
     };
 
     useEffect(() => {
-        if (cenoteData && !loadingData) {
-            setCenoteInfo({
-                name: cenoteData.name,
-                municipality: cenoteData.municipality,
-                state: cenoteData.state,
-                touristic: cenoteData.touristic,
-                type: cenoteData.type,
-                longitude: cenoteData.longitude,
-                latitude: cenoteData.latitude
-            });
-        } else {
-            setCenoteInfo(initialCenotesForm);
-        }
-        if(errorData){
-            toast.error('El registro no existe o no tiene un identificador')
-        }
-    }, [cenoteData, errorData]);
+        if (!id) return;
+
+        const getCenoteInfoToUpdate = async (id: string | null | undefined) => {
+            try {
+                const cenote = await getCenoteById(id);
+                setCenoteInfo(cenote as UpdateCenoteInterface);
+                setLoading(false);
+            } catch (error) {
+                console.error('Error fetching cenote:', error);
+            }
+        };
+
+        getCenoteInfoToUpdate(id);
+    }, [id]);
 
     useEffect(() => {
-        if (error) {
-          const errorMessage = error.graphQLErrors?.[0]?.message || 'La operación no se pudo completar, inténtelo nuevamente.';
-          toast.error(errorMessage);
-          if (handleToggleModal) {
-            handleToggleModal();
-          }
-        }
-        if(data && !error){
-          toast.success('Registro Actualizado Exitosamente');
-          if (handleToggleModal) {
-            handleToggleModal();
-            if (refetch) refetch();
-          }
-        } 
-    }, [data, error])
-
-    useEffect(() => {
-        const nonRequiredFields = ['touristic']; // List of non-required fields
-        const isFormFilled = Object.entries(cenoteInfo).every(([key, value]) => 
-            nonRequiredFields.includes(key) || value
-        );
+        const nonRequiredFields = ['touristic'];
+        const isFormFilled = Object.entries(cenoteInfo).every(([key, value]) => {
+            if (nonRequiredFields.includes(key)) return true;
+            if (typeof value === "string") return value !== "";
+            return value !== null;
+        });
         setIsFormValid(isFormFilled);
     }, [cenoteInfo]);
 
@@ -165,8 +147,10 @@ export const UpdateCenote: React.FC<UpdatePropsInterface> = ({id, showModal, han
                               className="form-control"
                               value={cenoteInfo.type}
                               onChange={handleChange}>
-                              {cenoteTypesData && cenoteTypesData.map((item: EnumsInterface) => (
-                                  <option key={item.name}  value={item.name}>{item.name}</option>
+                              {Object.values(CenoteTypeEnum).map((type) => (
+                                  <option key={type} value={type}>
+                                      {type}
+                                  </option>
                               ))}
                               </select>
                           </div>

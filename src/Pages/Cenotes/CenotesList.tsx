@@ -36,10 +36,10 @@ export const List_cenotes = () => {
   const [showCreateCenoteModal, setShowCreateCenoteModal] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showUpdateModal, setShowUpdatModal] = useState<boolean>(false);
-  const [ItemIdSelected, setItemIdSelected] = useState<string | null>(null)
+  const [itemIdSelected, setItemIdSelected] = useState<string | null>(null)
 
 
-  const [Sort, setSort] = useState<SortInterface>(initialSort);
+  const [sort, setSort] = useState<SortInterface>(initialSort);
   const [searchName, setSearchName] = useState<string>("");
 
   const handleSortChange = ( field: string) => {
@@ -77,8 +77,8 @@ export const List_cenotes = () => {
     setLoading(true)
     setShowDeleteModal(false);
     setItemIdSelected('');
-    if(ItemIdSelected){
-      await deleteCenote(ItemIdSelected);
+    if(itemIdSelected){
+      await deleteCenote(itemIdSelected);
       await fetchCenotes();
     }
   };
@@ -220,16 +220,16 @@ export const List_cenotes = () => {
                           <th></th>
                           <th>
                             <a onClick={() => handleSortChange("name")}>Nombre de cenote{" "}
-                              {Sort.field == 'name'? 
-                              (<img src={Sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
+                              {sort.field == 'name'? 
+                              (<img src={sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
                                 <img src="/assets/Icons/up-and-down-arrows.svg" alt="down"/>
                               )}
                             </a>
                           </th>
                           <th>
                             <a onClick={() => handleSortChange("state")}> Estado{" "}
-                            {Sort.field == 'state'? 
-                            (<img src={Sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
+                            {sort.field == 'state'? 
+                            (<img src={sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
                               <img src="/assets/Icons/up-and-down-arrows.svg" alt="down"/>
                             )}
                           </a>
@@ -237,16 +237,16 @@ export const List_cenotes = () => {
                           <th>
                            
                             <a onClick={() => handleSortChange("municipality")}> Municipio{" "}
-                            {Sort.field == 'municipality'? 
-                            (<img src={Sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
+                            {sort.field == 'municipality'? 
+                            (<img src={sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
                               <img src="/assets/Icons/up-and-down-arrows.svg" alt="down"/>
                             )}
                           </a>
                           </th>
                           <th> 
                             <a onClick={() => handleSortChange("type")}> Tipo{" "}
-                            {Sort.field == 'type'? 
-                            (<img src={Sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
+                            {sort.field == 'type'? 
+                            (<img src={sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
                               <img src="/assets/Icons/up-and-down-arrows.svg" alt="down"/>
                             )}
                           </a>
@@ -254,8 +254,8 @@ export const List_cenotes = () => {
                           <th>
                             
                             <a onClick={() => handleSortChange("createdAt")}> Creado{" "}
-                            {Sort.field == 'createdAt'? 
-                            (<img src={Sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
+                            {sort.field == 'createdAt'? 
+                            (<img src={sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
                               <img src="/assets/Icons/up-and-down-arrows.svg" alt="down"/>
                             )}
                           </a>
@@ -263,24 +263,24 @@ export const List_cenotes = () => {
                           <th>
                             Actualizado{""}
                             <a onClick={() => handleSortChange("description")}>Descripción{" "}
-                              {Sort.field == 'description'? 
-                              (<img src={Sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
+                              {sort.field == 'description'? 
+                              (<img src={sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
                                 <img src="/assets/Icons/up-and-down-arrows.svg" alt="down"/>
                               )}
                             </a>
                           </th>
                           <th>
                             <a onClick={() => handleSortChange("updatedAt")}> Etiquetas{" "}
-                              {Sort.field == 'updatedAt'? 
-                              (<img src={Sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
+                              {sort.field == 'updatedAt'? 
+                              (<img src={sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
                                 <img src="/assets/Icons/up-and-down-arrows.svg" alt="down"/>
                               )}
                             </a>
                           </th>
                           <th>
                             <a onClick={() => handleSortChange("variable_count")}> Variable{""}
-                            {Sort.field == 'variable_count'? 
-                            (<img src={Sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
+                            {sort.field == 'variable_count'? 
+                            (<img src={sort.sortOrder =='ASC'? "/assets/Icons/sort-arrow-up.svg": "/assets/Icons/sort-arrow-down.svg" }/>) : (
                               <img src="/assets/Icons/up-and-down-arrows.svg" alt="down"/>
                             )}
                           </a>
@@ -386,7 +386,7 @@ export const List_cenotes = () => {
             onCancel={handleActionDeleteCancel}
           ></ConfirmAction>
           <UpdateCenote
-            id={ItemIdSelected}
+            id={itemIdSelected}
             showModal={showUpdateModal}
             handleToggleModal={handleUpdateCenoteToggleModal}
             refetch={fetchCenotes}

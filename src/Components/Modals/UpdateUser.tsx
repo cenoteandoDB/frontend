@@ -32,6 +32,8 @@ export const UpdateUser: React.FC<UpdatePropsInterface> = ({id, showModal, handl
     };
 
     useEffect(() => {
+        if (!id) return;
+
         const getUserInfoToUpdate = async (id: string | null | undefined) => {
             try {
                 const user = await getGetUserById(id);
@@ -50,7 +52,6 @@ export const UpdateUser: React.FC<UpdatePropsInterface> = ({id, showModal, handl
           const isFormFilled = Object.values(userInfo).every(value => {
               return value != "";
           });
-          console.log(`Formed is valid? ${isFormFilled}`);
         setIsFormValid(isFormFilled);
       } else{
         setIsFormValid(false);
