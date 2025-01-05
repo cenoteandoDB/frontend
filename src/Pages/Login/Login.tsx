@@ -14,7 +14,7 @@ export const Login = () => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [errorResponse, setErrorResponse] = useState("");
   const [formData, setFormData] = useState<LoginRequestDto>({email: "", password: ""});
-  const { getUser, login, isAuthenticated, error, user } = useAuthContext();
+  const { login, isAuthenticated, error, user } = useAuthContext();
 
   useEffect(() => {
     const isFormFilled = Object.values(formData).every(value => value.trim());
@@ -25,9 +25,6 @@ export const Login = () => {
     if(error){
       setErrorResponse('El Usuario o Contraseña son incorrectas');
       toast.warning("El Usuario o Contraseña son incorrectas");
-    }
-    if(isAuthenticated){
-      getUser();
     }
   }, [error, isAuthenticated, user]);
  

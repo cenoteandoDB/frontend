@@ -25,11 +25,9 @@ export const getUsersList = async ()=> {
 
 export const getGetUserById = async (id: string | null | undefined) => {
     return apiRequest(`${BASE_API_URL}/api/users/${id}`, 'GET');
-
-    
 };
 
-export const getUserFavouriteCenotes = (id: string) => {
+export const getUserFavouriteCenotes = (id: string | null | undefined) => {
     return apiRequest(`${BASE_API_URL}/api/users/${id}/cenotes`, 'GET');
 }
 
@@ -39,6 +37,14 @@ export const updateUser = async  (id: string, updatedUser: any) => {
 
 export const deleteUser = async  (id: string) => {
     return await apiRequest(`${BASE_API_URL}/api/users/${id}`, 'DELETE');
+}
+
+export const addFavouriteCenote = async  (userId: string | null | undefined, cenoteId: string | null | undefined) => {
+    return await apiRequest(`${BASE_API_URL}/api/users/${userId}/favouriteCenotes/${cenoteId}`, 'PUT');
+}
+
+export const removeFavouriteCenote = async  (userId: string | null | undefined, cenoteId: string | null | undefined) => {
+    return await apiRequest(`${BASE_API_URL}/api/users/${userId}/favouriteCenotes/${cenoteId}`, 'DELETE');
 }
 
 export const useVerifyUser = () => {

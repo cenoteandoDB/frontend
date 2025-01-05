@@ -27,6 +27,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       localStorage.setItem('email', loginResponse.email);
       setToken(loginResponse.jwt);
       setRefreshToken(loginResponse.refreshToken);
+      console.log(`User: ${JSON.stringify(loginResponse)}`);
       setUser(loginResponse as UserInterface);
       setError(null);
     } catch (err) {

@@ -1,79 +1,63 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { DashboardData } from "../Dashboard/DashboardData";
-import { useAddFavoriteCenote, useCenotes, useDeleteCenote, useRemoveFavoriteCenote } from "../../graphql/Cenotes/CenotesCustomHooks";
+import {
+  deleteCenote, getCenotesList,
+} from "../../graphql/Cenotes/CenotesCustomHooks";
 import { CenoteInterface } from "../../Types/CenotesTypes";
-import { PaginationInterface, SortInterface } from "../../Types/UserTypes";
-import _ from "lodash";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { ClipLoader } from "react-spinners";
 import { ConfirmAction } from "../../Components/Modals/ConfirmAction";
 import { CreateCenote } from "../../Components/Modals/CreateCenote";
 import { UpdateCenote } from "../../Components/Modals/UpdateCenote";
 import { useAuthContext } from "../../Auth/AuthProvider";
 import { useNavigate } from "react-router-dom";
-import { useGetUserById } from "../../graphql/Users/UsersCustomHooks";
+import {
+  addFavouriteCenote,
+  getUserFavouriteCenotes,
+  removeFavouriteCenote
+} from "../../graphql/Users/UsersCustomHooks";
+import {SortInterface} from "../../Types/UserTypes.tsx";
+import _ from "lodash";
 
 
 export const List_cenotes = () => {
-  const initialPagination: PaginationInterface = { limit: 50, offset: 0 };
   const initialSort: SortInterface = { sortOrder: "ASC", field: "name" };
   const navigate = useNavigate();
   const testCenoteId = "00YaFC8pXUrx7ib4wx8Z";
   const isFirstRender = useRef(true);
 
   const { user } = useAuthContext();
-  const [searchName, setSearchName] = useState<string>("");
-  const { cenotesData, cenotesError, cenotesLoading, refetchCenotes, updatePagination, updateSort, searchCenoteByName, currentSortOrder, totalItems} = useCenotes(initialPagination, initialSort);
-  const { handleDeleteCenote, deleteCenoteLoading, deleteCenoteError, deleteCenoteData } = useDeleteCenote();
-  const { addCenote, favCenoteData, favCenoteLoading, favCenoteError } = useAddFavoriteCenote();
-  const { removeCenote, delFavCenoteData, delFavCenoteLoading, delFavCenoteError } = useRemoveFavoriteCenote();
-  const { userData, errorData, refetchUserById} = useGetUserById(user?.id);
-  const [favoriteCenote, setFavoriteCenote] = useState({userId: '', cenoteId: ''});
-  const loading =  cenotesLoading || favCenoteLoading || deleteCenoteLoading || delFavCenoteLoading;
-  const noData = !cenotesLoading && (!cenotesData || cenotesData.length === 0);
+  const [cenotes, setCenotes] = useState([]);
+  const [favouriteCenotesIds, setFavouriteCenotesIds] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const noData = !loading && (!cenotes || cenotes.length === 0);
+
   const [showCreateCenoteModal, setShowCreateCenoteModal] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showUpdateModal, setShowUpdatModal] = useState<boolean>(false);
   const [ItemIdSelected, setItemIdSelected] = useState<string | null>(null)
-  const [Sort, setSort] = useState<SortInterface>(initialSort);
-  const [isFavoriteAdded, setIsFavoriteAdded] = useState(false);
 
-  const [currentPage, setCurrentPage] = useState<number>(0);
-  const totalPages = Math.ceil(totalItems / initialPagination.limit);
-  const pageRange = 7; 
-  const startPage = Math.max(1, currentPage - pageRange);
-  const endPage = Math.min(totalPages, currentPage + pageRange);
+
+  const [Sort, setSort] = useState<SortInterface>(initialSort);
+  const [searchName, setSearchName] = useState<string>("");
 
   const handleSortChange = ( field: string) => {
-    const newSortOrder = currentSortOrder === "ASC" ? "DESC" : "ASC";
-    setSort({ field: field, sortOrder: newSortOrder})
-    updateSort({ field: field, sortOrder: newSortOrder});
   };
 
   const handleNextPage = () => {
-    const nextPage = currentPage + 1;
-    setCurrentPage(nextPage);
-    updatePagination({ ...initialPagination, offset: nextPage * initialPagination.limit });
   };
 
   const handlePreviousPage = () => {
-    const prevPage = currentPage - 1;
-    setCurrentPage(prevPage);
-    updatePagination({ ...initialPagination, offset: (prevPage - 1) * initialPagination.limit });
   };
 
   const handlePage = (page: number) => {
-    setCurrentPage(page);
-    updatePagination({ ...initialPagination, offset: (page - 1) * initialPagination.limit });
   };
 
   const handleSearch = useCallback(
     _.debounce((name: string) => {
       if (isFirstRender.current) {
         console.log("I'm here to render")
-        setCurrentPage(0);
-        updatePagination({ ...initialPagination, offset: 0 });
-        searchCenoteByName(name);
       }}, 1000),
     []
   );
@@ -89,21 +73,19 @@ export const List_cenotes = () => {
     }
   };
 
-  const handleActionDeleteConfirm = () => {
+  const handleActionDeleteConfirm = async () => {
+    setLoading(true)
     setShowDeleteModal(false);
     setItemIdSelected('');
     if(ItemIdSelected){
-      handleDelete(ItemIdSelected)
+      await deleteCenote(ItemIdSelected);
+      await fetchCenotes();
     }
   };
 
   const handleActionDeleteCancel = () => {
     setShowDeleteModal(false);
     setItemIdSelected('');
-  };
-
-  const handleDelete = (id: string) => {
-    handleDeleteCenote(id);
   };
 
   const handleUpdateCenote = (UserId?:  string) =>{
@@ -120,104 +102,55 @@ export const List_cenotes = () => {
     }
   };
 
-  const handleAddFavoriteCenote = (cenoteId: string | undefined) => {
-    if( user?.id && cenoteId){
-      setFavoriteCenote({ ...favoriteCenote, cenoteId, userId: user.id });
-      addCenote({ cenoteId: cenoteId, userId: user.id });
-      setIsFavoriteAdded(true);
+  const handleAddFavoriteCenote = async (cenoteId: string | undefined) => {
+    if (user?.id && cenoteId){
+      await addFavouriteCenote(user?.id, cenoteId);
+      favouriteCenotesIds.push(cenoteId);
+      setFavouriteCenotesIds(prevState => [...prevState, cenoteId]);
     }
   };
 
   const handleIsFavoriteCenote = (cenoteId: string | undefined | null) => {
-    if(userData && userData.favouriteCenotesIds && cenoteId){
-      if(userData.favouriteCenotesIds?.includes(cenoteId)){
-        return true;
-      }
-    }
-    return false;
-  };
-
-  const handleRemoveFavoriteCenote = (cenoteId: string | undefined) => {
-    if( user?.id && cenoteId){
-      setFavoriteCenote({ ...favoriteCenote, cenoteId, userId: user.id });
-      removeCenote({ cenoteId: cenoteId, userId: user.id });
-      setIsFavoriteAdded(true);
+    if (cenotes && favouriteCenotesIds && cenoteId) {
+      return favouriteCenotesIds.includes(cenoteId)
     }
   };
 
-  const getPageNumbers = () => {
-    const pages = [];
-    if (startPage > 1) pages.push(1);
-    if (startPage > 2) pages.push('...');
-    for (let i = startPage; i <= endPage; i++) {
-      pages.push(i);
+  const handleRemoveFavoriteCenote = async (cenoteId: string | undefined) => {
+    if (user?.id && cenoteId) {
+      await removeFavouriteCenote(user?.id, cenoteId);
+      const filteredFavouriteCenotes = favouriteCenotesIds.filter(id => id !== cenoteId);
+      setFavouriteCenotesIds(filteredFavouriteCenotes);
     }
-    if (endPage < totalPages - 1) pages.push('...');
-    if (endPage < totalPages) pages.push(totalPages);
-    return pages;
   };
 
-  const pageNumbers = getPageNumbers();
+  const fetchCenotes = async () => {
+    try {
+      const cenotesList = await getCenotesList();
+      setCenotes(cenotesList);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching cenotes:', error);
+    }
+  };
+
+  const fetchFavouriteCenotes = async () => {
+    try {
+      const favouriteCenotes = await getUserFavouriteCenotes(user?.id);
+      const favouriteCenotesIds = favouriteCenotes.map(c => c.id);
+      setFavouriteCenotesIds(favouriteCenotesIds);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching favourite cenotes:', error);
+    }
+  };
 
   //USE EFECTS
   useEffect(() => {
-    isFirstRender.current = false;
+    console.log(JSON.stringify(user));
+    fetchCenotes();
+    fetchFavouriteCenotes();
   }, []);
-
-  useEffect(() => {
-    handleSearch(searchName);
-  }, [searchName, handleSearch, searchCenoteByName]);
-
-  useEffect(() => {
-    if (deleteCenoteData) {
-      toast.success("Registro eliminado exitosamente");
-      refetchCenotes();
-    }
-  }, [deleteCenoteData, refetchCenotes]);
-
-  useEffect(() => {
-    if (cenotesError || deleteCenoteError) {
-        toast.error(`"Esta operación no se ha podido completar"`);
-    }
-  }, [cenotesError, deleteCenoteError]);
-
-useEffect(() => {
-    if (favCenoteError) {
-      const errorMessage = favCenoteError.graphQLErrors?.[0]?.message || 'La operación no se pudo completar, inténtelo nuevamente.';
-      toast.error(errorMessage);
-    }
-
-    if (favCenoteData && !favCenoteError && isFavoriteAdded && user) {
-      toast.success("Cenote agregado a sus favoritos", {
-        toastId: 'favoritos',
-      });
-  
-      refetchUserById();       // Wait for getUser to complete
-    }
-
-  }, [favCenoteData, favCenoteError, refetchUserById, isFavoriteAdded]);
-
-  useEffect(() => {
-    if (delFavCenoteError) {
-      const errorMessage = delFavCenoteError.graphQLErrors?.[0]?.message || 'La operación no se pudo completar, inténtelo nuevamente.';
-      toast.error(errorMessage);
-    }
-
-    if (delFavCenoteData && !delFavCenoteError && isFavoriteAdded) {
-      toast.success("OK", {
-        toastId: 'favoritos',
-      });
-      refetchUserById();       // Wait for getUser to complete
-    }
-
-  }, [delFavCenoteData, delFavCenoteError, refetchUserById, isFavoriteAdded]);
-  
-  useEffect(() => {
-    if(userData && !errorData){
-      refetchCenotes();
-      setIsFavoriteAdded(false);
-    }
-  }, [userData, errorData]);
 
 
   return (
@@ -356,15 +289,15 @@ useEffect(() => {
                         </tr>
                       </thead>
                       <tbody>
-                      {cenotesData && cenotesData.map((item: CenoteInterface) => (
-                          <tr key={item.firestore_id}>
+                      {cenotes && cenotes.map((item: CenoteInterface) => (
+                          <tr key={item.id}>
                             <td>
-                              {handleIsFavoriteCenote(item?.firestore_id) ?
-                              ( <a className="cursor-pointer" onClick={() => handleRemoveFavoriteCenote(item.firestore_id)}>
+                              {handleIsFavoriteCenote(item?.id) ?
+                              ( <a className="cursor-pointer" onClick={() => handleRemoveFavoriteCenote(item.id)}>
                               <img src="/assets/Icons/heart-red.svg" alt="" />
                             </a>)
                               : (
-                                <a className="cursor-pointer" onClick={() => handleAddFavoriteCenote(item.firestore_id)}>
+                                <a className="cursor-pointer" onClick={() => handleAddFavoriteCenote(item.id)}>
                                 <img src="/assets/Icons/heart.svg" alt="" />
                               </a>
                               )}
@@ -395,10 +328,10 @@ useEffect(() => {
                               <a className="cursor-pointer" onClick={() => {navigate(`/cenote/${testCenoteId}`);} }>
                                 <img src="/assets/Icons/eye.svg" alt="" />
                               </a>
-                              <a className="cursor-pointer" onClick={() => handleUpdateCenote(item.firestore_id)}>
+                              <a className="cursor-pointer" onClick={() => handleUpdateCenote(item.id)}>
                                 <img src="/assets/Icons/edit.svg" alt="" />
                               </a>
-                              <a className="cursor-pointer" onClick={() => handleOpenDeleteModal(item.firestore_id)}>
+                              <a className="cursor-pointer" onClick={() => handleOpenDeleteModal(item.id)}>
                                 <img src="/assets/Icons/trash.svg" alt="" />
                               </a>
                             </td>
@@ -414,35 +347,21 @@ useEffect(() => {
                   <div className="card-footer clearfix bg-header-footer">
                     <ul className="pagination pagination-sm m-0 float-right">
                       <a className="mr-3">
-                        Total: {totalItems}
+                        Total: {100}
                       </a>
                       <li className="page-item">
                         <button
                           className="page-link"
-                          disabled={currentPage === 1}
+                          disabled={12 === 1}
                           onClick={handlePreviousPage}
                         >
                           «
                         </button>
                       </li>
-                      {pageNumbers.map((page, index) => (
-                        <li className="page-item" key={index}>
-                          {page === '...' ? (
-                            <span className="page-link">...</span>
-                          ) : (
-                            <a
-                              className={currentPage === page ? "page-link text-white bg-primary" : "page-link"}
-                              onClick={() => handlePage(Number(page))}
-                            >
-                              {page}
-                            </a>
-                          )}
-                        </li>
-                      ))}
                       <li className="page-item">
                         <button
                           className="page-link"
-                          disabled={currentPage === totalPages}
+                          disabled={true}
                           onClick={handleNextPage}
                         >
                           »
@@ -457,7 +376,7 @@ useEffect(() => {
           <CreateCenote
             showModal={showCreateCenoteModal}
             handleToggleModal={handleCreateCenoteToggleModal}
-            refetch={refetchCenotes}
+            refetch={fetchCenotes}
           ></CreateCenote>
           <ConfirmAction
             show={showDeleteModal}
@@ -470,7 +389,7 @@ useEffect(() => {
             id={ItemIdSelected}
             showModal={showUpdateModal}
             handleToggleModal={handleUpdateCenoteToggleModal}
-            refetch={refetchCenotes}
+            refetch={fetchCenotes}
           ></UpdateCenote>
         </section>
       </DashboardData>

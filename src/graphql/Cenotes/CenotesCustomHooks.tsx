@@ -4,8 +4,25 @@ import { gql, useMutation, useQuery } from "@apollo/client";
 import { ACCEPT_MOF_REQUEST, ADD_FAVORITE_CENOTE, ALL_CENOTES, CHANGE_CENOTE_MAIN_PHOTO, CREATE_CENOTE, CREATE_MOF, DELETE_CENOTE, DELETE_PHOTO, GET_CENOTE_BY_ID, GET_CENOTE_DATA_BY_THEME, GET_CENOTE_THEMES_BY_CENOTE, GET_ENUM_CENOTE_TYPE, GET_MOF_BY_THEME, GET_MOF_MODIFICATIONS, GET_UPLOAD_IMAGE_URL, REJECT_MOF_REQUEST, REMOVE_FAVORITE_CENOTE, UPDATE_CENOTE, UPDATE_MOF } from "./CenotesGraphql";
 import { AddFavoriteCenote, CreateCenoteInterface, createMofInterface, UpdateCenoteInterface, updateMofInterface } from "../../Types/CenotesTypes";
 import { useAuthContext } from "../../Auth/AuthProvider";
-import { changeMainPhotoInterface, PhotoInterface } from "../../Types/UtilsTypes";
+import { apiRequest, BASE_API_URL } from "../../api/rest-api.ts";
 
+
+
+export const getCenotesList = async ()=> {
+    return await apiRequest(`${BASE_API_URL}/api/cenotes`, 'GET');
+}
+
+export const getCenoteById = async (id: string | null | undefined) => {
+    return apiRequest(`${BASE_API_URL}/api/cenotes/${id}`, 'GET');
+};
+
+export const updateCenote = async  (id: string, updatedUser: any) => {
+    return await apiRequest(`${BASE_API_URL}/api/cenotes/${id}`, 'PUT', updatedUser);
+}
+
+export const deleteCenote = async  (id: string) => {
+    return await apiRequest(`${BASE_API_URL}/api/cenotes/${id}`, 'DELETE');
+}
 
 
 export const useCenotes = (initialPagination: PaginationInterface, initialSort: SortInterface,  initialName: string | null = null) => {

@@ -2,6 +2,7 @@ import { ReferencesInterface } from "./ReferencesTypes";
 
 export interface CenoteInterface {
     firestore_id?: string;
+    id: string;
     cenoteando_id?: string;
   
     name: string;
