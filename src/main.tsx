@@ -13,7 +13,7 @@ import { Users } from "./Pages/Users/Users.tsx";
 import { Home } from "./Pages/Home/Admin/Home.tsx";
 import { CenoteProfile } from "./Pages/Cenotes/CenoteProfile/CenoteProfile.tsx";
 import { List_cenotes } from "./Pages/Cenotes/CenotesList.tsx";
-import { Variants } from "./Pages/Descriptors/Variants/Variants.tsx";
+import { Variables } from "./Pages/Descriptors/Variables/Variables.tsx";
 import { References } from "./Pages/Descriptors/References/References.tsx";
 import { GeographicLayers } from "./Pages/Descriptors/GeographicLayers/GeographicLayers.tsx";
 import { SpeciesList } from "./Pages/Descriptors/Species/SpeciesList.tsx";
@@ -82,8 +82,8 @@ const router = createBrowserRouter([
         element: <List_cenotes />,
       },
       {
-        path: "/variantes",
-        element: <Variants />,
+        path: "/variables",
+        element: <Variables />,
       },
       {
         path: "/referencias",

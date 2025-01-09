@@ -4,6 +4,26 @@ import { GET_VARIABLES, DELETE_VARIABLE, CREATE_VARIABLE, GET_ENUM_CATEGORY_VALU
 import { CreateVariableInterface, UpdateVariableInterface, VariableInterface } from "../../Types/VariablesTypes";
 import { PaginationInterface, SortInterface } from "../../Types/UserTypes";
 import { GET_ENUM_THEME_VALUES } from "../Users/UsersGraphql";
+import {apiRequest, BASE_API_URL} from "../../api/rest-api.ts";
+
+
+
+export const getVariablesList = async ()=> {
+    return await apiRequest(`${BASE_API_URL}/api/variables`, 'GET');
+}
+
+export const getVariableById = async (id: string | null | undefined) => {
+    return apiRequest(`${BASE_API_URL}/api/variables/${id}`, 'GET');
+};
+
+export const updateVariable = async  (id: string, updatedUser: any) => {
+    return await apiRequest(`${BASE_API_URL}/api/variables/${id}`, 'PUT', updatedUser);
+}
+
+export const deleteVariable = async  (id: string) => {
+    return await apiRequest(`${BASE_API_URL}/api/variables/${id}`, 'DELETE');
+}
+
 
 //QUERYS
 export const useVariables = (initialPagination: PaginationInterface, initialSort: SortInterface,  initialName: string | null = null) => {

@@ -57,7 +57,7 @@ export const ContentHeader = () => {
                   }
                   style={{ left: 0, right: "inherit" }}
                 >
-                  <Link to="/variantes" className="dropdown-item">
+                  <Link to="/variables" className="dropdown-item">
                     <p className="text-md text-muted mb-0">Variables</p>
                   </Link>
                   <div className="dropdown-divider" />

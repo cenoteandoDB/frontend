@@ -1,14 +1,24 @@
 import React, { useEffect, useState } from 'react'
-import { UpdateVariableInterface } from '../../Types/VariablesTypes';
-import { UpdatePropsInterface } from '../../Types/UtilsTypes';
-import { useAcessLevel, useCategories, useGetVariableById, useOrigin, useSpheres, useThemes, useUpdateVariable, useVariablesRepresentation, useVariableType } from '../../graphql/Variables/VariablesCustomHooks';
-import { toast } from 'react-toastify';
-import { EnumsInterface } from '../../Types/UserTypes';
+import {
+    AccessLevelEnum,
+    UpdateVariableInterface,
+    VariableCategoryEnum,
+    VariableOriginEnum,
+    VariableRepresentationEnum,
+    VariableSphereEnum,
+    VariableThemeEnum,
+    VariableTypeEnum
+} from '../../Types/VariablesTypes';
+import {
+    getVariableById,
+    updateVariable,
+} from '../../graphql/Variables/VariablesCustomHooks';
 import { IconSelector } from '../Utils/IconSelector';
+import {UpdateVariablePropsInterface} from "../../Types/UtilsTypes.tsx";
 
-export const UpdateVariable: React.FC<UpdatePropsInterface> = ({id, showModal, handleToggleModal, refetch }) => {
+export const UpdateVariable: React.FC<UpdateVariablePropsInterface> = ({id, showModal, handleToggleModal, refetch }) => {
     const initialVariablesForm: UpdateVariableInterface = {
-        firestore_id: id ?? '',
+        id: id ?? '',
         name: "",
         description: "",
         category: "",
@@ -22,19 +32,11 @@ export const UpdateVariable: React.FC<UpdatePropsInterface> = ({id, showModal, h
         timeseries: true,
         icon:"",
         variableRepresentation: "" };
-    const { data, loading, error, updateVariable } = useUpdateVariable();
-    const { variableData, loadingData, errorData, refetchVariableById} = useGetVariableById(id ? id : null);
+
+    const [loading, setLoading] = useState(true);
+
     const [ variableInfo, setVariableInfo] = useState<UpdateVariableInterface>(initialVariablesForm);
     const [ isFormValid, setIsFormValid] = useState(false);
-    const { categoryData, categoryLoading } = useCategories();
-    const { acessLevelData, acessLevelLoading} = useAcessLevel();
-    const { variableTypeData, variableTypeLoading}= useVariableType();
-    const { themesData, themesLoading} = useThemes()
-    const { spheresData, spheresLoading} = useSpheres()
-    const { originData, originLoading} = useOrigin();
-    const { variablesRepresentationData } = useVariablesRepresentation();
-    const loading_ = loading || categoryLoading || acessLevelLoading || variableTypeLoading 
-    || variableTypeLoading || themesLoading || spheresLoading || originLoading;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -48,6 +50,7 @@ export const UpdateVariable: React.FC<UpdatePropsInterface> = ({id, showModal, h
         e.preventDefault();
         if(id) {
             await updateVariable(id, variableInfo);
+            refetch();
         }
     };
     
@@ -55,48 +58,24 @@ export const UpdateVariable: React.FC<UpdatePropsInterface> = ({id, showModal, h
         setVariableInfo(prev => ({ ...prev, icon: icon }));
     };
 
-    useEffect(() => {
-        if (variableData && !loadingData) {
-      
-            setVariableInfo({
-                firestore_id: id ?? '',
-                name: variableTypeData.name,
-                description: variableData.description,
-                category: variableData.category,
-                accessLevel: variableData.accessLevel,
-                type: variableData.type,
-                theme: variableData.theme,
-                sphere: variableData.sphere,
-                origin: variableData.origin,
-                units: variableData.units,
-                methodology: variableData.methodology,
-                timeseries: true,
-                icon: variableData.icon,
-                variableRepresentation: variableData.variableRepresentation
-            });
-        } else {
-            setVariableInfo(initialVariablesForm);
-        }
-        if(errorData){
-            toast.error('El registro no existe o no tiene un identificador')
-        }
-    }, [variableData, errorData]);
+    // Use Effects
 
     useEffect(() => {
-        if (error) {
-          toast.error('La operación no se pudo completar, inténtelo nuevamente.')
-          if (handleToggleModal) {
-            handleToggleModal();
-          }
-        }
-        if(data && !error){
-          toast.success('Registro Actualizado Exitosamente, Ir a inicio para aprobar los cambios');
-          if (handleToggleModal) handleToggleModal();
-          if (refetch) refetch();
-          if (refetchVariableById) refetchVariableById;
-          
-        } 
-    }, [data, error])
+        if (!id) return;
+
+        const getVariableInfoToUpdate = async (id: string | null | undefined) => {
+            try {
+                const variable = await getVariableById(id);
+                setVariableInfo(variable as UpdateVariableInterface);
+                setLoading(false);
+            } catch (error) {
+                console.error('Error fetching variable:', error);
+            }
+        };
+
+        getVariableInfoToUpdate(id);
+    }, [id]);
+
 
     useEffect(() => {
         if (id) {
@@ -108,7 +87,7 @@ export const UpdateVariable: React.FC<UpdatePropsInterface> = ({id, showModal, h
         } else {
             setIsFormValid(false);
         }
-    }, [id, variableInfo]);
+    }, [variableInfo]);
 
 
     return (
@@ -172,8 +151,10 @@ export const UpdateVariable: React.FC<UpdatePropsInterface> = ({id, showModal, h
                             className="form-control"
                             value={variableInfo.category}
                             onChange={handleChange}>
-                            {categoryData && categoryData.map((item: EnumsInterface) => (
-                                <option key={item.name}  value={item.name}>{item.name}</option>
+                            {Object.values(VariableCategoryEnum).map((role) => (
+                                <option key={role} value={role}>
+                                    {role}
+                                </option>
                             ))}
                             </select>
                         </div>
@@ -184,8 +165,10 @@ export const UpdateVariable: React.FC<UpdatePropsInterface> = ({id, showModal, h
                             className="form-control"
                             value={variableInfo.accessLevel}
                             onChange={handleChange}>
-                            {acessLevelData && acessLevelData.map((item: EnumsInterface) => (
-                                <option key={item.name}  value={item.name}>{item.name}</option>
+                            {Object.values(AccessLevelEnum).map((role) => (
+                                <option key={role} value={role}>
+                                    {role}
+                                </option>
                             ))}
                             </select>
                         </div>
@@ -196,8 +179,10 @@ export const UpdateVariable: React.FC<UpdatePropsInterface> = ({id, showModal, h
                             className="form-control"
                             value={variableInfo.type}
                             onChange={handleChange}>
-                            {variableTypeData && variableTypeData.map((item: EnumsInterface) => (
-                                <option key={item.name}  value={item.name}>{item.name}</option>
+                            {Object.values(VariableTypeEnum).map((role) => (
+                                <option key={role} value={role}>
+                                    {role}
+                                </option>
                             ))}
                             </select>
                         </div>
@@ -208,8 +193,10 @@ export const UpdateVariable: React.FC<UpdatePropsInterface> = ({id, showModal, h
                             className="form-control"
                             value={variableInfo.theme}
                             onChange={handleChange}>
-                            {themesData && themesData.map((item: EnumsInterface) => (
-                                <option key={item.name}  value={item.name}>{item.name}</option>
+                            {Object.values(VariableThemeEnum).map((role) => (
+                                <option key={role} value={role}>
+                                    {role}
+                                </option>
                             ))}
                             </select>
                         </div>
@@ -220,8 +207,10 @@ export const UpdateVariable: React.FC<UpdatePropsInterface> = ({id, showModal, h
                             className="form-control"
                             value={variableInfo.sphere}
                             onChange={handleChange}>
-                            {spheresData && spheresData.map((item: EnumsInterface) => (
-                                <option key={item.name}  value={item.name}>{item.name}</option>
+                            {Object.values(VariableSphereEnum).map((role) => (
+                                <option key={role} value={role}>
+                                    {role}
+                                </option>
                             ))}
                             </select>
                         </div>
@@ -232,8 +221,10 @@ export const UpdateVariable: React.FC<UpdatePropsInterface> = ({id, showModal, h
                             className="form-control"
                             value={variableInfo.origin}
                             onChange={handleChange}>
-                            {originData && originData.map((item: EnumsInterface) => (
-                                <option key={item.name}  value={item.name}>{item.name}</option>
+                            {Object.values(VariableOriginEnum).map((role) => (
+                                <option key={role} value={role}>
+                                    {role}
+                                </option>
                             ))}
                             </select>
                         </div>
@@ -268,8 +259,10 @@ export const UpdateVariable: React.FC<UpdatePropsInterface> = ({id, showModal, h
                             className="form-control"
                             value={variableInfo.variableRepresentation}
                             onChange={handleChange}>
-                            {variablesRepresentationData && variablesRepresentationData.map((item: EnumsInterface, index: number) => (
-                                <option key={index}  value={item.name}>{item.name}</option>
+                            {Object.values(VariableRepresentationEnum).map((role) => (
+                                <option key={role} value={role}>
+                                    {role}
+                                </option>
                             ))}
                             </select>
                         </div>

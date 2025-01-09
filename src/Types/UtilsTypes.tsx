@@ -29,6 +29,13 @@ export interface UpdatePropsInterface {
   refetchCenoteById?: () => void;
 }
 
+export interface UpdateVariablePropsInterface {
+    id: string | null | undefined;
+    showModal: boolean;
+    handleToggleModal?: () => void;
+    refetch: () => void;
+}
+
 export interface UpdateMofPropsInterface {
   cenoteId: string | undefined | null;
   theme: string | null;

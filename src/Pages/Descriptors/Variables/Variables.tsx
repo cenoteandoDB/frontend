@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { DashboardData } from "../../Dashboard/DashboardData";
-import { useVariables, useDeleteVariable } from "../../../graphql/Variables/VariablesCustomHooks";
-import { PaginationInterface, SortInterface } from "../../../Types/UserTypes";
+import {
+  deleteVariable,
+  getVariablesList
+} from "../../../graphql/Variables/VariablesCustomHooks";
+import { SortInterface } from "../../../Types/UserTypes";
 import { ClipLoader } from "react-spinners";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import _ from 'lodash';
 import { VariableInterface } from "../../../Types/VariablesTypes";
@@ -11,14 +14,13 @@ import { ConfirmAction } from "../../../Components/Modals/ConfirmAction";
 import { CreateVariable } from "../../../Components/Modals/CreateVariable";
 import { UpdateVariable } from "../../../Components/Modals/UpdateVariable";
 
-export const Variants = () => {
-  const initialPagination: PaginationInterface = { limit: 50, offset: 0 };
+export const Variables = () => {
   const initialSort: SortInterface = { sortOrder: "ASC", field: "name" };
 
-  const { variableData,  variableError,  variableLoading, refetchVariables, updatePagination, updateSort, searchVariableByName, currentSortOrder, totalItems} = useVariables(initialPagination, initialSort);
-  const { handleDeleteVariable, deleteVariableLoading, deleteVariableError, deleteVariableData } = useDeleteVariable();
-  const loading =  variableLoading || deleteVariableLoading;
-  const noData = !variableLoading && (!variableData || variableData.length === 0);
+  const [variables, setVariables] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const noData = !loading && (!variables || variables.length === 0);
+
   const [showCreateVariableModal, setShowCreateVariableModal] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showUpdateModal, setShowUpdatModal] = useState<boolean>(false);
@@ -28,33 +30,19 @@ export const Variants = () => {
   const [Sort, setSort] = useState<SortInterface>(initialSort);
 
   const handleSortChange = ( field: string) => {
-    const newSortOrder = currentSortOrder === "ASC" ? "DESC" : "ASC";
-    setSort({ field: field, sortOrder: newSortOrder})
-    updateSort({ field: field, sortOrder: newSortOrder});
   };
 
   const handleNextPage = () => {
-    const nextPage = currentPage + 1;
-    setCurrentPage(nextPage);
-    updatePagination({ ...initialPagination, offset: nextPage * initialPagination.limit });
   };
 
   const handlePreviousPage = () => {
-    const prevPage = currentPage - 1;
-    setCurrentPage(prevPage);
-    updatePagination({ ...initialPagination, offset: (prevPage - 1) * initialPagination.limit });
   };
 
   const handlePage = (page: number) => {
-    setCurrentPage(page);
-    updatePagination({ ...initialPagination, offset: (page - 1) * initialPagination.limit });
   };
 
   const handleSearch = useCallback(
     _.debounce((name: string) => {
-      setCurrentPage(0);
-      updatePagination({ ...initialPagination, offset: 0 });
-      searchVariableByName(name);
     }, 1000),
     []
   );
@@ -63,21 +51,16 @@ export const Variants = () => {
     setShowCreateVariableModal(!showCreateVariableModal);
   };
 
-  const handleDelete = (id: string) => {
-    handleDeleteVariable(id);
-  };
-
-  const handleOpenDeleteModal = (UserId?: string) => {
+  const handleOpenDeleteModal = (variableId?: string) => {
     setShowDeleteModal(true);
-    if(UserId){
-      setItemIdSelected(UserId);
+    if(variableId){
+      setItemIdSelected(variableId);
     }
   };
 
-  const handleUpdateVariable = (UserId?:  string) =>{
-  
-    if(UserId){
-      setItemIdSelected(UserId)
+  const handleUpdateVariable = (variableId?:  string) =>{
+    if(variableId){
+      setItemIdSelected(variableId)
       setShowUpdatModal(true);
     }
   };
@@ -93,7 +76,7 @@ export const Variants = () => {
     setShowDeleteModal(false);
     setItemIdSelected('');
     if(ItemIdSelected){
-      handleDelete(ItemIdSelected)
+      deleteVariable(ItemIdSelected)
     }
   };
 
@@ -106,25 +89,21 @@ export const Variants = () => {
     setItemIdSelected(prevId => (prevId === id ? null : id));
   };
 
+  const fetchVariables = async () => {
+    try {
+      const variablesList = await getVariablesList();
+      setVariables(variablesList);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching variables:', error);
+    }
+  };
+
    //USE EFECTS
-   useEffect(() => {
-      handleSearch(searchName);
-  }, [searchName, handleSearch, searchVariableByName]);
-
   useEffect(() => {
-    if (deleteVariableData) {
-      toast.success("Registro eliminado exitosamente");
-      refetchVariables();
-    }
-  }, [deleteVariableData, refetchVariables]);
+    fetchVariables();
+  }, []);
 
-  useEffect(() => {
-    if (variableError || deleteVariableError) {
-        toast.error(`"Esta operación no se ha podido completar"`);
-    }
-  }, [variableError, deleteVariableError]);
-
-  
   return (
     <>
       <DashboardData>
@@ -286,7 +265,7 @@ export const Variants = () => {
                         </tr>
                       </thead>
                       <tbody>
-                      {variableData && variableData.map((item: VariableInterface) => (
+                      {variables && variables.map((item: VariableInterface) => (
                         <tr  key={item.name}>
                            <td>{item.sphere}</td>
                            <td>
@@ -299,16 +278,16 @@ export const Variants = () => {
                             {item.category} 
                             </span>
                           </td>
-                          <td>{item.name} {item.firestore_id}</td>
+                          <td>{item.name} {item.id}</td>
                           <td>
-                            {item.description.length > 70 && ItemIdSelected === item.firestore_id
+                            {item.description.length > 70 && ItemIdSelected === item.id
                               ? item.description
                               : item.description.substring(0, 70)}
 
                             {item.description.length > 70 && (
-                              <a className="cursor-pointer" onClick={() => handleDisplayDescription(item.firestore_id)}>
+                              <a className="cursor-pointer" onClick={() => handleDisplayDescription(item.id)}>
                                 <img 
-                                  src={ItemIdSelected === item.firestore_id 
+                                  src={ItemIdSelected === item.id 
                                         ? "/assets/Icons/slash-eye.svg" 
                                         : "/assets/Icons/eye.svg"} 
                                   alt="" 
@@ -318,7 +297,7 @@ export const Variants = () => {
                           </td>
                           <td>{item.accessLevel}</td>
                           <td>
-                            <span className="tag tag-gray-round">{item.type}</span>
+                            <span className="tag tag-gray-round">{item.variableType}</span>
                           </td>
                          
                           <td>  {item.units}</td>
@@ -329,10 +308,10 @@ export const Variants = () => {
                             {/*<a className="d-none">
                               <img src="/assets/Icons/eye.svg" alt="" />
                             </a>*/}
-                            <a onClick={() => handleUpdateVariable(item.firestore_id)}>
+                            <a onClick={() => handleUpdateVariable(item.id)}>
                               <img src="/assets/Icons/edit.svg" alt="" />
                             </a>
-                            <a onClick={() => handleOpenDeleteModal(item.firestore_id)}>
+                            <a onClick={() => handleOpenDeleteModal(item.id)}>
                               <img src="/assets/Icons/trash.svg" alt="" />
                             </a>
                           </td>
@@ -346,7 +325,7 @@ export const Variants = () => {
                     <ul className="pagination pagination-sm m-0 float-right">
                   
                       <a className="mr-3">
-                        Total: {totalItems}
+                        Total: {variables.length}
                       </a>
                    
                       <li className="page-item">
@@ -354,7 +333,7 @@ export const Variants = () => {
                           «
                         </button>
                       </li>
-                      {Array.from({ length: Math.ceil(totalItems / initialPagination.limit) }, (_, index) => (
+                      {Array.from({ length: 100 }, (_, index) => (
                         <li className="page-item" key={index}>
                           <a
                             className={currentPage === index + 1 ? "page-link text-white bg-primary" : "page-link"}
@@ -366,7 +345,7 @@ export const Variants = () => {
                         </li>
                       ))}
                       <li className="page-item" >
-                        <button className="page-link" disabled={currentPage  == Math.ceil(totalItems / initialPagination.limit)} onClick={handleNextPage}>
+                        <button className="page-link" disabled={currentPage  == 100} onClick={handleNextPage}>
                           »
                         </button>
                       </li>
@@ -379,7 +358,7 @@ export const Variants = () => {
           <CreateVariable
             showModal={showCreateVariableModal}
             handleToggleModal={handleCreateVariableToggleModal}
-            refetch={refetchVariables}
+            refetch={fetchVariables}
           ></CreateVariable>
           <ConfirmAction
             show={showDeleteModal}
@@ -392,7 +371,7 @@ export const Variants = () => {
             id={ItemIdSelected}
             showModal={showUpdateModal}
             handleToggleModal={handleUpdateVariableToggleModal}
-            refetch={refetchVariables}
+            refetch={fetchVariables}
           ></UpdateVariable>
         </section>
       </DashboardData>
