@@ -14,7 +14,8 @@ import "./Gallery.css";
 import { useChangeCenoteMainPhoto, useDeletePhoto } from "../../graphql/Cenotes/CenotesCustomHooks";
 import { toast } from "react-toastify";
 interface GalleryProps {
-  photoData: PhotoInterface[];
+  photoData: string[];
+  mainPhoto: string | undefined;
   cenoteId: string | undefined;
   refetchCenoteById: () => void;
 }
@@ -23,7 +24,7 @@ const getRandomValue = (min: number, max: number): number => {
   return Math.random() < 0.5 ? min : max;
 };
 
-const usePhotoDimensions = (photoData: PhotoInterface[]): PhotoInterface[] => {
+const usePhotoDimensions = (photoData: string[], mainPhoto: string | undefined): PhotoInterface[] => {
   const [photos, setPhotos] = useState<PhotoInterface[]>([]);
 
   useEffect(() => {
@@ -31,13 +32,13 @@ const usePhotoDimensions = (photoData: PhotoInterface[]): PhotoInterface[] => {
       (photo) =>
         new Promise<PhotoInterface>((resolve) => {
           const img = new Image();
-          img.src = photo.url;
+          img.src = photo;
           img.onload = () => {
             resolve({
-              id: photo.id,
-              url: photo.url,
-              src: photo.url,
-              isMain: photo.isMain,
+              id: photo,
+              url: photo,
+              src: photo,
+              isMain: photo == mainPhoto,
               width: img.naturalWidth > 1080 ? getRandomValue(1000, 1080) : img.naturalWidth ,
               height: img.naturalHeight > 720 ? getRandomValue(720, 800) : img.naturalHeight,
             });
@@ -53,8 +54,8 @@ const usePhotoDimensions = (photoData: PhotoInterface[]): PhotoInterface[] => {
 
 
 
-export const Gallery:  React.FC<GalleryProps> = ({ photoData, cenoteId, refetchCenoteById }) => {
-  const photos = usePhotoDimensions(photoData);
+export const Gallery:  React.FC<GalleryProps> = ({ photoData, mainPhoto, cenoteId, refetchCenoteById }) => {
+  const photos = usePhotoDimensions(photoData, mainPhoto);
   const [index, setIndex] = useState(-1);
   const {changeMainPhoto, mainPhotoResult, mainPhotoLoading, mainPhotoError, mainPhotoSetResult } = useChangeCenoteMainPhoto();
   const {deleteOnePhoto,deletePhotoResult, deletePhotoLoading, deletePhotoError, deletePhotoSetResult } = useDeletePhoto();

@@ -1,4 +1,5 @@
 import { ReferencesInterface } from "./ReferencesTypes";
+import {VariableInterface} from "./VariablesTypes.tsx";
 
 export interface CenoteInterface {
     firestore_id?: string;
@@ -115,4 +116,19 @@ export interface CenoteInterface {
     icon?: string | null | undefined;
     color?: string;
   }
+
+export interface MofInterface {
+    id: string;
+    cenote: CenoteMofInterface;
+    variable: VariableInterface;
+    firstTimestamp: string;
+    lastTimestamp: string;
+    measures: MeasurementsInterface[];
+}
+
+export interface CenoteMofInterface {
+[theme: string]: {
+    [category: string]: MofInterface[];
+};
+}
 

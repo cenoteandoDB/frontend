@@ -1,9 +1,11 @@
 import React from 'react';
-import { mofByThemeInterface } from '../../../Types/CenotesTypes';
 import { ClipLoader } from 'react-spinners';
+import {ThemeMofs} from "./CenoteProfile.tsx";
+import {CategoryIconEnum} from "../../../graphql/Cenotes/CenoteDto.ts";
+import {VariableThemeEnum} from "../../../Types/VariablesTypes.tsx";
 
 interface WaterTabProps {
-  mofsByThemeData: mofByThemeInterface[];
+  mofsByThemeData: ThemeMofs | undefined;
 }
 
 const left_module = [
@@ -44,7 +46,8 @@ const renderWaterCustomFields = (CategoryName: string): { color: string, positio
   };
 };
 
-const renderOrderWaterCategories = (mofsByThemeData: mofByThemeInterface[]) => {
+const renderOrderWaterCategories = (mofsByThemeData: ThemeMofs) => {
+  /*
   const enrichedMofsByThemeData = mofsByThemeData.map((item) => {
     const { position, color, icon } = renderWaterCustomFields(item.category);
     return {
@@ -58,26 +61,28 @@ const renderOrderWaterCategories = (mofsByThemeData: mofByThemeInterface[]) => {
   const sortedMofsByThemeData = enrichedMofsByThemeData.sort((a, b) => {
     return (a.order ?? 10) - (b.order ?? 10);
   });
+  */
+
+  console.log("next");
+  console.log(mofsByThemeData);
 
   return (
     <>
-      {sortedMofsByThemeData.map((item, index) => (
-        <div key={'theme-' + index} className="container-category mt-3 col-md-12" style={{ backgroundColor: item.color }}>
+      {Object.entries(mofsByThemeData).map(([category, mofsList]) => (
+        <div key={'theme-' + category} className="container-category mt-3 col-md-12" style={{ backgroundColor: 'blue' }}>
           <p className="title-color title-weight title-size">
-            {typeof item.icon === 'string' && (
-              <img src={item.icon} alt="Category Icon" />
-            )}
-            {item.category}
+            <img src={CategoryIconEnum[category as keyof typeof CategoryIconEnum]} alt="Category Icon" />
+            {category}
           </p>
-          {item.mofs.map((mofItem) => (
+          {mofsList && mofsList.map((mofItem) => (
             <div key={'mofs-' + mofItem.id}>
-              {mofItem.measurements.map((measurements_item, index) => (
+              {mofItem.measures && mofItem.measures.map((measurements_item, index) => (
                 <div className="measurement-item" key={'measurements-' + index}>
                   <span className="variable-name title-color">
-                    {mofItem.variableName}
+                    {mofItem.variable.name}
                   </span>
                   {measurements_item.value !== 'true' && measurements_item.value !== 'false' &&
-                    <span className="measurement-value"><strong>{measurements_item.value} {mofItem.variableUnits}</strong></span>
+                    <span className="measurement-value"><strong>{measurements_item.value} {mofItem.variable.units}</strong></span>
                   }
                 </div>
               ))}
@@ -90,14 +95,22 @@ const renderOrderWaterCategories = (mofsByThemeData: mofByThemeInterface[]) => {
 };
 
 export const WaterTab: React.FC<WaterTabProps> = ({ mofsByThemeData }) => {
-  if (!mofsByThemeData || mofsByThemeData.length === 0) {
+  if (!mofsByThemeData) {
     return   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
     <ClipLoader loading={true} size={50} />
       </div>;
   }
 
-  const leftModuleData = mofsByThemeData.filter(item => left_module.includes(item.category));
-  const rightModuleData = mofsByThemeData.filter(item => !left_module.includes(item.category));
+  const leftModuleData = [];
+  const rightModuleData = [];
+
+  Object.entries(mofsByThemeData).forEach(([category, mofsList]) => {
+    if (left_module.includes(category)) {
+      leftModuleData.push([category, mofsList]);
+    } else {
+      rightModuleData.push([category, mofsList]);
+    }
+  });
 
   return (
     <>

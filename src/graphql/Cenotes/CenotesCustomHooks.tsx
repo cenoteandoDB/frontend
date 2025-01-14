@@ -16,6 +16,10 @@ export const getCenoteById = async (id: string | null | undefined) => {
     return apiRequest(`${BASE_API_URL}/api/cenotes/${id}`, 'GET');
 };
 
+export const getCenotePhotos = async (id: string | null | undefined) => {
+    return apiRequest(`${BASE_API_URL}/api/cenotes/${id}/photos`, 'GET');
+};
+
 export const updateCenote = async  (id: string, updatedUser: any) => {
     return await apiRequest(`${BASE_API_URL}/api/cenotes/${id}`, 'PUT', updatedUser);
 }
@@ -23,6 +27,10 @@ export const updateCenote = async  (id: string, updatedUser: any) => {
 export const deleteCenote = async  (id: string) => {
     return await apiRequest(`${BASE_API_URL}/api/cenotes/${id}`, 'DELETE');
 }
+
+export const getCenoteData = async (id: string | null | undefined) => {
+    return apiRequest(`${BASE_API_URL}/api/mofs/${id}`, 'GET');
+};
 
 
 export const useCenotes = (initialPagination: PaginationInterface, initialSort: SortInterface,  initialName: string | null = null) => {

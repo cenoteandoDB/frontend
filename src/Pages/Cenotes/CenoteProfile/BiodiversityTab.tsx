@@ -9,6 +9,8 @@ import { SpeciesInterface } from '../../../Types/SpeciesTypes';
   }
   
   const renderComponents = (speciesList: SpeciesInterface[]) => {
+    if (!speciesList || speciesList.length == 0) return;
+
     return speciesList.map((item) => (
       
       <CardSpecies  key={item.id}  {...item}  ></CardSpecies>

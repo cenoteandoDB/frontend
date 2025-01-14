@@ -15,7 +15,7 @@ export const BibliographyTab: React.FC<ReferencesTabProps> = ({referenceList}) =
       </div>
       <div className="row">
         
-        {referenceList.length ? 
+        {referenceList && referenceList.length ?
             (
                 <table className="table table-hover ">
                 <thead className="bg-header-footer">

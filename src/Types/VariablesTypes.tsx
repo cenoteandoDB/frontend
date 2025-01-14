@@ -16,7 +16,7 @@ export interface VariableInterface {
     createdAt: string;
     updatedAt: string;
     icon: string;
-    variableRepresentation: string;
+    representation: string;
 }
 
 export interface CreateVariableInterface {
@@ -85,6 +85,7 @@ export enum VariableThemeEnum {
     TOURISM = 'TOURISM',
     CULTURAL = 'CULTURAL',
     WATER = 'WATER',
+    BIODIVERSITY = 'BIODIVERSITY',
 }
 
 export enum VariableSphereEnum {
