@@ -32,6 +32,10 @@ export const getCenoteData = async (id: string | null | undefined) => {
     return apiRequest(`${BASE_API_URL}/api/mofs/${id}`, 'GET');
 };
 
+export const getCenoteSpecies = async (id: string | null | undefined) => {
+    return apiRequest(`${BASE_API_URL}/api/cenotes/${id}/species`, 'GET');
+};
+
 
 export const useCenotes = (initialPagination: PaginationInterface, initialSort: SortInterface,  initialName: string | null = null) => {
     const [pagination, setPagination] = useState<PaginationInterface>(initialPagination);

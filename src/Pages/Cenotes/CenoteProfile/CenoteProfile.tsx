@@ -4,7 +4,12 @@ import {useParams} from 'react-router-dom';
 import {Gallery} from "../../../Components/Gallery/Gallery";
 import "./CenoteProfile.css";
 import {ClipLoader} from "react-spinners";
-import {getCenoteById, getCenoteData, getCenotePhotos} from "../../../graphql/Cenotes/CenotesCustomHooks";
+import {
+  getCenoteById,
+  getCenoteData,
+  getCenotePhotos,
+  getCenoteSpecies
+} from "../../../graphql/Cenotes/CenotesCustomHooks";
 import {ToastContainer} from "react-toastify";
 import {GeomorphologyTab} from './GeomorphologyTab';
 import {CenoteMofInterface, MeasurementsInterface, MofInterface,} from "../../../Types/CenotesTypes";
@@ -39,7 +44,7 @@ export const CenoteProfile = () => {
   // mofs
   const [cenoteMofs, setCenoteMofs] = useState<CenoteMofInterface>();
   // species
-  // const [cenoteSpecies, setCenoteSpecies] = useState();
+  const [cenoteSpecies, setCenoteSpecies] = useState([]);
 
 
 
@@ -62,7 +67,7 @@ export const CenoteProfile = () => {
 
   const handleIsThemeWithData = (theme: string | undefined | null) => {
     if (cenoteMofs && theme) {
-      return theme in cenoteMofs;
+      return theme in cenoteMofs || theme === "tourism";
     }
   };
 
@@ -119,11 +124,21 @@ export const CenoteProfile = () => {
     }
   };
 
+  const fetchCenoteSpecies = async () => {
+    try {
+      const cenoteSpecies = await getCenoteSpecies(id);
+      setCenoteSpecies(cenoteSpecies);
+    } catch (error) {
+      console.error('Error fetching cenote species:', error);
+    }
+  };
+
   const refetchCenoteById = () => {
     setLoading(true);
     fetchCenoteData();
     fetchCenotePhotos();
     fetchCenoteMofs();
+    fetchCenoteSpecies();
     setLoading(false);
   }
 
@@ -133,6 +148,7 @@ export const CenoteProfile = () => {
     fetchCenoteData();
     fetchCenotePhotos();
     fetchCenoteMofs();
+    fetchCenoteSpecies();
     setLoading(false);
   }, []);
 
@@ -404,7 +420,7 @@ export const CenoteProfile = () => {
                                   <div className="mt-3 col-6">
                                     {
                                     cenoteData && !loading &&
-                                      <BiodiversityTab speciesList={cenoteData.species}></BiodiversityTab>
+                                      <BiodiversityTab speciesList={cenoteSpecies}></BiodiversityTab>
                                     }
                                   </div>
                                 }
