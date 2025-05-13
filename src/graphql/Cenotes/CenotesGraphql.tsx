@@ -107,6 +107,50 @@ export const GET_MOF_BY_THEME = `query GetCenoteDataByTheme($cenoteId: ID!, $the
   }
 }`;
 
+export const GET_MOF_BY_CATEGORY = `query GetCenoteDataByCategory($cenoteId: ID!, $category: VariableCategory!) {
+  getCenoteDataByCategory(cenoteId: $cenoteId, category: $category) {
+    mof {
+      id
+      cenoteId
+      variableId
+      variableName
+      variableRepresentation
+      variableIcon
+      variableUnits
+      measurements {
+        timestamp
+        value
+      }
+      permissions {
+        canView
+        canEdit
+        canDelete
+      }
+      firstTimestamp
+      lastTimestamp
+    }
+    variable {
+      firestore_id
+      name
+      description
+      type
+      units
+      methodology
+      timeseries
+      accessLevel
+      origin
+      theme
+      variableRepresentation
+      sphere
+      category
+      icon
+      cenote_count
+      createdAt
+      updatedAt
+    }
+  }
+}`;
+
 export const GET_UPLOAD_IMAGE_URL= `query Query($cenoteId: ID!, $photoName: String!, $contentType: String!) {
   generateCenotePhotoUploadUrl(cenoteId: $cenoteId, photoName: $photoName, contentType: $contentType)
 }`;

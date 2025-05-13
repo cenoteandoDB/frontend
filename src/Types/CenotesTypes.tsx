@@ -1,4 +1,5 @@
 import { ReferencesInterface } from "./ReferencesTypes";
+import { VariableInterface } from "./VariablesTypes";
 
 export interface CenoteInterface {
     firestore_id?: string;
@@ -77,12 +78,19 @@ export interface CenoteInterface {
     value: string;
   }
 
+  export interface PermissionsInterface{
+    canView: boolean;
+    canEdit: boolean;
+    canDelete: boolean;
+  }
+
   export interface mofInterface {
     id: string;
     firstTimestamp: string;
     cenoteId: string;
     lastTimestamp: string;
     measurements: MeasurementsInterface[];
+    permissions: PermissionsInterface;
     variableIcon: string;
     variableId: string;
     variableName: string;
@@ -115,3 +123,8 @@ export interface CenoteInterface {
     color?: string;
   }
 
+  export interface mofByCategoryInterface {
+    mof: mofInterface,
+    variable: VariableInterface
+
+  }

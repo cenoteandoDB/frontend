@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { PaginationInterface, SortInterface } from "../../Types/UserTypes";
 import { gql, useMutation, useQuery } from "@apollo/client";
-import { ACCEPT_MOF_REQUEST, ADD_FAVORITE_CENOTE, ALL_CENOTES, CHANGE_CENOTE_MAIN_PHOTO, CREATE_CENOTE, CREATE_MOF, DELETE_CENOTE, DELETE_PHOTO, GET_CENOTE_BY_ID, GET_CENOTE_DATA_BY_THEME, GET_CENOTE_THEMES_BY_CENOTE, GET_ENUM_CENOTE_TYPE, GET_MOF_BY_THEME, GET_MOF_MODIFICATIONS, GET_UPLOAD_IMAGE_URL, REJECT_MOF_REQUEST, REMOVE_FAVORITE_CENOTE, UPDATE_CENOTE, UPDATE_MOF } from "./CenotesGraphql";
+import { ACCEPT_MOF_REQUEST, ADD_FAVORITE_CENOTE, ALL_CENOTES, CHANGE_CENOTE_MAIN_PHOTO, CREATE_CENOTE, CREATE_MOF, DELETE_CENOTE, DELETE_PHOTO, GET_CENOTE_BY_ID, GET_CENOTE_DATA_BY_THEME, GET_CENOTE_THEMES_BY_CENOTE, GET_ENUM_CENOTE_TYPE, GET_MOF_BY_CATEGORY, GET_MOF_BY_THEME, GET_MOF_MODIFICATIONS, GET_UPLOAD_IMAGE_URL, REJECT_MOF_REQUEST, REMOVE_FAVORITE_CENOTE, UPDATE_CENOTE, UPDATE_MOF } from "./CenotesGraphql";
 import { AddFavoriteCenote, CreateCenoteInterface, createMofInterface, UpdateCenoteInterface, updateMofInterface } from "../../Types/CenotesTypes";
 import { useAuthContext } from "../../Auth/AuthProvider";
 import { changeMainPhotoInterface, PhotoInterface } from "../../Types/UtilsTypes";
@@ -125,6 +125,27 @@ export const useGetMofByTheme = (cenoteId: string | null | undefined, theme: str
   return { mofsByThemeData: data?.getCenoteDataByTheme, mofsByThemeLoading: loading, mofsByThemeError: error, refetchMofByTheme: refetch};
 };
 
+export const useGetMofByCategory = (cenoteId: string | null | undefined, category: string | null | undefined) => {
+  const { token } = useAuthContext()
+  const { data, loading, error, refetch } = useQuery(gql`${GET_MOF_BY_CATEGORY}`, {
+    variables: { category: category ,cenoteId: cenoteId},
+    notifyOnNetworkStatusChange: true,
+    skip: !category || !cenoteId,
+    context: {
+      headers: {
+        Authorization: token ? `Bearer ${token}` : "",
+      },
+    }, 
+  });
+  console.log(data)
+  return { 
+    mofsByCategoryData: data?.getCenoteDataByCategory ? data?.getCenoteDataByCategory : [],
+    mofsByCategoryLoading: loading, 
+    mofsByCategoryError: error, 
+    refetchMofByCategory: refetch
+  };
+};
+
 export const useGetMofModifications = () => {
   const { token } = useAuthContext(); // Retrieve the token from Auth context
   
@@ -170,7 +191,21 @@ export const useCreateMof = () => {
         setCreateMofsuccess(false);
       }
   };
-  return { createMof, createMofLoading: loading, createMofError: error, createMofSuccess: createMofsuccess, setCreateMofsuccess };
+  return { createMof, createMofLoading: loading, createMofError: error, createMofSuccess: data, setCreateMofsuccess };
+}
+
+export const useUpdateMof = () => {
+  const [updateMofMutation, { data, loading, error }] = useMutation(gql`${UPDATE_MOF}`);
+  const [updateMofsuccess, setUpdateMofsuccess] = useState<boolean>(false);
+  const updateMof = async(MofInfo: updateMofInterface) => {
+      try {
+          await updateMofMutation({ variables: { updateMofInput: MofInfo } });
+          setUpdateMofsuccess(true);
+        } catch (e) {
+          setUpdateMofsuccess(false);
+        }
+  }
+  return {updateMofSucces: data, updateMofLoading: loading, updateMofError: error, updateMof, setUpdateMofsuccess };
 }
 
 export const useDeleteCenote = () => {
@@ -208,19 +243,7 @@ export const useUpdateCenote = () => {
     return {data, loading, error, updateCenote };
 }
 
-export const useUpdateMof = () => {
-  const [updateMofMutation, { data, loading, error }] = useMutation(gql`${UPDATE_MOF}`);
-  const [updateMofsuccess, setUpdateMofsuccess] = useState<boolean>(false);
-  const updateMof = async(MofInfo: updateMofInterface) => {
-      try {
-          await updateMofMutation({ variables: { updateMofInput: MofInfo } });
-          setUpdateMofsuccess(true);
-        } catch (e) {
-          setUpdateMofsuccess(false);
-        }
-  }
-  return {updateMofSucces: data, updateMofLoading: loading, updateMofError: error, updateMof, setUpdateMofsuccess };
-}
+
 
 export const useAddFavoriteCenote = () => {
   const [addFavoriteCenote, { data, loading, error }] = useMutation(gql`${ADD_FAVORITE_CENOTE}`);

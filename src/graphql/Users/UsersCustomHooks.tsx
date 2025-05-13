@@ -205,17 +205,38 @@ export const useUpdateUserInfo = () => {
     return {data, loading, error, updateUserInfo };
 }
 
+/**
+ * Hook personalizado para manejar la autenticación de usuarios
+ * @returns {Object} Objeto con funciones y estado de autenticación
+ */
 export const useAuth = () => {
   const [loginMutation, { data, loading, error }] = useMutation(gql`${LOGIN}`);
 
-  const login = async (loginData: LoginInterface) => {
+  /**
+   * Función para iniciar sesión
+   * @param {LoginInterface} loginData - Datos de inicio de sesión (email y contraseña)
+   * @returns {Promise<{token: string}>} Token de autenticación
+   * @throws {Error} Error si la autenticación falla
+   */
+  const login = async (loginData: LoginInterface): Promise<{ token: string }> => {
     try {
-      const response = await loginMutation({ variables: loginData });
-      const token = response.data.login;
-      return { token };
+      const response = await loginMutation({ 
+        variables: loginData,
+        // Evitar caché para asegurar datos frescos
+        fetchPolicy: 'no-cache'
+      });
+      
+      if (!response.data?.login) {
+        throw new Error('No se recibió token de autenticación');
+      }
+
+      return { token: response.data.login };
     } catch (err) {
-      console.error('Login error:', err);
-      throw err;
+      // Mejorar mensaje de error para el usuario
+      const errorMessage = err instanceof Error 
+        ? err.message 
+        : 'Error al iniciar sesión. Por favor intente nuevamente.';
+      throw new Error(errorMessage);
     }
   };
 

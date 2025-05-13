@@ -8,47 +8,54 @@ import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import "./Login.css";
 
-
+/**
+ * Componente de inicio de sesión
+ * Maneja la autenticación de usuarios y muestra el formulario de login
+ */
 export const Login = () => {
   const [isFormValid, setIsFormValid] = useState(false);
-  const [errorResponse, setErrorResponse] = useState("");
   const [formData, setFormData] = useState<LoginInterface>({email: "", password: ""});
-  const { getUser, login, isAuthenticated, error, user } = useAuthContext();
+  const { login, isAuthenticated, error, loading } = useAuthContext();
 
+  // Validar formulario cuando cambian los datos
   useEffect(() => {
     const isFormFilled = Object.values(formData).every(value => value.trim());
-    setIsFormValid(isFormFilled ? true : false);
-}, [formData]);
+    setIsFormValid(isFormFilled);
+  }, [formData]);
 
+  // Mostrar errores de autenticación
   useEffect(() => {
-    if(error){
-      setErrorResponse('El Usuario o Contraseña son incorrectas');
-      toast.warning("El Usuario o Contraseña son incorrectas");
+    if(error) {
+      toast.error(error);
     }
-    if(isAuthenticated){
-      getUser();
-    }
-  }, [error, isAuthenticated, user]);
- 
-  
+  }, [error]);
+
+  // Redirigir si ya está autenticado
   if (isAuthenticated) {
     return <Navigate to="/home" />;
   }
 
+  /**
+   * Maneja cambios en los campos del formulario
+   */
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setFormData(prev => ({
+      ...prev,
       [name]: value,
-    });
+    }));
   };
 
+  /**
+   * Maneja el envío del formulario
+   */
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     try {
       await login(formData);
     } catch (err) {
-      console.error('Login failed:', err);
+      // Los errores ya son manejados por el AuthProvider
+      console.error('Error en el formulario:', err);
     }
   }
 
@@ -57,72 +64,55 @@ export const Login = () => {
       <Dashboard>
         <div className="login-bg">
           <section className="content-header">
-            <div className="container-fluid"> <ToastContainer /> </div>
+            <div className="container-fluid">
+              <ToastContainer 
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+              />
+            </div>
           </section>
           <div className="row">
-            <div className="col-md-6  text-center d-flex align-items-center justify-content-center">
-              <div className="">
-                <div>
-                  <h2 className="login-title">
-                    Cenoteando Data 
-                   
-                  </h2>
-                  <p className="lead mb-5 login-text">
-                    Te damos la bienvenida a Cenoteando Data, el <br></br>
-                    repositorio más grande de cenotes de la <br></br> península
-                    de Yucatán.
-                  </p>
-                </div>
+            <div className="col-md-6 text-center d-flex align-items-center justify-content-center">
+              <div>
+                <h2 className="login-title">
+                  Cenoteando Data
+                </h2>
+                <p className="lead mb-5 login-text">
+                  Te damos la bienvenida a Cenoteando Data, el <br />
+                  repositorio más grande de cenotes de la <br /> península
+                  de Yucatán.
+                </p>
               </div>
             </div>
 
-            <div className="col-md-6 ">
+            <div className="col-md-6">
               <div className="login-box login-box-cnt margin-top-50">
-                {/* /.login-logo */}
                 <div className="card login-box-cnt">
                   <div className="card-body login-card-body">
-                    {" "}
                     <div className="justify-content-center text-center">
                       <p className="login-title-font-card text-center">Iniciar Sesión</p>
-                      {errorResponse && 
-                        <small className='text-danger text-center'>{errorResponse}</small>
-                      }
                     </div>
-                    <div className="social-auth-links text-center d-none">
-                      <div className="row">
-                        <div className="col-md-6">
-                          <a
-                            href="#"
-                            className="btn btn-white-border col-md-12 float-left"
-                          >
-                            <i className="fab fa-facebook mr-1" /> Ingresa con
-                            Google
-                          </a>
-                        </div>
-                        <div className="col-md-6">
-                          <a
-                            href="#"
-                            className="btn btn-white-border col-md-12 float-right"
-                          >
-                            <i className="fab fa-google-plus mr-1" /> Ingresa
-                            con Microsoft
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                    {/* /.Register */}
+
                     <form onSubmit={handleSubmit}>
                       <div className="form-group">
-                        <label htmlFor="email_adress">Correo Electrónico</label>
-                        <div className=" mb-3">
+                        <label htmlFor="email">Correo Electrónico</label>
+                        <div className="mb-3">
                           <input
-                            type="text"
+                            type="email"
                             name="email"
                             id="email"
                             onChange={handleChange}
                             value={formData.email}
                             className="form-control"
                             placeholder="Correo Electrónico"
+                            disabled={loading}
                           />
                         </div>
                       </div>
@@ -137,53 +127,56 @@ export const Login = () => {
                             value={formData.password}
                             className="form-control"
                             placeholder="Contraseña"
+                            disabled={loading}
                           />
                           <div className="input-group-append">
                             <div className="input-group-text">
                               <img
                                 src="/assets/Icons/slash-eye.svg"
-                                alt=""
+                                alt="Mostrar/Ocultar contraseña"
                               />
                             </div>
                           </div>
                         </div>
                       </div>
                       <p className="mb-1">
-                        <a href="forgot-password.html">I forgot my password</a>
+                        <Link to="/forgot-password">¿Olvidaste tu contraseña?</Link>
                       </p>
 
                       <div className="d-flex justify-content-center">
-                        {/* /.col */}
-                        <button type="submit" disabled={!isFormValid } className="btn btn-bg-blue">
-                          Ingresar
+                        <button 
+                          type="submit" 
+                          disabled={!isFormValid || loading} 
+                          className="btn btn-bg-blue"
+                        >
+                          {loading ? 'Iniciando sesión...' : 'Ingresar'}
                         </button>
-                        {/* /.col */}
                       </div>
                     </form>
-                    {/* /.social-auth-links */}
-                    <div className="social-auth-links text-center ">
+
+                    <div className="social-auth-links text-center">
                       <div className="row">
                         <div className="col-md-6">
-                          <Link to="/verifycode"
+                          <Link 
+                            to="/verifycode"
                             className="btn btn-white-border col-md-12 float-left"
                           >
-                             <img className="mb-1" src="/assets/Images/register.png" alt="" />
+                            <img className="mb-1" src="/assets/Images/register.png" alt="Registro con código" />
                             <p>Registrarse con código de invitación</p>
                           </Link>
                         </div>
                         <div className="col-md-6">
-                          <Link to="/registerv1"
+                          <Link 
+                            to="/registerv1"
                             className="btn btn-white-border col-md-12 float-right"
                           >
-                            <img className="mb-1" src="/assets/Images/register.png" alt="" />
+                            <img className="mb-1" src="/assets/Images/register.png" alt="Registro con email" />
                             <p>Registrarse con correo electrónico</p>
                           </Link>
                         </div>
                       </div>
                     </div>
-                  
                   </div>
-                  {/* /.login-card-body */}
                 </div>
               </div>
             </div>

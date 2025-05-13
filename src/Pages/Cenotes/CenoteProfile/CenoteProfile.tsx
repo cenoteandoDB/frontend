@@ -11,7 +11,6 @@ import { MeasurementsInterface, mofByThemeInterface, mofInterface } from "../../
 import { useThemes } from "../../../graphql/Variables/VariablesCustomHooks";
 import { EnumsInterface } from "../../../Types/UserTypes";
 import { BiodiversityTab } from "./BiodiversityTab";
-import { UpdateMof } from "../../../Components/Modals/UpdateMof";
 import MapSelector from "../../../Components/Utils/mapSelector";
 import { BibliographyTab } from "./BibliographyTab";
 import { IndicatorsTab } from "./IndicatorsTab";
@@ -416,6 +415,7 @@ export const CenoteProfile = () => {
                                               {item && item.mofs.map((mofItem: mofInterface) => (
                                                 <div key={mofItem.id} >
                                                     <div>
+                                                 
                                                       {mofItem.variableRepresentation === 'TEXT' &&
                                                         (mofItem.measurements.map((measurements_item: MeasurementsInterface) => (
                                                         <div className="measurement-item">
@@ -434,7 +434,9 @@ export const CenoteProfile = () => {
                                                         ))
                                                       )}
                                                       {mofItem.variableRepresentation === 'CHECK' || mofItem.variableRepresentation === 'ICON' && (
+                                                      
                                                         <div className="two-column-container">
+                                                            <p>{mofItem.variableRepresentation }</p>
                                                           {mofItem.measurements.map((measurements_item: MeasurementsInterface, index: number) => (
                                                             <div className="two-column-item" key={index}>
                                                                 { renderIconOnCheckOption(mofItem, measurements_item.value) }
@@ -495,6 +497,7 @@ export const CenoteProfile = () => {
                                                 {item && item.mofs.map((mofItem: mofInterface) => (
                                                   <div key={mofItem.id} >
                                                       <div>
+                                                     
                                                         {mofItem.variableRepresentation === 'TEXT' &&
                                                           (mofItem.measurements.map((measurements_item: MeasurementsInterface) => (
                                                           <div className="measurement-item">
@@ -512,10 +515,23 @@ export const CenoteProfile = () => {
                                                           </div>
                                                           ))
                                                         )}
-                                                        {mofItem.variableRepresentation === 'CHECK' || mofItem.variableRepresentation === 'ICON' && (
+                                                        {mofItem.variableRepresentation === 'CHECK'  && (
                                                           <div className="two-column-container">
+                
                                                             {mofItem.measurements.map((measurements_item: MeasurementsInterface, index: number) => (
-                                                              <div className="two-column-item" key={index}>
+                                                              <div className="two-column-item" key={'d-'+index}>
+                                                                  { renderIconOnCheckOption(mofItem, measurements_item.value) }
+                                                                  { mofItem.variableName }
+                                                              </div> 
+                                                            ))}
+                                                          </div>
+                                                        )}
+
+                                                        {mofItem.variableRepresentation === 'ICON' && (
+                                                          <div className="two-column-container">
+                                                             <p>{mofItem.variableName}-{mofItem.variableRepresentation}</p>
+                                                            {mofItem.measurements.map((measurements_item: MeasurementsInterface, index: number) => (
+                                                              <div className="two-column-item" key={'d-'+index}>
                                                                   { renderIconOnCheckOption(mofItem, measurements_item.value) }
                                                                   { mofItem.variableName }
                                                               </div> 
@@ -611,7 +627,7 @@ export const CenoteProfile = () => {
                 category={category}
                 showModal={showUpdateMofModal}
                 handleToggleModal={handleUpdateMofToggleModal}
-                refetch={refetchCenoteById}
+                refetch={refetchMofByTheme}
               ></EditMofs>
 
 

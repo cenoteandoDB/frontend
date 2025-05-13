@@ -8,6 +8,19 @@
   outline: none;
 }
 
+.btn-save {
+  color: white;
+  background-color: #3D578F !important;
+  font-weight: 300;
+}
+
+.btn-save-white-border {
+  color: black;
+  background-color: white;
+  outline: none;
+  border: 1px solid #3D578F;
+}
+
 .bg-cnt{
   background-color: #F5F8FE !important;
 }
@@ -125,6 +138,11 @@
   color: #183981 !important;
 }
 
+.text_labels-inputs{
+  font-weight: 500 !important;
+  font-size: larger !important;
+}
+
 .bg-tag-success {
   padding: 3px 6px;
   background-color: #f8fafc;
@@ -184,6 +202,7 @@
   background-color: #f8fafc;
   color: #104887;
 }
+
 
 /*Modals*/
 .modal-title-c {

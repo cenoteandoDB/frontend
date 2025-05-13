@@ -17,6 +17,7 @@ export interface VariableInterface {
     updatedAt: string;
     icon: string;
     variableRepresentation: string;
+    
 }
 
 export interface CreateVariableInterface {
