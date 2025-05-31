@@ -23,7 +23,7 @@ export const getUsersList = async ()=> {
     return await apiRequest(`${BASE_API_URL}/api/users`, 'GET');
 }
 
-export const getGetUserById = async (id: string | null | undefined) => {
+export const getUserById = async (id: string | null | undefined) => {
     return apiRequest(`${BASE_API_URL}/api/users/${id}`, 'GET');
 };
 
@@ -31,7 +31,7 @@ export const getUserFavouriteCenotes = (id: string | null | undefined) => {
     return apiRequest(`${BASE_API_URL}/api/users/${id}/cenotes`, 'GET');
 }
 
-export const updateUser = async  (id: string, updatedUser: any) => {
+export const updateUser = async  (id: string | null | undefined, updatedUser: any) => {
     return await apiRequest(`${BASE_API_URL}/api/users/${id}`, 'PUT', updatedUser);
 }
 
@@ -45,6 +45,16 @@ export const addFavouriteCenote = async  (userId: string | null | undefined, cen
 
 export const removeFavouriteCenote = async  (userId: string | null | undefined, cenoteId: string | null | undefined) => {
     return await apiRequest(`${BASE_API_URL}/api/users/${userId}/favouriteCenotes/${cenoteId}`, 'DELETE');
+}
+
+// Registration
+
+export const verifyCode = async  (code: string | null | undefined ) => {
+    return await apiRequest(`${BASE_API_URL}/api/invite/${code}`, 'GET');
+}
+
+export const registerInvitedUser = async  (code: string | null | undefined, updatedUser: any) => {
+    return await apiRequest(`${BASE_API_URL}/api/invite/${code}`, 'POST', updatedUser);
 }
 
 export const useVerifyUser = () => {

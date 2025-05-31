@@ -57,9 +57,9 @@ const router = createBrowserRouter([
   {
     path: "/verifycode",
     element: <RegisterByVerifyCode />,
-  }, 
+  },
   {
-    path: "/registerv2/:id",
+    path: "/registerv2/:code",
     element: <RegisterByCode />,
   },
   {

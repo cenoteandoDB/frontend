@@ -3,13 +3,20 @@ import { Dashboard } from "../Dashboard/Dashboard";
 import { useParams } from 'react-router-dom';
 import { UserInterface } from "../../Types/UserTypes";
 import { useNavigate } from "react-router-dom";
-import { useUpdateUserInfo } from "../../graphql/Users/UsersCustomHooks";
+import {
+  getUserById,
+  registerInvitedUser,
+  updateUser,
+  useUpdateUserInfo,
+  verifyCode
+} from "../../graphql/Users/UsersCustomHooks";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
 export const RegisterByCode = () => {
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { code } = useParams();
+  const [loading, setLoading] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [isFormValid, setIsFormValid] = useState(false);
@@ -20,7 +27,6 @@ export const RegisterByCode = () => {
     phone: '',
     surname: '',
   });
-  const {data, loading, error, updateUserInfo } = useUpdateUserInfo();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setUserInfo({
@@ -29,43 +35,71 @@ export const RegisterByCode = () => {
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-      e.preventDefault();
-      if (!confirmPassword || userInfo.password !== confirmPassword) {
-        toast.warning(`Passwords do not match`);
-        setPasswordError('Passwords do not match');
-        return;
-      }
+  const verifyPasswordsCheck = () => {
+    if (!confirmPassword || userInfo.password !== confirmPassword) {
+      toast.warning(`Passwords do not match`);
+      setPasswordError('Passwords do not match');
+      return false;
+    } else {
       setPasswordError('');
-      if(id){
-        await updateUserInfo(id, userInfo);
-      }
-  };
+    }
+  }
 
   const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setConfirmPassword(e.target.value);
   };
 
-  useEffect(() => {
-    if (error) {
-      toast.error('La operación no se pudo completar, inténtelo nuevamente.')
-    }
-    if(data && !error){
-      toast.success('Usuario Registrado Exitosamente');
-      navigate(`/`);
-    } 
-  }, [data, error])
+  const handleSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+      try {
+        const passwordsCheck = verifyPasswordsCheck();
+        if (passwordsCheck) return;
 
-useEffect(() => {
-  // Check if all required fields are filled
-  if(id){
-    const isFormFilled = id.trim() && Object.values(userInfo).every(value => value.trim());
-    setIsFormValid(isFormFilled ? true : false);
-  }else{
-    setIsFormValid(false);
+        setLoading(true);
+        await registerInvitedUser(code, userInfo);
+        setLoading(false);
+
+        toast.success('Usuario Registrado Exitosamente');
+        navigate(`/`);
+      } catch (e) {
+        setLoading(false);
+        toast.error('La operación no se pudo completar, inténtelo nuevamente.');
+        console.log(e);
+      }
+  };
+
+  const fetchUser = async () => {
+    const userInfo = await verifyCode(code);
+    userInfo.password = "";
+    setUserInfo(userInfo as UserInterface);
   }
 
-}, [id, userInfo]);
+  // Use Effects
+
+  useEffect(() => {
+    fetchUser()
+  }, []);
+
+  useEffect(() => {
+    // Check if all required fields are filled
+    if (code) {
+      console.log(JSON.stringify(userInfo));
+      const mandatoryFields = ['name', 'surname', 'email', 'phone', 'password'];
+      let isFormFilled = Object.entries(userInfo).every(([key, value]) => {
+        if (mandatoryFields.includes(key)) {
+          if (typeof value === "string") return value !== "";
+          else return value !== null;
+        } else {
+          return true;
+        }
+      });
+      isFormFilled = isFormFilled && confirmPassword !== '';
+      setIsFormValid(isFormFilled);
+    }else{
+      setIsFormValid(false);
+    }
+
+  }, [code, userInfo]);
 
 
   return (

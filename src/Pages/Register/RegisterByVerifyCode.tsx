@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Dashboard } from '../Dashboard/Dashboard'
-import { useVerifyUser } from '../../graphql/Users/UsersCustomHooks'
+import { verifyCode } from '../../graphql/Users/UsersCustomHooks'
 import { useNavigate } from 'react-router-dom';
 import { ClipLoader } from "react-spinners";
 import { ToastContainer, toast } from "react-toastify";
@@ -8,23 +8,24 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export const RegisterByVerifyCode = () => {
     const navigate = useNavigate();
-    const  { handleVerifyUser, data, loading, error} = useVerifyUser();
+
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
     const [code, setCode] = useState<string>('');
-    const loading_ = loading;
 
     const handleSubmit = async(e: React.FormEvent) => {
-        e.preventDefault()
-        await handleVerifyUser(code);
-    }
+        e.preventDefault();
+        setLoading(true);
 
-    useEffect(() => {
-        if(error){
+        try {
+            await verifyCode(code);
+            setLoading(false);
+            navigate(`/registerv2/${code}`);
+        } catch (e) {
+            setError(e.message);
             toast.warning("El código no coincide o esta incorrecto, inténtelo nuevamente.");
         }
-        if(data && !error){
-            navigate(`/registerv2/${data.verifyCode.id}`);
-        } 
-    }, [data, error])
+    }
 
     return (
         <div>
@@ -33,9 +34,9 @@ export const RegisterByVerifyCode = () => {
             <section className="content-header">
                 <div className="container-fluid">
                     <ToastContainer />
-                    {loading_ &&
+                    {loading &&
                     (<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-                        <ClipLoader loading={loading_} size={50} />
+                        <ClipLoader loading={loading} size={50} />
                     </div>)
                     }
                 </div>
@@ -69,7 +70,7 @@ export const RegisterByVerifyCode = () => {
                         <p className="login-title-font-card mb-2 text-center">Regístrate con código</p>
                         <small className='text-center'>Para completar tu registro, por favor ingresa el código que recibiste en tu correo electrónico.</small>
                         <br></br>
-                        {error?.message && 
+                        {error &&
                         <small className='text-danger text-center'>El código no coincide o esta incorrecto.</small>
                         }                    
                     </div>

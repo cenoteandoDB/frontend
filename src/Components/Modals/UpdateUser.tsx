@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { UpdatePropsInterface } from '../../Types/UtilsTypes'
-import { getGetUserById, updateUser } from '../../graphql/Users/UsersCustomHooks';
+import { getUserById, updateUser } from '../../graphql/Users/UsersCustomHooks';
 import { ClipLoader } from "react-spinners";
 import 'react-toastify/dist/ReactToastify.css';
 import { UserInterface } from '../../Types/UserTypes';
@@ -36,7 +36,7 @@ export const UpdateUser: React.FC<UpdatePropsInterface> = ({id, showModal, handl
 
         const getUserInfoToUpdate = async (id: string | null | undefined) => {
             try {
-                const user = await getGetUserById(id);
+                const user = await getUserById(id);
                 setUserInfo(user as UserInterface);
                 setLoading(false);
             } catch (error) {
